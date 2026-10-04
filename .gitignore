@@ -1,0 +1,9 @@
+.env
+dist/
+archive_original/
+.wrangler/
+node_modules/
+assets/sprites_bundle.js
+tests/shots/
+__pycache__/
+*.log

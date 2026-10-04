@@ -1,0 +1,14 @@
+{
+  "name": "동물농장",
+  "short_name": "동물농장",
+  "description": "귀여운 동물과 환상의 세계로",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fffdf6",
+  "theme_color": "#f6b400",
+  "icons": [
+    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

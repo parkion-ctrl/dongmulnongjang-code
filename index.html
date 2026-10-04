@@ -1,0 +1,2563 @@
+<meta charset="utf-8">
+<title>동물농장</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f6b400">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="assets/icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --gold:#f6b400;--gold-deep:#d98e00;--orange:#f07b00;--cream:#fff8e3;--paper:#fffdf6;
+  --ink:#5a3a12;--ink-soft:#8a6a3e;--line:#ecd9a8;
+  --sky-top:#7fcdf2;--sky-bottom:#d8f3ff;--grass:#86c540;--grass-deep:#5d9e2a;
+  --love:#ff7aa2;--know:#4f9be6;--charm:#b07ce8;--power:#f5893a;
+  --display:"Jua","BM JUA","Malgun Gothic","맑은 고딕",sans-serif;
+  --body:"Gowun Dodum","Malgun Gothic","맑은 고딕","Apple SD Gothic Neo",sans-serif;
+  --nav-h:66px;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{background:#f3e7c4;height:100%}
+/* 페이지 전체가 아니라 가운데(main)만 스크롤: 홈 화면 앱 모드에서 화면 높이가 실제보다 크게 잡혀
+   아래 고정 메뉴/내용이 시스템 버튼 줄 밑으로 숨던 문제 방지 */
+body{margin:0;height:100%;overflow:hidden;background:#f3e7c4;color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible,input:focus-visible{outline:3px solid #4f9be6;outline-offset:2px}
+img{max-width:100%}
+.app{max-width:480px;margin:0 auto;height:100vh;height:100dvh;display:flex;flex-direction:column;background:var(--paper);position:relative;box-shadow:0 0 0 1px var(--line)}
+.app>main{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding-bottom:16px}
+
+/* 상단 바 */
+.topbar{flex:none;position:relative;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 12px 4px 4px;background:#fff;border-bottom:3px solid var(--gold)}
+.logo{margin:0;line-height:0}
+.logo img{height:54px;width:auto}
+.points{display:flex;align-items:center;gap:6px;background:var(--paper);border:2px solid var(--gold-deep);border-radius:999px;padding:4px 12px 4px 6px;font-family:var(--display);font-size:16px;font-variant-numeric:tabular-nums}
+.points i{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--orange);color:#fff;font-style:normal;font-size:12px}
+
+.screen{padding:0 16px}
+.section-title{font-family:var(--display);font-size:20px;margin:18px 0 10px;display:flex;align-items:baseline;gap:8px}
+.section-title span{font-family:var(--body);font-size:12px;color:var(--ink-soft)}
+
+/* 농장 무대 */
+.stage{position:relative;margin:0 -16px;height:270px;overflow:hidden;background:linear-gradient(var(--sky-top),var(--sky-bottom) 62%);border-bottom:3px solid var(--grass-deep)}
+.stage::after{content:"";position:absolute;left:-10%;right:-10%;bottom:-60px;height:130px;border-radius:50% 50% 0 0;background:var(--grass);box-shadow:inset 0 10px 0 #9fd65b}
+.stage.has-bg{height:auto;aspect-ratio:557/342;background-size:cover;background-position:center bottom}
+/* 원작 돌보기 방: 515x399, 구름 말풍선은 x 31~79%, y 10~37% */
+.stage.room{height:auto;aspect-ratio:515/399;background-size:100% 100%;border-bottom:3px solid #8cc43c}
+.stage.room::after{display:none}
+.stage.room .bubble{left:55%;top:12%;width:44%;height:22%;max-width:none;display:flex;align-items:center;justify-content:center;background:none;border:0;border-radius:0;padding:0 6px;font-size:15px;line-height:1.35;color:#3d2a10}
+.stage.room .bubble::after{display:none}
+.stage.room .pet{bottom:9%}
+.stat.short .stat-top span{color:var(--orange);font-weight:700}
+.stat.fatigue{margin-top:12px;padding-top:10px;border-top:2px dashed var(--line)}
+.fatigue-risk{margin-top:4px;font-size:12px;color:#c2410c;word-break:keep-all}
+.badge.sick{background:#e4f3ff;border-color:#4f9be6;color:#1d5fa8}
+.pet.sick{filter:saturate(.55) brightness(.95) drop-shadow(0 6px 0 rgba(60,90,20,.25))}
+.sick-card{margin-top:12px;padding:12px;border-radius:14px;background:#eef7ff;border:2px solid #9cc8f0;display:flex;flex-direction:column;gap:6px}
+.sick-card strong{font-family:var(--display);font-weight:400;font-size:17px;color:#1d5fa8}
+.sick-card p{margin:0;font-size:13px;color:var(--ink-soft);word-break:keep-all}
+.sick-card .btn{align-self:flex-start}
+.hosp-txt{display:block;max-width:100%;height:auto;margin:12px auto}
+.rx{margin:10px 0;padding:8px 12px;border-radius:10px;background:#fff4f8;border:2px dashed #f29ab8;font-size:13px;word-break:keep-all}
+.ending:disabled{background:#cfc6ae;border-bottom-color:#a99e83;font-size:15px}
+.stat.fatigue .meter b{background:linear-gradient(90deg,#9aa0a6,#5f6368)}
+.stat.fatigue.tired .stat-top span{color:#d23c1e;font-weight:700}
+.wish{margin-top:14px;background:#fff;border:2px solid #5a8ee6;border-radius:16px;overflow:hidden}
+.wish h3{margin:0;padding:6px 12px;background:#2f6ad0;color:#fff;font-family:var(--display);font-weight:400;font-size:15px}
+.wish-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px}
+.wish-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 6px;border-radius:12px;background:#eef1f5;border:2px solid #d6dbe3;font-family:var(--display)}
+.wish-btn strong{font-weight:400;font-size:17px}
+.wish-btn small{font-family:var(--body);font-size:11px;color:var(--ink-soft)}
+.wish-btn.want{background:#ffe27a;border-color:#f0a800}
+.wish-btn.want small{color:#b35a00;font-weight:700}
+.wish-btn:disabled{opacity:.55}
+/* 실외 마당 */
+.stage.yard{height:auto;aspect-ratio:557/342;background-size:100% 100%;user-select:none;-webkit-user-select:none}
+.stage.yard::after{display:none}
+.stage.yard.editing{touch-action:none;box-shadow:inset 0 0 0 3px #74bf17}
+.deco{position:absolute;transform:translate(-50%,-100%);max-width:none;width:12%;-webkit-user-drag:none}
+.stage.yard.editing .deco{cursor:grab}
+.stage.yard.editing .yard-pet{pointer-events:none;opacity:.55}
+.deco.sel{filter:drop-shadow(0 0 2px #fff) drop-shadow(0 0 4px #2f8f00)}
+.yard-pet{position:absolute;transform:translate(-50%,-100%);max-width:none;transition:left 2.4s ease-in-out,top 2.4s ease-in-out}
+@media (prefers-reduced-motion:reduce){.yard-pet{transition:none}}
+.yard-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.btn.green{background:#8fd42a;border-bottom-color:#5a9a10;color:#fff}
+.sub-title{font-family:var(--display);font-weight:400;font-size:16px;margin:16px 0 8px}
+.sub-title span{font-family:var(--body);font-size:12px;color:var(--ink-soft);margin-left:6px}
+.sel-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;padding:8px 10px;background:#f1fbe2;border:2px solid #b7e27a;border-radius:12px;font-size:13px}
+.tray{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:8px}
+.tray-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;background:#fff;border:2px solid var(--line);border-radius:12px;font-size:12px;text-align:center;word-break:keep-all}
+.tray-item img{width:56px;height:56px;object-fit:contain}
+.tray-item small{color:var(--ink-soft)}
+.skins{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin}
+.skins button{flex:0 0 96px;aspect-ratio:557/342;border-radius:10px;border:3px solid #fff;box-shadow:0 0 0 1px var(--line);background-size:cover;background-position:center}
+.skins button[aria-pressed=true]{border-color:#74bf17;box-shadow:none}
+.link-btn{font:inherit;color:#2f6ad0;text-decoration:underline;padding:0}
+.deco-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(102px,1fr));gap:10px}
+.deco-card{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 6px;background:#fff;border:2px solid var(--line);border-radius:14px;text-align:center;word-break:keep-all}
+.deco-card img{width:72px;height:72px;object-fit:contain}
+.deco-card strong{font-family:var(--display);font-weight:400;font-size:14px;line-height:1.3;min-height:2.6em;display:flex;align-items:center;justify-content:center}
+.deco-card small{font-size:11px;color:var(--ink-soft);min-height:1.4em}
+.deco-card button{margin-top:auto;width:100%;font-family:var(--display);font-size:14px;padding:5px;border-radius:10px;background:#8fd42a;border-bottom:3px solid #5a9a10;color:#fff}
+.deco-card button:disabled{background:#e4e0d2;border-bottom-color:#c9c2ab;color:#9b8b66}
+/* 날짜 / 일정 */
+.date-bar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 -16px;padding:7px 16px;font-family:var(--display);font-size:16px;color:#fff;background:#7cc24a}
+.date-bar.season-summer{background:#2fb6e3}.date-bar.season-autumn{background:#e58a1f}.date-bar.season-winter{background:#7d8fd6}
+.season-chip{font-size:13px;padding:1px 10px;border-radius:999px;background:rgba(255,255,255,.3)}
+.care-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-top:6px}
+.care-left{font-size:12px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.actions.three{grid-template-columns:repeat(3,1fr)}
+.actions.three .act{font-size:16px}
+.schedules{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sched{display:flex;flex-direction:column;align-items:flex-start;gap:1px;padding:10px 12px;border-radius:14px;background:#fff;border:2px solid #b9d8f5;border-bottom-width:4px;text-align:left}
+.sched strong{font-family:var(--display);font-weight:400;font-size:17px;color:#2f6ad0}
+.sched small{font-size:11px;color:var(--ink-soft)}
+.sched em{font-style:normal;font-size:12px;color:var(--orange);font-weight:700;margin-top:2px}
+.sched:disabled{opacity:.45}
+.warn{color:#c2410c!important;font-size:13px!important}
+.next-date{font-family:var(--display);color:#2f6ad0!important}
+.travel-img{width:100%;border-radius:12px;margin-bottom:6px}
+/* 마을 */
+.back-btn{margin:12px 0 4px;font-family:var(--display);font-size:15px;color:#2f6ad0;padding:4px 0}
+/* 동물학교 */
+.school-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.school-btn{padding:0;border-radius:14px;overflow:hidden;line-height:0}
+.school-btn img{width:100%;height:auto}
+.school-btn:disabled{filter:grayscale(.8) opacity(.6)}
+.gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.gallery img{width:100%;height:auto;border-radius:8px;border:2px solid var(--line);background:#fff}
+.teacher{display:flex;justify-content:center;margin-top:6px}
+.teacher img{width:100%;max-width:248px;height:auto;border-radius:12px}
+.quiz-count{margin:12px 0 0;font-size:12px;color:var(--ink-soft);text-align:center}
+.quiz-q{margin:6px 0 12px;font-family:var(--display);font-size:20px;text-align:center;word-break:keep-all}
+.quiz-opts{display:flex;flex-direction:column;gap:8px}
+.quiz-opt{padding:12px;border-radius:14px;background:#fff;border:2px solid #b9d8f5;border-bottom-width:4px;font-family:var(--display);font-size:17px}
+.quiz-opt.right{background:#e6f9d8;border-color:#6cc23a}
+.quiz-opt.wrong{background:#ffe8e8;border-color:#e36b6b}
+.quiz-ok{color:#2f8f00;font-family:var(--display);text-align:center;margin:10px 0 0}
+.sheet-pick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.sheet-pick button{padding:4px;border-radius:12px;background:#fff;border:2px solid var(--line)}
+.sheet-pick img{width:100%;height:auto}
+.palette{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:8px 0}
+.palette button{aspect-ratio:1;border-radius:50%;border:2px solid #d8cfb8}
+.palette button[aria-pressed=true]{border:3px solid var(--ink);transform:scale(1.08)}
+.paint-canvas{display:block;width:100%;max-width:360px;height:auto;margin:0 auto;border-radius:12px;border:2px solid var(--line);background:#fff;touch-action:manipulation}
+.paint-result{display:block;width:120px;height:auto;margin:6px auto;border-radius:8px;border:2px solid var(--line)}
+.book-row{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:14px;background:#fff;border:2px solid var(--line);text-align:left}
+.book-row strong{font-family:var(--display);font-weight:400;font-size:16px}
+.book-row small{font-size:12px;color:var(--ink-soft)}
+.book-text{text-align:left!important;line-height:1.8;color:var(--ink)!important;font-size:15px!important}
+.teach-form{display:flex;flex-direction:column;gap:8px}
+.teach-form input{font:inherit;padding:10px 12px;border-radius:12px;border:2px solid var(--line);background:#fff;color:var(--ink)}
+.taught-list{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--ink-soft)}
+/* 아이템박스 (원작 탭 그림) */
+.box-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;align-items:end}
+.box-tabs button{padding:0;line-height:0}
+.box-tabs img{width:100%;height:auto}
+.box-panel{min-height:200px;padding:12px 10px;background:#fff;border:3px solid #c3ec5a;border-radius:0 0 14px 14px;margin-top:-3px}
+/* 여행사 (원작 배치) */
+.town-map{display:block;width:calc(100% + 32px);max-width:none;margin:0 -16px;height:auto}
+.town-list{display:flex;flex-direction:column;gap:8px}
+.town-row{display:flex;align-items:center;gap:12px;width:100%;padding:8px 12px 8px 8px;border-radius:14px;background:#fff;border:2px solid var(--line);text-align:left}
+.town-row img{flex:none;width:64px;height:60px;object-fit:cover;object-position:center 30%;border-radius:12px;background:#eaf6ff}
+.town-text{flex:1;min-width:0;display:flex;flex-direction:column}
+.town-text strong{font-family:var(--display);font-weight:400;font-size:17px}
+.town-text small{font-size:12px;color:var(--ink-soft);word-break:keep-all}
+.town-go{flex:none;font-family:var(--display);font-size:22px;color:#2fb6e3}
+.town-row.soon{background:#f7f4ec}
+.town-row.soon img{filter:grayscale(.8) opacity(.6)}
+.town-row.soon strong{color:#a8987a}
+.town-row.soon .town-go{font-size:12px;color:#fff;background:#b9a679;padding:2px 8px;border-radius:999px}
+.travel-bar{display:block;width:100%;height:auto;margin:10px 0 6px}
+.spot-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.spot-card{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px 6px;border-radius:10px;background:#f6e3a8 url("assets/ui/travel/bg_041229travel_sub01.gif") center/100% 100% no-repeat;border:3px solid transparent}
+.spot-card.on{border-color:#e07b00;box-shadow:0 0 0 2px #ffd36a}
+.spot-name{width:96%;height:auto}
+.spot-photo{width:80%;height:auto;border-radius:4px}
+.spot-price{font-family:var(--display);font-size:13px;color:#7a4a00}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{font-family:var(--display);font-size:14px;padding:6px 12px;border-radius:999px;background:#fff;border:2px solid #f0c860;color:#7a4a00}
+.chips button[aria-pressed=true]{background:#ffc928;border-color:#d98e00}
+.opt-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.opt-card{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px;border-radius:10px;background:#fff;border:3px solid transparent}
+.opt-card img{width:100%;height:auto}
+.opt-card small{font-size:11px;color:var(--ink-soft)}
+.opt-card[aria-pressed=true]{border-color:#e07b00;background:#fff4d2}
+.travel-preview{display:flex;flex-direction:column;gap:2px;margin-top:14px;padding:10px 12px;border-radius:12px;background:#fffbe9;border:2px dashed #f0c860;font-size:13px;font-variant-numeric:tabular-nums}
+.travel-preview strong{font-family:var(--display);font-weight:400;font-size:16px}
+/* 쿠킹샵 (원작 요리하기 화면 배치) */
+.cook-banner{display:block;width:calc(100% + 32px);max-width:none;margin:4px -16px 0}
+.cook-board{display:flex;align-items:flex-start;justify-content:center;gap:6px;margin-top:-6px;padding:14px 8px 4px;background:#fff;border-radius:0 0 16px 16px;border:2px solid #f3d27a;border-top:0}
+.cook-slot{display:flex;flex-direction:column;align-items:center;gap:4px;width:42%}
+.bowl{position:relative;width:100%;aspect-ratio:100/63;background:url("assets/ui/cook/thum_food.gif") center/contain no-repeat}
+.bowl-food{position:absolute;left:50%;bottom:28%;transform:translateX(-50%);max-height:120%;max-width:80%}
+.slot-name{font-size:12px;text-align:center;min-height:1.5em;word-break:keep-all}
+.pick-btn{font-family:var(--display);font-size:14px;padding:5px 12px;border-radius:999px;background:#fff;border:2px solid #d98e00;color:#7a4a00}
+.cook-plus{font-family:var(--display);font-size:30px;color:#f05a9c;margin-top:16px}
+.cook-btn{display:block;width:100%;margin-top:10px;padding:12px;border-radius:14px;font-family:var(--display);font-size:19px;color:#2d5a00;background:#a4e23a;border-bottom:4px solid #6aa514}
+.cook-btn:disabled{background:#e4e0d2;border-bottom-color:#c9c2ab;color:#9b8b66}
+.book-btn{display:block;width:100%;margin-top:12px;padding:6px;border-radius:14px;background:#fff;border:2px solid var(--line)}
+.book-btn img{display:block;width:100%;max-width:310px;margin:0 auto}
+.food-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.food-card{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;background:#fff;border:2px solid var(--line);border-radius:12px;text-align:center;word-break:keep-all}
+.food-card img{width:64px;height:56px;object-fit:contain}
+.food-card strong{font-family:var(--display);font-weight:400;font-size:13px;line-height:1.3;min-height:2.6em;display:flex;align-items:center;justify-content:center}
+.food-card small{font-size:11px;color:var(--ink-soft);min-height:1.3em}
+/* 이름 줄 수와 상관없이 가격 버튼은 항상 카드 맨 아래 */
+.food-card button{margin-top:auto;width:100%;font-family:var(--display);font-size:13px;padding:4px;border-radius:9px;background:var(--gold);border-bottom:3px solid var(--gold-deep)}
+.food-card button:disabled{background:#e4e0d2;border-bottom-color:#c9c2ab;color:#9b8b66}
+.food-grid.pick{max-height:52vh;overflow-y:auto;margin-bottom:12px}
+.cook-result{width:110px;height:auto;margin:6px auto;display:block}
+.recipe-list{display:flex;flex-direction:column;gap:6px;max-height:52vh;overflow-y:auto;margin-bottom:8px}
+.recipe-row{display:flex;align-items:center;justify-content:center;gap:4px;padding:6px;background:#fff8e3;border-radius:10px}
+.r-item{display:flex;flex-direction:column;align-items:center;width:64px;font-size:10px;line-height:1.2;word-break:keep-all}
+.r-item img{width:40px;height:36px;object-fit:contain}
+.recipe-row .op{font-family:var(--display);color:#f05a9c}
+.chat{display:flex;gap:8px;margin-top:12px}
+.chat input{flex:1;min-width:0;font:inherit;padding:10px 12px;border-radius:12px;border:2px solid var(--line);background:#fff;color:var(--ink)}
+.stage.has-bg::after{display:none}
+.pet{position:absolute;left:50%;bottom:34px;z-index:2;transform:translateX(-50%);height:170px;width:auto;max-width:80%;object-fit:contain;filter:drop-shadow(0 6px 0 rgba(60,90,20,.25));transition:transform .2s}
+.pet.hop{animation:hop .45s ease}
+@keyframes hop{0%,100%{transform:translateX(-50%) translateY(0)}40%{transform:translateX(-50%) translateY(-18px)}}
+.bubble{position:absolute;left:50%;top:14px;z-index:3;transform:translateX(-50%);max-width:78%;background:#fff;border:2px solid var(--ink);border-radius:16px;padding:7px 14px;font-size:14px;text-align:center;word-break:keep-all}
+.bubble::after{content:"";position:absolute;left:50%;bottom:-9px;width:14px;height:14px;background:#fff;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:translateX(-50%) rotate(45deg)}
+.float{position:absolute;z-index:4;font-family:var(--display);font-size:18px;color:#e05a00;text-shadow:2px 0 0 #fff,-2px 0 0 #fff,0 2px 0 #fff,0 -2px 0 #fff,2px 2px 0 #fff,-2px -2px 0 #fff,2px -2px 0 #fff,-2px 2px 0 #fff;white-space:nowrap;pointer-events:none;animation:float 1s ease-out forwards}
+.pet[data-stage="0"]{height:125px}
+.pet[data-stage="1"]{height:150px}
+.pet.orig[data-stage]{height:160px}
+@keyframes float{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-46px)}}
+
+/* 펫 정보 */
+.card{background:#fff;border:2px solid var(--line);border-radius:16px;padding:14px}
+.pet-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px}
+.pet-name{font-family:var(--display);font-size:22px;line-height:1.2;word-break:keep-all}
+.pet-kind{font-size:12px;color:var(--ink-soft)}
+.badges{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.badge{font-family:var(--display);font-size:13px;padding:2px 10px;border-radius:999px;background:var(--cream);border:2px solid var(--gold);white-space:nowrap}
+.badge.fire{background:#ffe1d1;border-color:#f07b4a;color:#b5410f}
+.growth{margin-top:12px}
+.growth-label{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.meter{height:12px;border-radius:999px;background:#f1e6c8;overflow:hidden;border:2px solid #e5d3a0}
+.meter b{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--gold),var(--orange));transition:width .4s}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;margin-top:14px}
+.stat-top{display:flex;justify-content:space-between;font-size:13px;font-variant-numeric:tabular-nums}
+.stat-top strong{font-family:var(--display);font-weight:400}
+.stat .meter{height:10px}
+.stat[data-k=love] .meter b{background:var(--love)}
+.stat[data-k=know] .meter b{background:var(--know)}
+.stat[data-k=charm] .meter b{background:var(--charm)}
+.stat[data-k=power] .meter b{background:var(--power)}
+
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.act{display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 6px;border-radius:16px;background:var(--gold);border-bottom:4px solid var(--gold-deep);font-family:var(--display);font-size:18px;color:var(--ink);transition:transform .1s}
+.act small{font-family:var(--body);font-size:11px;color:#7a5413}
+.act:active{transform:translateY(2px);border-bottom-width:2px}
+.act:disabled{background:#eadfc2;border-bottom-color:#cdbf98;color:#9b8b66;cursor:default}
+.ending{display:block;width:100%;margin-top:12px;padding:14px;border-radius:16px;background:var(--orange);border-bottom:4px solid #b85a00;color:#fff;font-family:var(--display);font-size:20px}
+
+/* 분양소 / 도감 그리드 */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px}
+.tile{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px 8px;background:#fff;border:2px solid var(--line);border-radius:14px;font-size:13px;text-align:center;word-break:keep-all}
+.tile img{height:64px;width:auto;object-fit:contain}
+.tile.locked img{filter:brightness(0) opacity(.18)}
+.tile.locked span{color:#b9a679}
+.tile .done{font-size:10px;color:var(--orange);font-family:var(--display)}
+.tile.taken{background:#f6efdc}
+.tile.taken img{opacity:.45}
+
+/* 수첩/동료 전환 */
+.seg{display:flex;gap:6px;margin-top:16px;padding:4px;background:var(--cream);border:2px solid var(--line);border-radius:14px}
+.seg button{flex:1;padding:8px;border-radius:10px;font-family:var(--display);font-size:16px;color:var(--ink-soft)}
+.seg button[aria-pressed=true]{background:var(--gold);color:var(--ink)}
+.party{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.slot{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;aspect-ratio:3/4;border-radius:14px;background:#fff;border:2px solid var(--gold);font-size:12px;text-align:center;word-break:keep-all;padding:4px}
+.slot img{height:62%;width:auto;object-fit:contain}
+.slot.empty{border-style:dashed;border-color:var(--line);color:#b9a679;background:var(--cream)}
+.roster{display:flex;flex-direction:column;gap:10px}
+.mate{display:grid;grid-template-columns:64px 1fr;gap:12px;align-items:center;text-align:left;background:#fff;border:2px solid var(--line);border-radius:14px;padding:10px 12px}
+.mate.in{border-color:var(--gold);background:var(--cream)}
+.mate img{height:64px;width:64px;object-fit:contain}
+.mate-top{display:flex;align-items:center;gap:8px}
+.mate-top strong{font-family:var(--display);font-weight:400;font-size:17px}
+.grade{font-family:var(--display);font-size:13px;min-width:24px;text-align:center;padding:0 6px;border-radius:8px;background:#e9e0c8;color:var(--ink)}
+.grade-S{background:#ffd23f}.grade-A{background:#ffb37a}.grade-B{background:#cfe6a8}
+.mate-stats{display:flex;flex-wrap:wrap;gap:2px 10px;font-size:12px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.score-table{display:flex;flex-direction:column;gap:4px;margin:8px auto 12px;max-width:260px;font-variant-numeric:tabular-nums}
+.score-table div{display:flex;justify-content:space-between;font-size:14px}
+.score-table div:last-child{border-top:2px solid var(--line);padding-top:4px;font-family:var(--display);font-size:17px}
+
+/* 상점 */
+.note{font-size:12px;color:var(--ink-soft);margin:12px 0 0;word-break:keep-all}
+
+.btn{font-family:var(--display);font-size:16px;padding:9px 16px;border-radius:14px;background:var(--gold);border-bottom:4px solid var(--gold-deep)}
+.btn.ghost{background:var(--cream);border:2px solid var(--line);border-bottom-width:4px}
+
+/* 하단 메뉴 */
+.nav{flex:none;position:relative;z-index:10;padding-bottom:env(safe-area-inset-bottom,0px);background:#fff;border-top:3px solid var(--gold);box-shadow:0 -4px 12px rgba(90,58,18,.08)}
+.nav-inner{max-width:480px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;height:var(--nav-h);padding:0 6px;align-items:end}
+.nav button{position:relative;height:calc(var(--nav-h) - 6px);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:1px;padding:0 0 7px;border-radius:14px 14px 0 0;font-family:var(--display);font-size:14px;color:var(--c);transition:background .15s}
+.nav button img{width:36px;height:32px;object-fit:contain;opacity:.75;filter:saturate(.6);transition:transform .2s,opacity .2s,filter .2s}
+.nav button[aria-current=page]{background:var(--c);color:#fff}
+.nav button[aria-current=page] img{opacity:1;filter:drop-shadow(0 2px 0 rgba(0,0,0,.15));transform:translateY(-12px) scale(1.3)}
+/* 원작 탭의 흰 둥근 모서리 장식 */
+.nav button[aria-current=page]::before,.nav button[aria-current=page]::after{content:"";position:absolute;top:4px;width:8px;height:8px;border-top:2px solid #fff}
+.nav button[aria-current=page]::before{left:5px;border-left:2px solid #fff;border-top-left-radius:8px}
+.nav button[aria-current=page]::after{right:5px;border-right:2px solid #fff;border-top-right-radius:8px}
+@media (prefers-reduced-motion:reduce){.nav button img{transition:none}}
+
+/* 모달 */
+.modal{position:fixed;inset:0;z-index:20;background:rgba(60,40,10,.45);display:grid;place-items:center;padding:16px}
+.modal-box{width:100%;max-width:400px;background:var(--paper);border:3px solid var(--gold);border-radius:20px;padding:18px;text-align:center}
+.modal-box h3{font-family:var(--display);font-weight:400;font-size:22px;margin:0 0 6px}
+.modal-box p{margin:4px 0 12px;color:var(--ink-soft);font-size:14px;word-break:keep-all}
+.stages{display:flex;justify-content:center;align-items:flex-end;gap:6px;margin:8px 0 14px}
+.stages figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;color:var(--ink-soft)}
+.stages img{height:78px;width:auto;object-fit:contain}
+.stages img.locked{filter:brightness(0) opacity(.18)}
+.big-sprite{height:150px;width:auto;object-fit:contain;margin:6px auto 10px;display:block}
+.name-input{width:100%;font:inherit;font-size:17px;padding:10px 12px;border-radius:12px;border:2px solid var(--line);background:#fff;color:var(--ink);text-align:center;margin-bottom:12px}
+.modal-actions{display:flex;gap:8px;justify-content:center}
+.toast{position:fixed;left:50%;bottom:calc(var(--nav-h) + env(safe-area-inset-bottom,0px) + 14px);z-index:30;transform:translateX(-50%);background:var(--ink);color:#fff;padding:8px 16px;border-radius:999px;font-size:14px;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis}
+@media (prefers-reduced-motion:reduce){.pet.hop,.float{animation:none}.meter b{transition:none}}
+</style>
+
+<div class="app">
+  <header class="topbar">
+    <h1 class="logo"><img src="assets/ui/logo_farm.gif" alt="동물농장"></h1>
+    <div class="points" aria-label="포인트"><i>P</i><span id="points">0</span></div>
+  </header>
+
+  <main>
+    <section id="screen-farm" class="screen"></section>
+    <section id="screen-yard" class="screen" hidden></section>
+    <section id="screen-shop" class="screen" hidden></section>
+    <section id="screen-town" class="screen" hidden></section>
+    <section id="screen-dex" class="screen" hidden></section>
+  </main>
+
+<!-- 원작 탭(tab_mini*, img_mnu*)의 캐릭터와 색을 따온 폰용 하단 메뉴 -->
+<nav class="nav" aria-label="메뉴">
+  <div class="nav-inner">
+    <button data-tab="farm" style="--c:#c27ad9" aria-current="page"><img src="assets/ui/nav_raise.png" alt=""><span>키우기</span></button>
+    <button data-tab="yard" style="--c:#74bf17"><img src="assets/ui/nav_deco.png" alt=""><span>꾸미기</span></button>
+    <button data-tab="shop" style="--c:#5a8ee6"><img src="assets/ui/nav_item.png" alt=""><span>아이템</span></button>
+    <button data-tab="town" style="--c:#2fb6e3"><img src="assets/ui/nav_game.png" alt=""><span>마을</span></button>
+    <button data-tab="dex" style="--c:#ee9a00"><img src="assets/ui/nav_book.png" alt=""><span>수첩</span></button>
+  </div>
+</nav>
+</div>
+
+<div id="modal" class="modal" hidden><div class="modal-box" id="modal-box" role="dialog" aria-modal="true"></div></div>
+<div id="toast" class="toast" hidden role="status"></div>
+
+<script src="assets/sprites_bundle.js"></script>
+<script src="assets/food_data.js"></script>
+<script>
+(() => {
+'use strict';
+
+// ===== 설정 =====
+// 원작 성장표 기준: 애정/매력/건강/지식지수가 '각각' 90 → 1차, 210 → 2차, 300 → 엔딩. 지수 최대 1000.
+const GROWTH = { stage1: 90, stage2: 210, ending: 300 };
+const STAT_MAX = 1000;
+// 히든 노력 점수: 학교/알바/여행/수확제 등 일정으로만 쌓임(아이템 X). 육성 중엔 숨기고 엔딩 평가 때 공개.
+// 엔딩 최소치는 지수 합계 1200(300×4). 300을 넘겨 키울수록, 잡활동을 많이 할수록 점수가 오른다.
+const SCORE = { effortWeight: 2, grades: [['S', 2000], ['A', 1600], ['B', 1350], ['C', 0]] };
+const PARTY_SIZE = 4;
+
+// 날짜: 3월 1주차 시작, 한 달은 4주. 한 주마다 돌보기 몇 번 + 일정 하나. 기한/시간 압박은 없음.
+const WEEKS_PER_MONTH = 4;
+const CARE_PER_PERIOD = 3;
+const seasonOf = m => (m >= 3 && m <= 5 ? 'spring' : m <= 8 && m >= 6 ? 'summer' : m >= 9 && m <= 11 ? 'autumn' : 'winter');
+const SEASON_NAMES = { spring: '봄', summer: '여름', autumn: '가을', winter: '겨울' };
+// 여행사(원작 travel/): 여행지 6곳 + 일정 + 이동수단 + 숙소. 가격은 원작의 1/10, 효과 수치는 임시.
+// perDay: 하루마다 오르는 지수 / fatigue: 하루마다 피로 변화
+const TRAVEL_SPOTS = [
+  { id: 1, name: '구름위성 몽마랜드', price: 70, perDay: { love: 4, charm: 4 }, fatigue: -4 },
+  { id: 2, name: '진흙거품 온천', price: 80, perDay: { power: 5, love: 2 }, fatigue: -10 },
+  { id: 3, name: '눈의 나라', price: 90, perDay: { power: 3, know: 5 }, fatigue: -3 },
+  { id: 4, name: '강아지 발바닥 정글', price: 40, perDay: { power: 4, love: 3 }, fatigue: -2 },
+  { id: 5, name: '박쥐 숲의 굴 탐험', price: 80, perDay: { know: 5, power: 3 }, fatigue: 0 },
+  { id: 6, name: '하늘섬', price: 80, perDay: { charm: 5, know: 3 }, fatigue: -4 },
+];
+// 여행은 한 주를 다 쓰므로 일정은 항상 4박 5일로 고정
+const TRAVEL_DAYS = 5;
+const TRAVEL_RIDES = [
+  { id: 1, name: '통통배', cost: 0, gain: { love: 3 }, fatigue: 0 },
+  { id: 2, name: '열기구', cost: 20, gain: { charm: 6 }, fatigue: 0 },
+  { id: 3, name: '자전거', cost: 0, gain: { power: 6 }, fatigue: 10 },
+  { id: 4, name: '비행기', cost: 40, gain: {}, fatigue: -15 },
+];
+// perNight: 1박마다
+const TRAVEL_STAYS = [
+  { id: 5, name: '민박', cost: 10, gain: {}, fatigue: -6 },
+  { id: 6, name: '펜션', cost: 20, gain: { love: 1 }, fatigue: -9 },
+  { id: 7, name: '호텔', cost: 40, gain: { charm: 1 }, fatigue: -14 },
+  { id: 8, name: '길거리', cost: 0, gain: { power: 1 }, fatigue: 6 },
+];
+const SEASON_TRAVEL_LINE = {
+  spring: '봄꽃이 흐드러진 길을 지나', summer: '쨍쨍한 여름 햇살 아래', autumn: '알록달록 단풍 사이로', winter: '하얀 눈을 뽀드득 밟으며',
+};
+// 일정(한 주를 보내는 활동). 원작에 있던 시설 이름을 쓴다. 수치는 임시.
+const SCHEDULES = [
+  { id: 'school', name: '동물학교', desc: '수업·색칠·책방·말 가르치기', cost: 10, gain: {}, fatigue: 0, effort: 0, school: true, line: '' },
+  { id: 'work', name: '아르바이트', desc: '포인트 +40 건강↑ 피로↑↑', cost: 0, earn: 40, gain: { power: 15 }, fatigue: 25, effort: 3, line: '열심히 일해서 용돈 벌었어요~' },
+  { id: 'beauty', name: '마법 미용실', desc: '매력↑↑ 애정↑', cost: 20, gain: { charm: 30, love: 5 }, fatigue: 10, effort: 1, line: '어때요? 예뻐졌죠?' },
+  { id: 'playground', name: '공원 놀이', desc: '애정↑↑ 매력↑ 피로↓', cost: 0, gain: { love: 25, charm: 5 }, fatigue: -10, effort: 0, line: '친구들이랑 실컷 놀았어요!' },
+  { id: 'rest', name: '푹 쉬기', desc: '피로↓↓↓', cost: 0, gain: {}, fatigue: -50, effort: 0, line: '푹 쉬었더니 개운해요!' },
+  { id: 'travel', name: '여행사', desc: '여행지·일정을 골라 떠나요', cost: 0, gain: {}, fatigue: 0, effort: 0, travel: true, line: '' },
+];
+const STAGE_NAMES = ['기본동물', '1차성장', '2차성장'];
+const STAGE_FILES = ['base', 'stage1', 'stage2'];
+
+// 원작 UI 그래픽을 확보하면 여기 경로만 채우면 적용된다 (비어 있으면 CSS 기본 모양).
+const UI_ASSETS = {
+  // 돌보기(실내) 배경. 말풍선 구름이 그림에 포함돼 있어 대사를 그 위치에 얹는다.
+  roomBackground: 'assets/backgrounds/room/bg_bring_skin.gif',
+  // 실외 농장(꾸미기) 배경 스킨 - 실외 화면 만들 때 사용
+  farmBackground: 'assets/backgrounds/farm/bg_skin04.gif',
+};
+
+const ANIMALS = ('dragon:용,rabbit:토끼,monster:몬스터,dolphin:돌고래,squirrel:다람쥐,bluebird:파랑새,shihtzu:시츄,penguin:펭귄,' +
+  'sheep:양,duck:오리,puppy:강아지,frog:개구리,turtle:거북이,wolf:늑대,tiger:호랑이,hedgehog:고슴도치,giraffe:기린,rhino:코뿔소,' +
+  'xmas_cat:크리스마스 고양이,cat:고양이,pig:돼지,elephant:코끼리,deer:사슴,weasel:족제비,monkey:원숭이,panda:팬더,' +
+  'xmas_sheep:크리스마스 양,otter:수달,fox:여우,snake:뱀,goat:염소,owl:부엉이,koala:코알라,kangaroo:캥거루,polarbear:북극곰,' +
+  'octopus:문어,eagle:독수리,xmas_squirrel:크리스마스 다람쥐,crocodile:악어,seahorse:해마,tropicalfish:열대어,seal:바다표범,' +
+  'armadillo:아르마딜로,mole:두더지,peacock:공작,chicken:닭,unicorn:유니콘,raccoon:미국너구리,xmas_deer:크리스마스 사슴,' +
+  'skunk:스컹크,crane:두루미,hamster:햄스터,lion:사자,hippo:하마,camel:낙타,ostrich:타조,parrot:앵무새,shark:상어,' +
+  'bulldog:불독,axolotl:우파루파,frilledlizard:목도리 도마뱀,zebra:얼룩말')
+  .split(',').map(s => { const [slug, name] = s.split(':'); return { slug, name }; });
+const ANIMAL_BY_SLUG = Object.fromEntries(ANIMALS.map(a => [a.slug, a]));
+const ELEMENTS = { dragon: '불' };
+
+// 원작 지수 이름. 저장 키(power)는 그대로 두고 표시만 '건강'.
+const STATS = [
+  { k: 'love', name: '애정' },
+  { k: 'charm', name: '매력' },
+  { k: 'power', name: '건강' },
+  { k: 'know', name: '지식' },
+];
+
+// 피로지수(원작): 활동하면 오르고, 높으면 효과 반감, 꽉 차면 피곤한 활동 불가. 주가 지날 때와 쉬기 일정으로 회복.
+const FATIGUE = { max: 100, tiredAt: 70, perPeriod: -10 };
+
+// 질병: 주가 끝날 때 피로가 높을수록 걸리기 쉽다. 진료(20P)를 받아야 병명·단계·처방을 알 수 있고,
+// 같은 계열의 약을 병 단계 이상으로 먹여야 낫는다. 내버려 두면 주마다 단계가 오르고 지수가 깎인다. 수치는 임시.
+const illnessChance = f => (f >= 90 ? 0.45 : f >= 70 ? 0.25 : f >= 50 ? 0.08 : 0.02);
+const DISEASES = [
+  { id: 'cold', name: '콜록콜록 감기', symptom: '콜록콜록 기침을 해요', med: 'cough_mask', hurt: { power: -6 }, line: '콜록콜록... 목이 아파요' },
+  { id: 'itch', name: '근질근질 피부병', symptom: '몸을 자꾸 긁어요', med: 'mitten', hurt: { charm: -6 }, line: '여기저기 너무 간지러워요...' },
+  { id: 'forget', name: '깜빡깜빡 건망증', symptom: '방금 한 일도 잊어버려요', med: 'lumicap', hurt: { know: -6 }, line: '어... 제가 뭐 하려고 했죠?' },
+  { id: 'blue', name: '시무룩 마음병', symptom: '기운 없이 시무룩해요', med: 'butter_cookie', hurt: { love: -6 }, line: '아무것도 하기 싫어요...' },
+  { id: 'achy', name: '비실비실 몸살', symptom: '온몸이 쑤시고 나른해요', med: 'zelkova', hurt: {}, tire: 12, line: '온몸이 쑤셔요...' },
+  { id: 'night', name: '무서워 밤잠병', symptom: '밤마다 무서워서 잠을 못 자요', med: 'lightning_bug', hurt: {}, tire: 12, line: '밤이 너무 무서워요...' },
+];
+const DISEASE_BY_ID = Object.fromEntries(DISEASES.map(d => [d.id, d]));
+const SEVERITY = ['', '가벼움', '보통', '심함', '중병'];
+// 4단계(중병): 약으로 못 고치고 강제로 입원. 포인트는 안 들지만 한 주를 쓰고 모든 지수가 80% 깎인다.
+const SEVERE = { level: 4, keep: 0.2 };
+const rxText = sick => (sick.sev >= SEVERE.level ? '약으로는 나을 수 없어요. 입원 치료가 필요해요'
+  : `${MED_FAMILIES[DISEASE_BY_ID[sick.id].med][sick.sev - 1]} 이상`);
+// 원작 약국 약(계열마다 3단계 그림). 원작에서 확인된 이름 일부 + 나머지는 임시 이름.
+const MED_FAMILIES = {
+  cough_mask: ['기침 마스크', '튼튼 기침 마스크', '특제 기침 마스크'],
+  mitten: ['근질근질 장갑', '포근포근 장갑', '특제 벙어리 장갑'],
+  lumicap: ['깜빡깜빡 모자', '형광등 모자', '반짝반짝 형광등 모자'],
+  butter_cookie: ['버터쿠키', '하트형 버터쿠키', '왕 하트 버터쿠키'],
+  zelkova: ['느티나무 버섯', '점박이 느티나무 버섯', '황금 느티나무 버섯'],
+  lightning_bug: ['반딧불', '찌릿찌릿 반딧불', '왕 반딧불'],
+};
+const MED_PRICE = [20, 40, 70];
+const MEDICINES = Object.entries(MED_FAMILIES).flatMap(([fam, names]) =>
+  names.map((name, i) => ({ id: `${fam}0${i + 1}`, fam, tier: i + 1, name, price: MED_PRICE[i] })));
+const HOSPITAL = { diagnose: 20, stay: 80 };
+
+// 돌보기(주마다 CARE_PER_PERIOD 번). 하고 싶은 놀이도 같은 횟수를 쓴다.
+const ACTIONS = [
+  { id: 'feed', name: '음식주기', hint: '건강↑ 애정↑', gain: { power: 8, love: 3 }, fatigue: -3, lines: ['냠냠, 맛있다!', '배부르다~', '또 줘!'] },
+  { id: 'wash', name: '씻겨주기', hint: '매력↑ 건강↑', gain: { charm: 8, power: 3 }, fatigue: 2, lines: ['보송보송~', '깨끗해졌어!', '간지러워!'] },
+  { id: 'read', name: '책 읽어주기', hint: '지식↑', gain: { know: 8 }, fatigue: 4, lines: ['그 다음은요?', '하나 알았어!', '나 똑똑해졌지?'] },
+];
+
+// 하고 싶은 놀이(원작): 두 가지 중 동물이 원하는 놀이를 해주면 효과 2배.
+const PLAYS = [
+  { id: 'tapdance', name: '탭댄스', gain: { love: 8 }, line: '주인님과의 즐거운 탭 댄스 전 너무 재미있었어요~' },
+  { id: 'sing', name: '노래하기', gain: { charm: 8 }, line: '랄라라~ 제 노래 어땠어요?' },
+  { id: 'ball', name: '공놀이', gain: { love: 5, power: 4 }, line: '공 또 던져주세요! 또요 또요!' },
+  { id: 'hide', name: '숨바꼭질', gain: { love: 4, know: 4 }, line: '찾았다! 이번엔 제가 숨을게요~' },
+  { id: 'draw', name: '그림그리기', gain: { charm: 4, know: 5 }, line: '주인님 얼굴을 그려봤어요!' },
+  { id: 'walk', name: '산책하기', gain: { power: 6, love: 3 }, line: '바람이 시원해요~' },
+];
+const PLAY_FATIGUE = 8;
+
+// 동물과 대화하기: 키워드에 맞춰 대답. 다정한 말은 1분에 한 번 애정 +1.
+const CHAT_RULES = [
+  [/사랑|좋아|예뻐|이뻐|귀여|착하|최고/, ['저도 주인님이 제일 좋아요!', '헤헤, 부끄러워요~', '주인님 최고!'], { love: 1 }],
+  [/배고|밥|먹|간식/, ['배고파요! 맛있는 거 주세요~', '냠냠, 생각만 해도 좋아요']],
+  [/놀|심심|재미/, ['놀아주세요! 하고 싶은 놀이가 있어요!', '같이 놀아요~']],
+  [/공부|숙제|학교/, ['공부... 조금만 할래요', '오늘은 뭐 배워요?']],
+  [/안녕|하이|반가/, ['안녕하세요 주인님!', '반가워요~']],
+  [/피곤|졸려|자자|잘자/, ['저도 좀 졸려요...', '안녕히 주무세요~']],
+  [/이름/, ['제 이름은 {name}이에요!']],
+  [/사람|마법|주문/, ['언젠가 저도 사람이 될 수 있을까요?', '마법 주문... 꼭 찾고 싶어요']],
+];
+const CHAT_DEFAULT = ['네? 뭐라고요?', '헤헤', '응응!', '주인님 말은 어려워요~'];
+
+// 실외 농장 꾸미기(원작 아이템 그림). 이름/가격은 임시.
+const DECO = [["Fence_Farm","나무 울타리",15],["Fence_Green","초록 울타리",15],["Fence_Star","별 울타리",20],["Love_Fence","하트 울타리",20],["Flowergarden","꽃밭",25],["Yellow_flower","노란 꽃",10],["Pink_flower","분홍 꽃",10],["Sunflower","해바라기",15],["Tree_BigLeaf","둥근 나무",30],["Tree_Cherry","체리 나무",35],["Coconut","야자나무",35],["baobab","바오밥나무",60],["Scarecrow","허수아비",25],["Carrot","당근",10],["Flower_Cart","꽃수레",30],["Weathervane","바람개비",20],["Postbox","우체통",25],["StreetLight","가로등",25],["Lamplight","등불",20],["123signal","신호등",30],["7redflag","빨간 깃발",15],["Slide","미끄럼틀",50],["Rockingchair","흔들의자",35],["Couch","하트 소파",40],["Table","식탁",35],["Fountain","숲 분수",60],["PongPong_Fountain","퐁퐁 분수",55],["Sea_fountain","조개 분수",50],["Mermaid","인어 분수",80],["WoodenHouse","통나무집",80],["Woodenapartment","나무 아파트",100],["House_on_Tree","나무 위 집",90],["House_Coconut","야자잎 집",80],["House_Heater","그루터기 집",70],["House_on_Cloud","구름 위 집",120],["Castle","모래성",60],["Shrine","신전",90],["Totem","토템",40],["Balloon","열기구",70],["Cloud_Big","큰 구름",20],["Cloud_Small","작은 구름",15],["Sun","해님",30],["Moon","달님",30],["Big_star","큰 별",20],["Present_box","선물상자",20],["Love","LOVE 전구",50],["Jellyfish","해파리 아치",60],["Leaf","나뭇잎 방석",25]]
+  .map(([id, name, price]) => ({ id, name, price }));
+const DECO_BY_ID = Object.fromEntries(DECO.map(d => [d.id, d]));
+const SKINS = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10'].map(n => `bg_skin${n}`);
+const SKIN_W = 557;
+
+
+const IDLE_LINES = ['안녕! 오늘도 같이 놀자~', '나 좀 봐줘!', '기분 최고야!', '심심해~', '쓰담쓰담 해줘!'];
+
+// ===== 저장 =====
+const SAVE_KEY = 'dongmulnongjang.save.v1';
+// gameCleared: 메인 스토리(탑) 완결 여부. 완결 전엔 사람이 된 종을 다시 키울 수 없고,
+// 완결 후엔 다시 키울 수 있지만 동료로는 합류하지 않는다.
+const blankSave = () => ({ v: 1, points: 50, pet: null, dex: {}, companions: [], party: [], gameCleared: false,
+  calendar: { year: 1, month: 3, period: 0 }, careLeft: CARE_PER_PERIOD,
+  decoBag: {}, yard: { skin: 'bg_skin04', items: [], nextId: 1 }, foodBag: {}, recipeKnown: [], medBag: {}, drawings: [] });
+
+function load() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (raw) return Object.assign(blankSave(), JSON.parse(raw));
+  } catch (e) {}
+  return blankSave();
+}
+let S = load();
+function save() {
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify(S)); } catch (e) {}
+}
+
+// ===== 유틸 =====
+const $ = id => document.getElementById(id);
+const el = (tag, cls, text) => {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text != null) n.textContent = text;
+  return n;
+};
+// 원작 GIF(Wayback, 투명 배경)가 있으면 그걸 쓰고, 없으면 나무위키 성장표에서 추출한 webp.
+const ORIGINAL_SPRITES = new Set(["dragon","rabbit","monster","dolphin","squirrel","bluebird","shihtzu","penguin","sheep","duck","puppy","frog","turtle","wolf","tiger","hedgehog","giraffe","rhino","xmas_cat","cat","pig","elephant","deer","weasel","monkey","panda","xmas_sheep","otter","fox","snake","goat","owl","koala","kangaroo","polarbear","xmas_squirrel","ostrich","lion","hippo","camel","xmas_deer","parrot","hamster"]);
+// 원작 '_face1' 자세가 있는 단계(0=기본,1=1차,2=2차)
+const POSE_STAGES = {"dragon":[0,1,2],"rabbit":[0,1,2],"monster":[0,1,2],"dolphin":[0,1,2],"squirrel":[0,1,2],"bluebird":[0,1,2],"shihtzu":[0,1,2],"penguin":[0,1,2],"sheep":[0,1,2],"duck":[0,1,2],"puppy":[0,1,2],"frog":[0,1,2],"turtle":[0,1,2],"wolf":[0,1,2],"tiger":[0,1,2],"hedgehog":[0,1,2],"giraffe":[0,1,2],"rhino":[0,1,2],"xmas_cat":[0,1,2],"cat":[0,1,2],"pig":[0,1,2],"elephant":[0,1,2],"deer":[0,1,2],"weasel":[0,1,2],"monkey":[0,1,2],"panda":[0,1,2],"xmas_sheep":[0,1,2],"otter":[0,1,2],"fox":[0,1,2],"snake":[0],"owl":[0,1,2],"koala":[0,1,2],"polarbear":[0,1,2],"xmas_squirrel":[0,1,2],"ostrich":[0,1,2],"lion":[0,1,2],"hippo":[0,1,2],"camel":[0,1,2],"xmas_deer":[0,1,2],"parrot":[0,1,2],"hamster":[0,1,2]};
+const hasPose = (slug, stage) => (POSE_STAGES[slug] || []).includes(stage);
+const spritePath = (slug, stage, pose) => ORIGINAL_SPRITES.has(slug)
+  ? `assets/animals/${slug}/${slug}_${STAGE_FILES[stage]}${pose && hasPose(slug, stage) ? '_pose' : ''}.gif`
+  : `assets/animals/${slug}/${slug}_${STAGE_FILES[stage]}.webp`;
+const asset = p => (window.SPRITE_DATA && window.SPRITE_DATA[p]) || p;
+const sprite = (slug, stage, pose = false) => asset(spritePath(slug, stage, pose));
+const decoIcon = id => asset(`assets/deco/${id}.gif`);
+const medImg = id => asset(`assets/medicine/${id}s.gif`);
+const decoImg = id => asset(`assets/deco/${id}d.gif`);
+const skinImg = skin => asset(`assets/backgrounds/farm/${skin}.gif`);
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+// 받침에 맞는 조사: josa('비행기','을','를') -> '비행기를'
+const josa = (word, withFinal, withoutFinal) => {
+  const c = word.charCodeAt(word.length - 1) - 0xac00;
+  if (c < 0 || c > 11171) return word + withFinal;
+  return word + (c % 28 ? withFinal : withoutFinal);
+};
+const lowest = pet => Math.min(...STATS.map(s => pet.stats[s.k]));
+const stageFor = low => (low >= GROWTH.stage2 ? 2 : low >= GROWTH.stage1 ? 1 : 0);
+
+function dexEntry(slug) {
+  return S.dex[slug] || (S.dex[slug] = { seen: -1, ended: 0, bestScore: 0 });
+}
+const companionOf = slug => S.companions.find(c => c.slug === slug);
+const adoptLocked = slug => !S.gameCleared && !!companionOf(slug);
+const statTotal = stats => STATS.reduce((sum, s) => sum + stats[s.k], 0);
+const gradeFor = score => SCORE.grades.find(([, min]) => score >= min)[0];
+function markSeen(slug, stage) {
+  const d = dexEntry(slug);
+  d.seen = Math.max(d.seen, stage);
+}
+
+let toastTimer;
+function toast(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.hidden = true; }, 1800);
+}
+
+function openModal(build) {
+  const box = $('modal-box');
+  box.replaceChildren();
+  build(box);
+  $('modal').hidden = false;
+}
+function closeModal() { $('modal').hidden = true; }
+$('modal').addEventListener('click', e => { if (e.target.id === 'modal' && !severeLock) closeModal(); });
+
+function renderPoints() { $('points').textContent = S.points; }
+
+// ===== 탭 =====
+let currentTab = 'farm';
+document.querySelectorAll('.nav button').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
+function showTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.nav button').forEach(b => {
+    if (b.dataset.tab === tab) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+  });
+  ['farm', 'yard', 'shop', 'town', 'dex'].forEach(t => { $('screen-' + t).hidden = t !== tab; });
+  if (tab !== 'yard') clearInterval(wanderTimer);
+  ({ farm: renderFarm, yard: renderYard, shop: renderItemBox, town: renderTown, dex: renderDex })[tab]();
+  document.querySelector('.app > main').scrollTop = 0;
+}
+
+// ===== 내 농장 =====
+function renderFarm() {
+  const root = $('screen-farm');
+  root.replaceChildren();
+  if (!S.pet) return renderAdopt(root);
+  if (S.pet.sick && S.pet.sick.sev >= SEVERE.level) severeHospital();
+
+  const pet = S.pet;
+  const a = ANIMAL_BY_SLUG[pet.slug];
+
+  root.append(dateBar());
+  const stage = el('div', 'stage');
+  if (UI_ASSETS.roomBackground) {
+    stage.classList.add('room');
+    stage.style.backgroundImage = `url("${UI_ASSETS.roomBackground}")`;
+  }
+  const bubble = el('div', 'bubble', pet.lastLine || pick(IDLE_LINES));
+  const img = el('img', 'pet' + (ORIGINAL_SPRITES.has(pet.slug) ? ' orig' : '') + (pet.sick ? ' sick' : ''));
+  img.src = sprite(pet.slug, pet.stage);
+  img.dataset.stage = pet.stage;
+  img.alt = `${pet.name} (${a.name} ${STAGE_NAMES[pet.stage]})`;
+  img.addEventListener('click', () => { say(pick(IDLE_LINES)); hop(); showPose(); });
+  stage.append(bubble, img);
+  root.append(stage);
+
+  const head = el('div', 'pet-head');
+  const names = el('div');
+  names.append(el('div', 'pet-name', pet.name), el('div', 'pet-kind', `${a.name} · 함께한 지 ${(pet.periods || 0) * 7 + 1}일째`));
+  const badges = el('div', 'badges');
+  if (ELEMENTS[pet.slug]) badges.append(el('span', 'badge fire', ELEMENTS[pet.slug] + '속성'));
+  badges.append(el('span', 'badge', STAGE_NAMES[pet.stage]));
+  if (pet.sick) badges.append(el('span', 'badge sick', pet.sick.known ? `${DISEASE_BY_ID[pet.sick.id].name} (${SEVERITY[pet.sick.sev]})` : '아파요'));
+  head.append(names, badges);
+  root.append(head);
+
+  const low = lowest(pet);
+  const nextGoal = pet.stage === 0 ? GROWTH.stage1 : pet.stage === 1 ? GROWTH.stage2 : GROWTH.ending;
+  const prevGoal = pet.stage === 0 ? 0 : pet.stage === 1 ? GROWTH.stage1 : GROWTH.stage2;
+  const nextName = pet.stage === 0 ? '1차성장' : pet.stage === 1 ? '2차성장' : '엔딩 도전';
+  const growth = el('div', 'growth');
+  const gl = el('div', 'growth-label');
+  gl.append(el('span', null, `다음: ${nextName} (네 지수 모두 ${nextGoal})`), el('span', null, `가장 낮은 지수 ${low}`));
+  const gm = el('div', 'meter');
+  const gb = el('b');
+  gb.style.width = Math.max(0, Math.min(100, (low - prevGoal) / (nextGoal - prevGoal) * 100)) + '%';
+  gm.append(gb);
+  growth.append(gl, gm);
+
+  const stats = el('div', 'stats');
+  STATS.forEach(s => {
+    const v = pet.stats[s.k];
+    const w = el('div', 'stat' + (v < nextGoal ? ' short' : ''));
+    w.dataset.k = s.k;
+    const top = el('div', 'stat-top');
+    top.append(el('strong', null, s.name + '지수'), el('span', null, `${v}`));
+    const m = el('div', 'meter');
+    const b = el('b');
+    b.style.width = Math.min(100, v / GROWTH.ending * 100) + '%';
+    m.append(b);
+    w.append(top, m);
+    stats.append(w);
+  });
+
+  const fat = fatigueNow(pet);
+  const fw = el('div', 'stat fatigue' + (fat >= FATIGUE.tiredAt ? ' tired' : ''));
+  const ft = el('div', 'stat-top');
+  ft.append(el('strong', null, '피로지수'), el('span', null, fat >= FATIGUE.max ? `${fat} 지쳤어요` : fat >= FATIGUE.tiredAt ? `${fat} 피곤해요` : `${fat}`));
+  const fm = el('div', 'meter');
+  const fb = el('b');
+  fb.style.width = (fat / FATIGUE.max * 100) + '%';
+  fm.append(fb);
+  fw.append(ft, fm);
+  const riskText = fat >= 90 ? '병에 걸리기 매우 쉬워요. 푹 쉬게 해주세요'
+    : fat >= FATIGUE.tiredAt ? '피곤해서 효과가 반으로 줄고, 병에 걸리기 쉬워요'
+    : fat >= 50 ? '조금 지쳤어요. 병에 걸릴 수도 있어요' : '';
+  if (riskText) fw.append(el('div', 'fatigue-risk', riskText));
+
+  const card = el('div', 'card');
+  card.style.marginTop = '12px';
+  card.append(growth, stats, fw);
+  root.append(card);
+
+  if (pet.sick) {
+    const d = DISEASE_BY_ID[pet.sick.id];
+    const sk = el('div', 'sick-card');
+    sk.append(el('strong', null, pet.sick.known ? `${d.name} · ${SEVERITY[pet.sick.sev]}` : `${josa(pet.name, '이', '가')} 아파요`));
+    sk.append(el('p', null, pet.sick.known
+      ? `처방: ${rxText(pet.sick)}. 아픈 동안은 일정은 푹 쉬기만 할 수 있고 돌봐주기 효과가 반으로 줄어요.`
+      : `${d.symptom}. 동물병원 진료실에서 진료를 받아보세요. 내버려 두면 점점 심해져요.`));
+    const go = el('button', 'btn', '동물병원 가기');
+    go.addEventListener('click', () => { townView = 'hospital'; hospitalView = pet.sick.known ? 'pharmacy' : 'clinic'; showTab('town'); });
+    sk.append(go);
+    root.insertBefore(sk, card);
+  }
+
+  const noCare = S.careLeft <= 0;
+  const careHead = el('div', 'care-head');
+  careHead.append(el('h3', 'sub-title', '돌봐주기'), el('span', 'care-left', `이번 주 남은 횟수 ${S.careLeft}/${CARE_PER_PERIOD}`));
+  root.append(careHead);
+
+  ensureWish(pet);
+  const wish = el('section', 'wish');
+  wish.append(el('h3', null, '하고 싶은 놀이'));
+  const opts = el('div', 'wish-opts');
+  pet.wish.options.forEach(id => {
+    const play = PLAYS.find(p => p.id === id);
+    const b = el('button', 'wish-btn' + (id === pet.wish.want ? ' want' : ''));
+    b.append(el('strong', null, play.name), el('small', null, id === pet.wish.want ? '하고 싶어요!' : gainText(play.gain)));
+    b.disabled = noCare;
+    b.addEventListener('click', () => doPlay(play));
+    opts.append(b);
+  });
+  wish.append(opts);
+  root.append(wish);
+
+  const acts = el('div', 'actions three');
+  ACTIONS.forEach(act => {
+    const btn = el('button', 'act');
+    btn.append(document.createTextNode(act.name), el('small', null, act.hint));
+    btn.disabled = noCare;
+    btn.addEventListener('click', () => doAction(act));
+    acts.append(btn);
+  });
+  root.append(acts);
+
+  root.append(el('h3', 'sub-title', '이번 주 일정 정하기'));
+  root.lastChild.append(el('span', null, '고르면 10일이 지나가요'));
+  const sch = el('div', 'schedules');
+  SCHEDULES.forEach(s => {
+    const b = el('button', 'sched');
+    b.append(el('strong', null, s.name), el('small', null, s.desc), el('em', null, s.cost ? `${s.cost}P` : '무료'));
+    b.disabled = S.points < s.cost;
+    b.addEventListener('click', () => confirmSchedule(s));
+    sch.append(b);
+  });
+  root.append(sch);
+
+  const chat = el('form', 'chat');
+  const input = el('input');
+  input.maxLength = 40;
+  input.placeholder = '동물과 대화하기';
+  input.setAttribute('aria-label', '동물과 대화하기');
+  chat.append(input, el('button', 'btn', '입력'));
+  chat.addEventListener('submit', e => {
+    e.preventDefault();
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    chatReply(text);
+  });
+  root.append(chat);
+
+  if (pet.stage === 2 && low >= GROWTH.ending) {
+    const end = el('button', 'ending', pet.sick ? '아픈 동안은 엔딩에 도전할 수 없어요' : '엔딩 도전하기');
+    end.disabled = !!pet.sick;
+    end.addEventListener('click', tryEnding);
+    root.append(end);
+  }
+}
+
+function say(line) {
+  if (!S.pet) return;
+  S.pet.lastLine = line;
+  const b = document.querySelector('#screen-farm .bubble');
+  if (b) b.textContent = line;
+}
+function hop() {
+  const p = document.querySelector('#screen-farm .pet');
+  if (!p) return;
+  p.classList.remove('hop');
+  void p.offsetWidth;
+  p.classList.add('hop');
+}
+let poseTimer;
+function showPose(ms = 1500) {
+  const p = document.querySelector('#screen-farm .pet');
+  if (!p || !S.pet || !hasPose(S.pet.slug, S.pet.stage)) return;
+  p.src = sprite(S.pet.slug, S.pet.stage, true);
+  clearTimeout(poseTimer);
+  poseTimer = setTimeout(() => {
+    const cur = document.querySelector('#screen-farm .pet');
+    if (cur && S.pet) cur.src = sprite(S.pet.slug, S.pet.stage);
+  }, ms);
+}
+
+function floatText(text) {
+  const stage = document.querySelector('#screen-farm .stage');
+  if (!stage) return;
+  const f = el('div', 'float', text);
+  f.style.left = (40 + Math.random() * 20) + '%';
+  f.style.top = '45%';
+  stage.append(f);
+  setTimeout(() => f.remove(), 1000);
+}
+
+function applyGain(gain) {
+  STATS.forEach(s => {
+    if (gain[s.k]) S.pet.stats[s.k] = Math.max(0, Math.min(STAT_MAX, S.pet.stats[s.k] + gain[s.k]));
+  });
+}
+function gainText(gain) {
+  return STATS.filter(s => gain[s.k] > 0).map(s => `${s.name}+${gain[s.k]}`).join(' ');
+}
+
+function checkGrowth() {
+  const pet = S.pet;
+  const next = stageFor(lowest(pet));
+  if (next > pet.stage) {
+    pet.stage = next;
+    markSeen(pet.slug, next);
+    save();
+    openModal(box => {
+      box.append(el('h3', null, `${STAGE_NAMES[next]}!`));
+      const img = el('img', 'big-sprite');
+      img.src = sprite(pet.slug, next);
+      img.alt = '';
+      box.append(img, el('p', null, `${josa(pet.name, '이', '가')} ${STAGE_NAMES[next]}했어요.`));
+      const ok = el('button', 'btn', '좋아!');
+      ok.addEventListener('click', () => { closeModal(); renderFarm(); });
+      box.append(ok);
+    });
+  }
+}
+
+const fatigueNow = pet => pet.fatigue || 0;
+function setFatigue(pet, v) {
+  pet.fatigue = Math.max(0, Math.min(FATIGUE.max, v));
+}
+
+// ===== 날짜 / 일정 =====
+const dateText = c => `${c.year}년째 ${c.month}월 ${c.period + 1}주차`;
+function dateBar() {
+  const c = S.calendar;
+  const bar = el('div', 'date-bar season-' + seasonOf(c.month));
+  bar.append(el('strong', null, dateText(c)), el('span', 'season-chip', SEASON_NAMES[seasonOf(c.month)]));
+  return bar;
+}
+
+function advancePeriod() {
+  const c = S.calendar;
+  const festival = c.month === 9 && c.period === WEEKS_PER_MONTH - 1;
+  c.period += 1;
+  if (c.period >= WEEKS_PER_MONTH) {
+    c.period = 0;
+    c.month = c.month === 12 ? 1 : c.month + 1;
+    if (c.month === 3) c.year += 1;
+  }
+  S.careLeft = CARE_PER_PERIOD;
+  const news = [];
+  const pet = S.pet;
+  if (pet) {
+    pet.periods = (pet.periods || 0) + 1;
+    const f = fatigueNow(pet);
+    if (pet.sick) {
+      const d = DISEASE_BY_ID[pet.sick.id];
+      const hurt = Object.fromEntries(Object.entries(d.hurt).map(([k, v]) => [k, v * pet.sick.sev]));
+      applyGain(hurt);
+      setFatigue(pet, f + (d.tire || 0) * pet.sick.sev);
+      const lost = STATS.filter(x => hurt[x.k]).map(x => `${x.name} ${hurt[x.k]}`).join(' ');
+      if (pet.sick.sev < SEVERE.level) pet.sick.sev += 1;
+      news.push(pet.sick.sev >= SEVERE.level
+        ? `${josa(pet.name, '이', '가')} 아파서 ${lost ? `지수가 깎였어요(${lost})` : '피로가 더 쌓였어요'}. 결국 중병이 됐어요! 당장 입원해야 해요.`
+        : `${josa(pet.name, '이', '가')} 아파서 ${lost ? `지수가 깎였어요(${lost})` : '피로가 더 쌓였어요'}. 병이 '${SEVERITY[pet.sick.sev]}' 단계가 됐어요. 병원에 데려가 주세요.`);
+      pet.lastLine = d.line;
+    } else {
+      setFatigue(pet, f + FATIGUE.perPeriod);
+      if (Math.random() < illnessChance(f)) {
+        const d = pick(DISEASES);
+        pet.sick = { id: d.id, sev: 1, known: false };
+        pet.lastLine = d.line;
+        news.push(`${josa(pet.name, '이', '가')} 병에 걸렸어요! ${d.symptom}. 동물병원에서 진료를 받아보세요.`);
+      }
+    }
+  }
+  return { festival, news };
+}
+
+function confirmSchedule(s) {
+  const pet = S.pet;
+  if (pet.sick && s.id !== 'rest') {
+    say(DISEASE_BY_ID[pet.sick.id].line);
+    toast('아픈 동안에는 푹 쉬기만 할 수 있어요. 동물병원에 데려가 주세요');
+    return;
+  }
+  if ((s.fatigue > 0 || s.school) && fatigueNow(pet) >= FATIGUE.max) {
+    say('너무 피곤해요... 오늘은 쉬고 싶어요');
+    toast('피로지수가 가득 찼어요. 쉬기나 여행으로 피로를 풀어주세요');
+    return;
+  }
+  if (s.school) {
+    townView = 'school';
+    schoolView = 'hub';
+    return showTab('town');
+  }
+  if (s.travel) {
+    townView = 'travel';
+    travelPlan = { spot: null, ride: 1, stay: 5 };
+    return showTab('town');
+  }
+  openModal(box => {
+    box.append(el('h3', null, s.name), el('p', null, `${dateText(S.calendar)} 일주일 동안 ${s.name}에서 지내요.`));
+    box.append(el('p', null, `${s.desc}${s.cost ? ` · ${s.cost}P` : ''}`));
+    if (S.careLeft > 0) box.append(el('p', 'warn', `이번 주 돌봐주기가 ${S.careLeft}번 남았어요. 그래도 넘어갈까요?`));
+    const row = el('div', 'modal-actions');
+    const no = el('button', 'btn ghost', '다시 고를래');
+    no.addEventListener('click', closeModal);
+    const yes = el('button', 'btn', '보내기');
+    yes.addEventListener('click', () => runSchedule(s));
+    row.append(no, yes);
+    box.append(row);
+  });
+}
+
+function runSchedule(s) {
+  endPeriod({ id: s.id, title: `${s.name} 끝!`, cost: s.cost, earn: s.earn, gain: s.gain, fatigue: s.fatigue, effort: s.effort, line: s.line });
+}
+
+// 한 주를 보내는 공통 처리(일정·여행). decorate(box) 로 결과 창 위쪽에 그림 등을 넣는다.
+function endPeriod({ id, title, cost = 0, earn = 0, gain, fatigue, effort = 0, line, decorate, extra = [], after }) {
+  const pet = S.pet;
+  if (S.points < cost) return;
+  const tired = (fatigue > 0 && fatigueNow(pet) >= FATIGUE.tiredAt) || !!pet.sick;
+  const g = tired ? halveGain(gain) : gain;
+  S.points += earn - cost;
+  applyGain(g);
+  setFatigue(pet, fatigueNow(pet) + fatigue);
+  pet.effort = (pet.effort || 0) + effort;
+  pet.activities = pet.activities || {};
+  pet.activities[id] = (pet.activities[id] || 0) + 1;
+  pet.lastLine = tired ? `피곤해서 힘들었어요... ${line}` : line;
+  if (after) after();
+  const { festival, news } = advancePeriod();
+  const revealed = S.recipeKnown.length ? revealRecipe() : null;
+  save();
+  renderPoints();
+  openModal(box => {
+    box.append(el('h3', null, title));
+    if (decorate) decorate(box);
+    const parts = [gainText(g), earn ? `포인트 +${earn}` : '', fatigue < 0 ? `피로 ${fatigue}` : `피로 +${fatigue}`].filter(Boolean);
+    box.append(el('p', null, parts.join(' · ')));
+    extra.forEach(t => box.append(el('p', null, t)));
+    if (tired && Object.keys(gain).length) box.append(el('p', 'warn', '피곤하거나 아파서 효과가 반으로 줄었어요.'));
+    box.append(el('p', 'next-date', `일주일이 지나 ${dateText(S.calendar)}가 됐어요.`));
+    if (revealed) box.append(el('p', null, `쿠킹샵 요리 비법서에 새 요리법이 공개됐어요: ${FOOD_BY_ID[revealed.result].name}`));
+    news.forEach(t => box.append(el('p', 'warn', t)));
+    const ok = el('button', 'btn', '확인');
+    ok.addEventListener('click', () => {
+      closeModal();
+      pendingFestival = festival;
+      showTab('farm');
+      if (severeLock) return;
+      pendingFestival = false;
+      checkGrowth();
+      if (festival) setTimeout(harvestFestival, 50);
+    });
+    box.append(ok);
+  });
+}
+
+// 수확제(9월 4주차가 끝날 때): 가장 자신 있는 지수로 대회에 나간다. 상금/순위 기준은 임시.
+const CONTESTS = { love: '인기 대회', charm: '미인 대회', power: '씨름 대회', know: '퀴즈 대회' };
+function harvestFestival() {
+  const pet = S.pet;
+  if (!pet) return;
+  const best = STATS.reduce((a, b) => (pet.stats[b.k] > pet.stats[a.k] ? b : a));
+  const v = pet.stats[best.k];
+  const [rank, prize] = v >= 600 ? ['우승', 100] : v >= 400 ? ['준우승', 60] : v >= 250 ? ['3등', 30] : ['참가상', 10];
+  S.points += prize;
+  pet.effort = (pet.effort || 0) + 5;
+  pet.activities = pet.activities || {};
+  pet.activities.festival = (pet.activities.festival || 0) + 1;
+  save();
+  renderPoints();
+  openModal(box => {
+    box.append(el('h3', null, `${S.calendar.year}년째 수확제`));
+    const img = el('img', 'big-sprite');
+    img.src = sprite(pet.slug, pet.stage, true);
+    img.alt = '';
+    box.append(img, el('p', null, `${josa(pet.name, '이', '가')} ${CONTESTS[best.k]}에 나가서 ${rank}을 했어요! (${best.name}지수 ${v})`));
+    box.append(el('p', null, `상금 ${prize}P`));
+    const ok = el('button', 'btn', '좋아!');
+    ok.addEventListener('click', () => { closeModal(); renderFarm(); });
+    box.append(ok);
+  });
+}
+function ensureWish(pet) {
+  if (pet.wish && PLAYS.some(p => p.id === pet.wish.want)) return;
+  const opts = [...PLAYS].sort(() => Math.random() - .5).slice(0, 2);
+  pet.wish = { options: opts.map(p => p.id), want: pick(opts).id };
+  save();
+}
+const halveGain = g => Object.fromEntries(Object.entries(g).map(([k, v]) => [k, v > 0 ? Math.ceil(v / 2) : v]));
+const doubleGain = g => Object.fromEntries(Object.entries(g).map(([k, v]) => [k, v * 2]));
+
+function perform({ gain, fatigue = 0, line, after }) {
+  if (S.careLeft <= 0) {
+    toast('이번 주에는 더 돌봐줄 수 없어요. 일정을 정해 다음 주로 넘어가세요');
+    return;
+  }
+  const pet = S.pet;
+  const f = fatigueNow(pet);
+  if (fatigue > 0 && f >= FATIGUE.max) {
+    say('너무 피곤해요... 좀 쉬게 해주세요');
+    toast('피로지수가 가득 찼어요. 쉬게 해주세요');
+    return;
+  }
+  const tired = (fatigue > 0 && f >= FATIGUE.tiredAt) || !!pet.sick;
+  const g = tired ? halveGain(gain) : gain;
+  S.careLeft -= 1;
+  applyGain(g);
+  setFatigue(pet, f + fatigue);
+  S.points += 2;
+  pet.lastLine = tired ? `피곤해요... ${line}` : line;
+  if (after) after();
+  save();
+  renderPoints();
+  renderFarm();
+  hop();
+  showPose();
+  if (gainText(g)) floatText(gainText(g));
+  checkGrowth();
+}
+
+function feedFood(f) {
+  if (!S.pet || f.id === FOOD.bad.id || (S.foodBag[f.id] || 0) < 1) return;
+  if (S.careLeft <= 0) return toast('이번 주에는 더 돌봐줄 수 없어요. 일정을 정해 다음 주로 넘어가세요');
+  S.foodBag[f.id] -= 1;
+  perform({
+    gain: f.gain,
+    fatigue: f.fatigue != null ? f.fatigue : -3,
+    line: f.id === 'badsoup' ? '으... 배 아파요...' : `${f.name}! 정말 맛있어요!`,
+  });
+}
+
+function doAction(act) {
+  const foods = act.id === 'feed' ? ownedFoods().filter(f => f.id !== FOOD.bad.id) : [];
+  if (!foods.length) return perform({ gain: act.gain, fatigue: act.fatigue, line: pick(act.lines) });
+  // 쿠킹샵에서 만든 음식이 있으면 무엇을 먹일지 고른다
+  openModal(box => {
+    box.append(el('h3', null, '무엇을 먹일까요?'));
+    const grid = el('div', 'food-grid pick');
+    const basic = el('button', 'food-card');
+    basic.append(el('strong', null, '기본 사료'), el('small', null, gainText(act.gain)));
+    basic.addEventListener('click', () => { closeModal(); perform({ gain: act.gain, fatigue: act.fatigue, line: pick(act.lines) }); });
+    grid.append(basic);
+    foods.forEach(f => {
+      const b = el('button', 'food-card');
+      const img = el('img');
+      img.src = foodImg(f.id);
+      img.alt = '';
+      b.append(img, el('strong', null, f.name), el('small', null, f.id === 'badsoup' ? '배탈 날지도…' : `${gainText(f.gain)} · ${f.count}개`));
+      b.addEventListener('click', () => { closeModal(); feedFood(f); });
+      grid.append(b);
+    });
+    box.append(grid);
+    const close = el('button', 'btn ghost', '닫기');
+    close.addEventListener('click', closeModal);
+    box.append(close);
+  });
+}
+
+function doPlay(play) {
+  const pet = S.pet;
+  const wished = pet.wish && pet.wish.want === play.id;
+  perform({
+    gain: wished ? doubleGain(play.gain) : play.gain,
+    fatigue: PLAY_FATIGUE,
+    line: wished ? `와! 정말 하고 싶었어요! ${play.line}` : play.line,
+    after: () => { pet.wish = null; },
+  });
+}
+
+// ===== 욕설 필터 (메이플 수준: 흔한 욕설·비하·성적 표현 + 초성/숫자/띄어쓰기 변형) =====
+// 공백·숫자·기호를 지우고 비교한다. 동물 게임에서 흔한 멀쩡한 말(젖소, 시바견, 보지 마 등)은 먼저 지운다.
+const BAD_ALLOW = ['젖소', '시바견', '시바이누', '보지마', '보지않', '자지마', '자지않', '새끼손가락', '새끼고양이', '새끼강아지', '미친듯이'];
+const BAD_WORDS = [
+  '시발', '씨발', '씨바', '씨빨', '시빨', '씨팔', '시팔', '쓰벌', '쓰발', '씌발', '썅', '샹년', '시바', '싸발',
+  '개새', '개색', '개세끼', '개쌔', '개섀', '새끼야', '섀끼', '쌔끼', '씨새', '개같', '개소리', '개년', '개놈',
+  '병신', '븅신', '빙신', '병쉰', '등신', '미친놈', '미친년', '미친새', '미친개', '미친', '또라이', '돌아이', '찐따', '애자',
+  '존나', '졸라', '존니', '좆', '좃', '조까', '좆까', '지랄', '염병', '엠창', '니미', '느금', '니애미', '니엄마', '느개비', '애미', '애비',
+  '꺼져', '닥쳐', '닥치', '엿먹', '뒤져', '뒈져', '디져', '죽어라', '죽여', '쓰레기', '걸레', '창녀', '창놈', '화냥',
+  '한남', '한녀', '김치녀', '틀딱', '급식충', '맘충', '노인충', '장애새', '정신병자',
+  '섹스', '쎅스', '야동', '자지', '보지', '젖꼭지', '젖탱', '강간', '성폭', '딸딸', '자위', '오르가즘', '창년',
+  'fuck', 'fck', 'shit', 'bitch', 'asshole', 'dick', 'pussy', 'porn', 'sex', 'nigger', 'nigga', 'cunt', 'bastard',
+];
+const BAD_CHOSEONG = ['ㅅㅂ', 'ㅆㅂ', 'ㅅㅃ', 'ㅂㅅ', 'ㅄ', 'ㅈㄹ', 'ㅈㄴ', 'ㅁㅊ', 'ㄱㅅㄲ', 'ㅅㄲ', 'ㄲㅈ', 'ㄷㅊ', 'ㅗㅗ', 'ㅈㄲ', 'ㅆㄹㄱ'];
+function hasBadWord(text) {
+  let t = String(text).toLowerCase().replace(/[^가-힣ㄱ-ㅎㅏ-ㅣa-z]/g, '');
+  BAD_ALLOW.forEach(w => { t = t.split(w).join(''); });
+  return BAD_WORDS.some(w => t.includes(w)) || BAD_CHOSEONG.some(w => t.includes(w));
+}
+
+function chatReply(text) {
+  const pet = S.pet;
+  if (hasBadWord(text)) {
+    applyGain({ love: -1 });
+    say(pick(['그런 말은 싫어요... 흑', '주인님 무서워요...', '나쁜 말 하지 마세요!']));
+    floatText('애정-1');
+    hop();
+    save();
+    return;
+  }
+  let reply = null;
+  let gain = null;
+  const taught = (pet.taught || []).find(t => text.includes(t.q));
+  if (taught) reply = taught.a;
+  else for (const [re, lines, g] of CHAT_RULES) {
+    if (re.test(text)) { reply = pick(lines); gain = g; break; }
+  }
+  reply = (reply || pick(CHAT_DEFAULT)).replace('{name}', pet.name);
+  const periodKey = dateText(S.calendar);
+  if (gain && pet.chatAt !== periodKey) {
+    pet.chatAt = periodKey;
+    applyGain(gain);
+    floatText(gainText(gain));
+  }
+  say(reply);
+  hop();
+  save();
+}
+
+function tryEnding() {
+  const pet = S.pet;
+  const joins = !S.gameCleared;
+  openModal(box => {
+    box.append(el('h3', null, '엔딩 도전'));
+    const img = el('img', 'big-sprite');
+    img.src = sprite(pet.slug, 2);
+    img.alt = '';
+    box.append(img, el('p', null, joins
+      ? `${josa(pet.name, '이', '가')} 사람이 될 준비가 됐어요. 사람이 되면 탐험을 함께할 동료가 되고, ${josa(ANIMAL_BY_SLUG[pet.slug].name, '은', '는')} 다시 분양받을 수 없어요. 지금 능력치로 평가가 확정돼요.`
+      : `${josa(pet.name, '이', '가')} 사람이 될 준비가 됐어요. 평가 점수는 동물수첩에 기록돼요.`));
+    const row = el('div', 'modal-actions');
+    const no = el('button', 'btn ghost', '조금 더 키울래');
+    no.addEventListener('click', closeModal);
+    const yes = el('button', 'btn', '사람이 되기');
+    yes.addEventListener('click', () => finishEnding(joins));
+    row.append(no, yes);
+    box.append(row);
+  });
+}
+
+function finishEnding(joins) {
+  const pet = S.pet;
+  const effort = pet.effort || 0;
+  const base = statTotal(pet.stats);
+  const score = base + effort * SCORE.effortWeight;
+  const grade = gradeFor(score);
+  const d = dexEntry(pet.slug);
+  d.ended += 1;
+  d.bestScore = Math.max(d.bestScore, score);
+  if (joins) {
+    S.companions.push({ slug: pet.slug, name: pet.name, stats: { ...pet.stats }, effort, score, grade, at: Date.now() });
+    if (S.party.length < PARTY_SIZE) S.party.push(pet.slug);
+  }
+  S.points += 100;
+  S.pet = null;
+  save();
+  renderPoints();
+  openModal(box => {
+    box.append(el('h3', null, `평가 ${grade}`));
+    const tbl = el('div', 'score-table');
+    [['능력치 합계', base], [`노력 점수 ×${SCORE.effortWeight}`, effort * SCORE.effortWeight], ['총점', score]].forEach(([k, v]) => {
+      const r = el('div');
+      r.append(el('span', null, k), el('strong', null, String(v)));
+      tbl.append(r);
+    });
+    box.append(tbl, el('p', null, joins
+      ? `${josa(pet.name, '이', '가')} 사람이 되어 동료로 합류했어요! (사람 모습 그림은 준비 중)`
+      : `${josa(pet.name, '이', '가')} 사람이 되었어요.`));
+    const ok = el('button', 'btn', '확인');
+    ok.addEventListener('click', () => { closeModal(); renderFarm(); });
+    box.append(ok);
+  });
+}
+
+// ===== 꾸미기(실외 마당) =====
+let wanderTimer = null;
+let yardEdit = false;
+let yardSel = null;
+const placedCount = id => S.yard.items.filter(i => i.id === id).length;
+const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+function renderYard() {
+  const root = $('screen-yard');
+  root.replaceChildren();
+  clearInterval(wanderTimer);
+  const Y = S.yard;
+
+  const stage = el('div', 'stage yard' + (yardEdit ? ' editing' : ''));
+  stage.style.backgroundImage = `url("${skinImg(Y.skin)}")`;
+  Y.items.forEach(it => stage.append(decoNode(it, stage)));
+
+  if (S.pet) {
+    const p = el('img', 'yard-pet');
+    p.src = sprite(S.pet.slug, S.pet.stage);
+    p.alt = S.pet.name;
+    p.style.width = (135 / SKIN_W * 100) + '%';
+    const place = (x, y) => { p.style.left = x + '%'; p.style.top = y + '%'; p.style.zIndex = Math.round(y * 10); };
+    place(50, 88);
+    p.addEventListener('click', () => {
+      if (yardEdit) return;
+      p.src = sprite(S.pet.slug, S.pet.stage, true);
+      setTimeout(() => { p.src = sprite(S.pet.slug, S.pet.stage); }, 1200);
+    });
+    stage.append(p);
+    wanderTimer = setInterval(() => {
+      if (currentTab !== 'yard' || yardEdit) return;
+      place(12 + Math.random() * 76, 62 + Math.random() * 32);
+    }, 2600);
+  }
+  root.append(stage);
+
+  const head = el('div', 'yard-head');
+  head.append(el('h2', 'section-title', yardEdit ? '농장 꾸미는 중' : '우리 농장 마당'));
+  const editBtn = el('button', 'btn' + (yardEdit ? '' : ' green'), yardEdit ? '다 꾸몄어요' : '농장 꾸미기');
+  editBtn.addEventListener('click', () => { yardEdit = !yardEdit; yardSel = null; save(); renderYard(); });
+  head.append(editBtn);
+  root.append(head);
+
+  if (!yardEdit) {
+    root.append(el('p', 'note', S.pet
+      ? `${josa(S.pet.name, '이', '가')} 마당에서 놀고 있어요. 마을 아이템 가게에서 꾸미기 아이템을 사서 농장을 꾸며보세요.`
+      : '마을 아이템 가게에서 꾸미기 아이템을 사서 농장을 꾸며보세요.'));
+    return;
+  }
+
+  const sel = Y.items.find(i => i.uid === yardSel);
+  if (sel) {
+    const row = el('div', 'sel-row');
+    row.append(el('span', null, `${DECO_BY_ID[sel.id].name} 선택됨 · 끌어서 옮겨요`));
+    const del = el('button', 'btn ghost', '치우기');
+    del.addEventListener('click', () => {
+      Y.items = Y.items.filter(i => i.uid !== sel.uid);
+      yardSel = null;
+      save();
+      renderYard();
+    });
+    row.append(del);
+    root.append(row);
+  }
+
+  root.append(el('h3', 'sub-title', '가방 속 꾸미기 아이템'));
+  const owned = DECO.filter(d => (S.decoBag[d.id] || 0) - placedCount(d.id) > 0);
+  if (!owned.length) {
+    const p = el('p', 'note', '놓을 수 있는 아이템이 없어요. ');
+    const go = el('button', 'link-btn', '마을 아이템 가게로 가기');
+    go.addEventListener('click', () => { townView = 'shop'; showTab('town'); });
+    p.append(go);
+    root.append(p);
+  } else {
+    const tray = el('div', 'tray');
+    owned.forEach(d => {
+      const b = el('button', 'tray-item');
+      const img = el('img');
+      img.src = decoIcon(d.id);
+      img.alt = '';
+      b.append(img, el('span', null, d.name), el('small', null, `×${(S.decoBag[d.id] || 0) - placedCount(d.id)}`));
+      b.addEventListener('click', () => {
+        const it = { uid: Y.nextId++, id: d.id, x: 30 + Math.random() * 40, y: 68 + Math.random() * 22 };
+        Y.items.push(it);
+        yardSel = it.uid;
+        save();
+        renderYard();
+      });
+      tray.append(b);
+    });
+    root.append(tray);
+  }
+
+  root.append(el('h3', 'sub-title', '배경'));
+  const skins = el('div', 'skins');
+  SKINS.forEach(s => {
+    const b = el('button');
+    b.style.backgroundImage = `url("${skinImg(s)}")`;
+    b.setAttribute('aria-pressed', String(s === Y.skin));
+    b.setAttribute('aria-label', `배경 ${s.slice(-2)}`);
+    b.addEventListener('click', () => { Y.skin = s; save(); renderYard(); });
+    skins.append(b);
+  });
+  root.append(skins);
+}
+
+function decoNode(it, stage) {
+  const img = el('img', 'deco' + (yardEdit && it.uid === yardSel ? ' sel' : ''));
+  img.src = decoImg(it.id);
+  img.alt = DECO_BY_ID[it.id] ? DECO_BY_ID[it.id].name : '';
+  img.draggable = false;
+  const pos = () => { img.style.left = it.x + '%'; img.style.top = it.y + '%'; img.style.zIndex = Math.round(it.y * 10); };
+  pos();
+  img.addEventListener('load', () => { img.style.width = (img.naturalWidth / SKIN_W * 100) + '%'; });
+  if (!yardEdit) return img;
+  img.addEventListener('pointerdown', e => {
+    e.preventDefault();
+    yardSel = it.uid;
+    stage.querySelectorAll('.deco.sel').forEach(n => n.classList.remove('sel'));
+    img.classList.add('sel');
+    img.setPointerCapture(e.pointerId);
+    const r = stage.getBoundingClientRect();
+    const dx = (e.clientX - r.left) / r.width * 100 - it.x;
+    const dy = (e.clientY - r.top) / r.height * 100 - it.y;
+    const move = ev => {
+      it.x = clamp((ev.clientX - r.left) / r.width * 100 - dx, 0, 100);
+      it.y = clamp((ev.clientY - r.top) / r.height * 100 - dy, 8, 100);
+      pos();
+    };
+    const up = () => {
+      img.removeEventListener('pointermove', move);
+      save();
+      renderYard();
+    };
+    img.addEventListener('pointermove', move);
+    img.addEventListener('pointerup', up, { once: true });
+    img.addEventListener('pointercancel', up, { once: true });
+  });
+  return img;
+}
+
+// ===== 마을 =====
+// 원작 섬 모양 시설 버튼. ready=false 는 아직 없는 시설.
+const TOWN = [
+  { id: 'travel', icon: 'ico_travel', name: '여행사', desc: '여행지를 골라 여행을 보내요', ready: true },
+  { id: 'cook', icon: 'ico_cooking', name: '쿠킹샵', desc: '재료 2가지로 요리를 만들어요', ready: true },
+  { id: 'shop', icon: 'ico_item', name: '아이템 가게', desc: '농장 꾸미기 아이템을 팔아요', ready: true },
+  { id: 'school', icon: 'ico_school', name: '동물학교', desc: '수업·색칠하기·책방·말 가르치기', ready: true },
+  { id: 'festival', icon: 'ico_festival', name: '페스티발', desc: '동물 대회에 나가요', ready: false },
+  { id: 'hospital', icon: 'ico_hospital', name: '동물병원', desc: '진료를 받고 약을 사거나 입원시켜요', ready: true },
+  { id: 'market', icon: 'ico_market', name: '와글와글 장터', desc: '물건을 사고팔아요', ready: false },
+  { id: 'lazbel', icon: 'ico_lazbel', name: '라즈벨의 수정구슬', desc: '수정구슬로 미래를 봐요', ready: false },
+];
+let townView = 'hub';
+let travelPlan = { spot: null, ride: 1, stay: 5 };
+
+function renderTown() {
+  const root = $('screen-town');
+  root.replaceChildren();
+  if (townView === 'cook') return renderCook(root);
+  if (townView === 'travel') return renderTravel(root);
+  if (townView === 'shop') return renderItemShop(root);
+  if (townView === 'hospital') return renderHospital(root);
+  if (townView === 'school') return renderSchool(root);
+  const map = el('img', 'town-map');
+  map.src = 'assets/ui/town/town_map.jpg';
+  map.alt = '몽게몽게 마을 지도';
+  root.append(map);
+  root.append(el('h2', 'section-title', '몽게몽게 마을'));
+  root.lastChild.append(el('span', null, '가고 싶은 곳을 골라요'));
+  const list = el('div', 'town-list');
+  TOWN.forEach(t => {
+    const b = el('button', 'town-row' + (t.ready ? '' : ' soon'));
+    const img = el('img');
+    img.src = `assets/ui/town/${t.icon}.png`;
+    img.alt = '';
+    const text = el('div', 'town-text');
+    text.append(el('strong', null, t.name), el('small', null, t.desc));
+    b.append(img, text, el('span', 'town-go', t.ready ? '›' : '준비 중'));
+    b.addEventListener('click', () => {
+      if (!t.ready) return toast(`${josa(t.name, '은', '는')} 아직 준비 중이에요`);
+      townView = t.id;
+      renderTown();
+      document.querySelector('.app > main').scrollTop = 0;
+    });
+    list.append(b);
+  });
+  root.append(list);
+}
+
+// ===== 여행사 (원작: 여행지 → 일정·이동수단·숙소, 고를 때마다 효과/비용 계산) =====
+const TRAVEL_IMG = 'assets/ui/travel/';
+function travelCalc(plan) {
+  const spot = TRAVEL_SPOTS.find(s => s.id === plan.spot);
+  const ride = TRAVEL_RIDES.find(r => r.id === plan.ride);
+  const stay = TRAVEL_STAYS.find(s => s.id === plan.stay);
+  const d = TRAVEL_DAYS;
+  const nights = d - 1;
+  const gain = {};
+  const add = (g, n) => Object.entries(g).forEach(([k, v]) => { gain[k] = (gain[k] || 0) + v * n; });
+  add(spot.perDay, d);
+  add(ride.gain, 1);
+  add(stay.gain, nights);
+  return {
+    spot, ride, stay, d, gain,
+    fatigue: spot.fatigue * d + ride.fatigue + stay.fatigue * nights,
+    cost: spot.price + ride.cost + stay.cost * nights,
+    effort: 2 + d,
+    souvenirs: d >= 4 ? 2 : d >= 2 ? 1 : 0,
+  };
+}
+
+function renderTravel(root) {
+  const back = el('button', 'back-btn', '← 마을');
+  back.addEventListener('click', () => { townView = 'hub'; renderTown(); });
+  root.append(back);
+  const banner = el('img', 'cook-banner');
+  banner.src = TRAVEL_IMG + 'main_top041229_travel.gif';
+  banner.alt = '몇 일 집을 비우실 때면 외로운 동물에게 여행을 시켜 주세요. 동물 친구도 좋아하고 성장에도 도움을 준답니다.';
+  root.append(banner);
+  if (!S.pet) {
+    root.append(el('p', 'note', '여행을 보낼 동물이 없어요. 먼저 분양소에서 동물을 데려오세요.'));
+    return;
+  }
+  const bar1 = el('img', 'travel-bar');
+  bar1.src = TRAVEL_IMG + 'bar_041229travel05.gif';
+  bar1.alt = '다양한 여행 상품이 있답니다~ 취향에 맞게 고르세요~';
+  root.append(bar1);
+  const spots = el('div', 'spot-grid');
+  TRAVEL_SPOTS.forEach(s => {
+    const b = el('button', 'spot-card' + (travelPlan.spot === s.id ? ' on' : ''));
+    b.setAttribute('aria-pressed', String(travelPlan.spot === s.id));
+    const label = el('img', 'spot-name');
+    label.src = `${TRAVEL_IMG}sum_travel_sub01_0${s.id}_txt.gif`;
+    label.alt = s.name;
+    const photo = el('img', 'spot-photo');
+    // 고른 여행지만 컬러(원작 세피아 사진을 바탕으로 만든 컬러판)
+    photo.src = travelPlan.spot === s.id ? `assets/travel/spot${s.id}_icon.jpg` : `${TRAVEL_IMG}sum_travel_sub01_0${s.id}.gif`;
+    photo.alt = '';
+    b.append(label, photo, el('span', 'spot-price', `${s.price}P`));
+    b.addEventListener('click', () => { travelPlan.spot = s.id; renderTown(); });
+    spots.append(b);
+  });
+  root.append(spots);
+  if (!travelPlan.spot) return;
+
+  const bar2 = el('img', 'travel-bar');
+  bar2.src = TRAVEL_IMG + 'bar_041229travel01.gif';
+  bar2.alt = '즐거운 여행이 되도록 계획을 잘 짜보세요~';
+  root.append(bar2);
+
+  [['이동수단', TRAVEL_RIDES, 'ride', () => ''], ['숙소', TRAVEL_STAYS, 'stay', x => (x.cost ? `1박 ${x.cost}P` : '무료')]].forEach(([title, list, key, costText]) => {
+    root.append(el('h3', 'sub-title', title));
+    const grid = el('div', 'opt-grid');
+    list.forEach(x => {
+      const b = el('button', 'opt-card');
+      b.setAttribute('aria-pressed', String(travelPlan[key] === x.id));
+      const img = el('img');
+      img.src = `${TRAVEL_IMG}sum_travel_sub03_0${x.id}.gif`;
+      img.alt = x.name;
+      b.append(img, el('small', null, key === 'ride' ? (x.cost ? `${x.cost}P` : '무료') : costText(x)));
+      b.addEventListener('click', () => { travelPlan[key] = x.id; renderTown(); });
+      grid.append(b);
+    });
+    root.append(grid);
+  });
+
+  const c = travelCalc(travelPlan);
+  const pv = el('div', 'travel-preview');
+  pv.append(el('strong', null, `${c.spot.name} · 4박 5일`));
+  pv.append(el('div', null, STATS.map(s => `${s.name} +${c.gain[s.k] || 0}`).join('  ')));
+  pv.append(el('div', null, `피로 ${c.fatigue > 0 ? '+' : ''}${c.fatigue} · 비용 ${c.cost}P${c.souvenirs ? ` · 기념품 ${c.souvenirs}개` : ''}`));
+  root.append(pv);
+  const go = el('button', 'cook-btn', '여행 보내기');
+  go.disabled = S.points < c.cost;
+  if (go.disabled) root.append(el('p', 'warn', '포인트가 모자라요.'));
+  go.addEventListener('click', () => confirmTravel(c));
+  root.append(go);
+}
+
+function confirmTravel(c) {
+  openModal(box => {
+    box.append(el('h3', null, '여행 보내기'), el('p', null, `${josa(S.pet.name, '이', '가')} ${c.spot.name}에 다녀와요. 이번 주가 지나가요.`));
+    if (S.careLeft > 0) box.append(el('p', 'warn', `이번 주 돌봐주기가 ${S.careLeft}번 남았어요. 그래도 보낼까요?`));
+    const row = el('div', 'modal-actions');
+    const no = el('button', 'btn ghost', '다시 짤래');
+    no.addEventListener('click', closeModal);
+    const yes = el('button', 'btn', `${c.cost}P 내고 보내기`);
+    yes.addEventListener('click', () => { closeModal(); runTravel(c); });
+    row.append(no, yes);
+    box.append(row);
+  });
+}
+
+function runTravel(c) {
+  const season = seasonOf(S.calendar.month);
+  const souvenirs = Array.from({ length: c.souvenirs }, () => pick(BASE_FOODS)).filter(Boolean);
+  travelPlan.spot = null;
+  townView = 'hub';
+  endPeriod({
+    id: 'travel',
+    title: `${SEASON_NAMES[season]}의 ${c.spot.name}`,
+    cost: c.cost,
+    gain: c.gain,
+    fatigue: c.fatigue,
+    effort: c.effort,
+    line: `${c.spot.name} 여행 정말 즐거웠어요!`,
+    decorate: box => {
+      const view = el('img', 'travel-img');
+      view.src = `assets/travel/spot${c.spot.id}_${season}.jpg`;
+      view.alt = `${SEASON_NAMES[season]}의 ${c.spot.name} 풍경`;
+      box.append(view, el('p', null, `${SEASON_TRAVEL_LINE[season]} ${josa(c.ride.name, '을', '를')} 타고 ${c.spot.name}에 다녀왔어요. ${c.stay.name}에서 4박 5일 동안 묵었어요.`));
+    },
+    extra: souvenirs.length ? [`기념품: ${souvenirs.map(f => f.name).join(', ')} (쿠킹샵 재료)`] : [],
+    after: () => souvenirs.forEach(f => { S.foodBag[f.id] = (S.foodBag[f.id] || 0) + 1; }),
+  });
+}
+
+// ===== 쿠킹샵 (원작: 재료 2가지를 골라 요리) =====
+const FOOD = window.FOOD_DATA || { foods: [], recipes: [], bad: { id: 'badsoup', name: '먹을 수 없는 요리', gain: {}, fatigue: 10 } };
+const FOOD_BY_ID = Object.fromEntries([...FOOD.foods, FOOD.bad].map(f => [f.id, f]));
+const foodImg = id => asset(`assets/food/${id}.gif`);
+const BASE_FOODS = FOOD.foods.filter(f => f.tier === 1);
+const recipeFor = (a, b) => FOOD.recipes.find(r => (r.a === a && r.b === b) || (r.a === b && r.b === a));
+let cookSlots = [null, null];
+let cookResult = null; // 'ok' | 'fail' | null
+
+// 비법서는 처음에 3개, 주가 지날 때마다 1개씩 '살짝 공개'. 만들 수 있는 것부터 공개한다.
+function revealRecipe() {
+  const known = new Set(S.recipeKnown);
+  const makeable = id => FOOD_BY_ID[id] && (FOOD_BY_ID[id].tier === 1 || FOOD.recipes.some(r => known.has(r.id) && r.result === id));
+  const cand = FOOD.recipes.filter(r => !known.has(r.id) && makeable(r.a) && makeable(r.b));
+  const pickFrom = cand.length ? cand : FOOD.recipes.filter(r => !known.has(r.id));
+  if (!pickFrom.length) return null;
+  const r = pick(pickFrom);
+  S.recipeKnown.push(r.id);
+  return r;
+}
+function ensureRecipeBook() {
+  if (!FOOD.recipes.length || S.recipeKnown.length) return;
+  for (let i = 0; i < 3; i++) revealRecipe();
+  save();
+}
+
+function renderCook(root) {
+  ensureRecipeBook();
+  const back = el('button', 'back-btn', '← 마을');
+  back.addEventListener('click', () => { townView = 'hub'; cookResult = null; renderTown(); });
+  root.append(back);
+
+  const banner = el('img', 'cook-banner');
+  banner.src = `assets/ui/cook/${cookResult === 'ok' ? 'img_food04' : cookResult === 'fail' ? 'img_food05' : 'img_food02'}.gif`;
+  banner.alt = cookResult === 'ok' ? '어때요? 완성된 요리가 맘에 드나요?' : cookResult === 'fail' ? '도저히 먹을 수 없는 요리가 나와버렸네요' : '먼저 재료 2가지를 고른 후 맛있는 요리를 만들어 보세요';
+  root.append(banner);
+
+  const board = el('div', 'cook-board');
+  cookSlots.forEach((id, i) => {
+    const slot = el('div', 'cook-slot');
+    const bowl = el('div', 'bowl');
+    if (id) {
+      const f = el('img', 'bowl-food');
+      f.src = foodImg(id);
+      f.alt = FOOD_BY_ID[id].name;
+      bowl.append(f);
+    }
+    const name = el('div', 'slot-name', id ? FOOD_BY_ID[id].name : ' ');
+    const pickBtn = el('button', 'pick-btn', '재료고르기');
+    pickBtn.addEventListener('click', () => pickIngredient(i));
+    slot.append(bowl, name, pickBtn);
+    board.append(slot);
+    if (i === 0) board.append(el('span', 'cook-plus', '+'));
+  });
+  root.append(board);
+  const cookBtn = el('button', 'cook-btn', '요리하기');
+  cookBtn.disabled = !(cookSlots[0] && cookSlots[1]);
+  cookBtn.addEventListener('click', doCook);
+  root.append(cookBtn);
+
+  const book = el('button', 'book-btn');
+  const bimg = el('img');
+  bimg.src = 'assets/ui/cook/img_mini05.gif';
+  bimg.alt = '몽게몽게왕국에서 전해 내려오는 요리 비법서를 살짝 공개합니다';
+  book.append(bimg);
+  book.addEventListener('click', openRecipeBook);
+  root.append(book);
+
+  root.append(el('h3', 'sub-title', '재료 가게'));
+  root.lastChild.append(el('span', null, '기본 재료를 사서 요리해요'));
+  const shop = el('div', 'food-grid');
+  BASE_FOODS.forEach(f => {
+    const card = el('div', 'food-card');
+    const img = el('img');
+    img.src = foodImg(f.id);
+    img.alt = '';
+    img.loading = 'lazy';
+    const have = S.foodBag[f.id] || 0;
+    const buy = el('button', null, `${f.price}P`);
+    buy.disabled = S.points < f.price;
+    buy.setAttribute('aria-label', `${f.name} ${f.price}포인트에 사기`);
+    buy.addEventListener('click', () => {
+      if (S.points < f.price) return;
+      S.points -= f.price;
+      S.foodBag[f.id] = have + 1;
+      save();
+      renderPoints();
+      renderTown();
+    });
+    card.append(img, el('strong', null, f.name), el('small', null, have ? `${have}개` : ' '), buy);
+    shop.append(card);
+  });
+  root.append(shop);
+}
+
+function ownedFoods() {
+  return Object.entries(S.foodBag).filter(([id, n]) => n > 0 && FOOD_BY_ID[id]).map(([id, n]) => ({ ...FOOD_BY_ID[id], count: n }));
+}
+
+function pickIngredient(slot) {
+  const other = cookSlots[1 - slot];
+  const list = ownedFoods().filter(f => f.id !== 'badsoup' && (f.id !== other || f.count > 1));
+  openModal(box => {
+    box.append(el('h3', null, '원하는 재료를 클릭하세요'));
+    if (!list.length) {
+      box.append(el('p', null, '가진 재료가 없어요. 아래 재료 가게에서 사 오세요.'));
+    } else {
+      const grid = el('div', 'food-grid pick');
+      list.forEach(f => {
+        const b = el('button', 'food-card');
+        const img = el('img');
+        img.src = foodImg(f.id);
+        img.alt = '';
+        b.append(img, el('strong', null, f.name), el('small', null, `${f.count}개`));
+        b.addEventListener('click', () => { cookSlots[slot] = f.id; cookResult = null; closeModal(); renderTown(); });
+        grid.append(b);
+      });
+      box.append(grid);
+    }
+    const close = el('button', 'btn ghost', '닫기');
+    close.addEventListener('click', closeModal);
+    box.append(close);
+  });
+}
+
+function doCook() {
+  const [a, b] = cookSlots;
+  if (!a || !b) return;
+  if ((S.foodBag[a] || 0) < 1 || (S.foodBag[b] || 0) < (a === b ? 2 : 1)) return toast('재료가 모자라요');
+  S.foodBag[a] -= 1;
+  S.foodBag[b] -= 1;
+  const r = recipeFor(a, b);
+  const resultId = r ? r.result : FOOD.bad.id;
+  S.foodBag[resultId] = (S.foodBag[resultId] || 0) + 1;
+  const isNew = r && !S.recipeKnown.includes(r.id);
+  if (isNew) S.recipeKnown.push(r.id);
+  cookResult = r ? 'ok' : 'fail';
+  cookSlots = [null, null];
+  save();
+  renderTown();
+  openModal(box => {
+    box.append(el('h3', null, r ? '요리 완성!' : '앗, 실패...'));
+    const img = el('img', 'cook-result');
+    img.src = foodImg(resultId);
+    img.alt = '';
+    box.append(img, el('p', null, `${josa(FOOD_BY_ID[resultId].name, '이', '가')} ${r ? `완성됐어요. ${gainText(FOOD_BY_ID[resultId].gain)}` : '나와버렸어요 T.T'}`));
+    if (isNew) box.append(el('p', 'next-date', '새로운 요리법을 알아냈어요! 비법서에 적어둘게요.'));
+    box.append(el('p', null, '음식 아이템은 키우기의 음식주기로 먹일 수 있어요.'));
+    const ok = el('button', 'btn', '확인');
+    ok.addEventListener('click', closeModal);
+    box.append(ok);
+  });
+}
+
+function openRecipeBook() {
+  const known = FOOD.recipes.filter(r => S.recipeKnown.includes(r.id));
+  openModal(box => {
+    box.append(el('h3', null, '요리 비법서'));
+    box.append(el('p', null, `알아낸 요리법 ${known.length} / ${FOOD.recipes.length}`));
+    const list = el('div', 'recipe-list');
+    known.forEach(r => {
+      const row = el('div', 'recipe-row');
+      [r.a, '+', r.b, '=', r.result].forEach(x => {
+        if (x === '+' || x === '=') return row.append(el('span', 'op', x));
+        const c = el('div', 'r-item');
+        const img = el('img');
+        img.src = foodImg(x);
+        img.alt = '';
+        c.append(img, el('small', null, FOOD_BY_ID[x] ? FOOD_BY_ID[x].name : x));
+        row.append(c);
+      });
+      list.append(row);
+    });
+    box.append(list, el('p', 'note', '새 요리법은 일주일마다 하나씩 살짝 공개되고, 직접 조합해서 알아낼 수도 있어요.'));
+    const ok = el('button', 'btn', '닫기');
+    ok.addEventListener('click', closeModal);
+    box.append(ok);
+  });
+}
+
+// ===== 분양소 =====
+function renderAdopt(root) {
+  root.append(el('h2', 'section-title', '분양소'));
+  root.lastChild.append(el('span', null, '함께 지낼 동물을 골라주세요'));
+  const grid = el('div', 'grid');
+  ANIMALS.forEach(a => {
+    const locked = adoptLocked(a.slug);
+    const t = el('button', 'tile' + (locked ? ' taken' : ''));
+    const img = el('img');
+    img.src = sprite(a.slug, 0);
+    img.alt = '';
+    img.loading = 'lazy';
+    t.append(img, el('span', null, a.name));
+    if (locked) t.append(el('span', 'done', '사람이 됨'));
+    t.addEventListener('click', () => locked
+      ? toast(`${josa(a.name, '은', '는')} 이미 사람이 되어 동료가 됐어요`)
+      : confirmAdopt(a));
+    grid.append(t);
+  });
+  root.append(grid);
+}
+
+function confirmAdopt(a) {
+  openModal(box => {
+    box.append(el('h3', null, a.name));
+    const st = el('div', 'stages');
+    STAGE_NAMES.forEach((n, i) => {
+      const f = el('figure');
+      const img = el('img');
+      img.src = sprite(a.slug, i);
+      img.alt = '';
+      f.append(img, el('figcaption', null, n));
+      st.append(f);
+    });
+    box.append(st, el('p', null, '이름을 지어주세요'));
+    const input = el('input', 'name-input');
+    input.maxLength = 10;
+    input.value = '꼬마' + a.name.replace('크리스마스 ', '');
+    input.setAttribute('aria-label', '동물 이름');
+    box.append(input);
+    const row = el('div', 'modal-actions');
+    const no = el('button', 'btn ghost', '다시 고를래');
+    no.addEventListener('click', closeModal);
+    const yes = el('button', 'btn', '분양받기');
+    yes.addEventListener('click', () => {
+      const name = input.value.trim() || a.name;
+      if (hasBadWord(name)) return toast('그 이름은 쓸 수 없어요. 다른 이름을 지어 주세요');
+      S.pet = { slug: a.slug, name, stage: 0, stats: { love: 10, know: 10, charm: 10, power: 10 }, effort: 0, born: Date.now() };
+      markSeen(a.slug, 0);
+      S.careLeft = CARE_PER_PERIOD;
+      save();
+      closeModal();
+      toast(`${josa(name, '과', '와')} 함께하게 됐어요!`);
+      renderFarm();
+    });
+    row.append(no, yes);
+    box.append(row);
+  });
+}
+
+// ===== 아이템박스 (원작 탭: 꾸미기 / 음식 / 용품 / 약품) =====
+// 아이템은 쿠킹샵·여행 기념품·아이템 가게 등에서 얻는다. 용품/약품은 연금술·병원·탐험이 생기면 채운다.
+const ITEMBOX_TABS = [
+  { id: 'food', img: 'food', empty: '쿠킹샵에서 요리하거나 여행 기념품으로 얻을 수 있어요.' },
+  { id: 'deco', img: 'deco', empty: '마을의 아이템 가게에서 살 수 있어요.' },
+  { id: 'goods', img: 'item', empty: '용품은 연금술과 탐험에서 얻을 수 있어요. (준비 중)' },
+  { id: 'medicine', img: 'mad', empty: '마을 동물병원 약국에서 살 수 있어요.' },
+];
+let boxView = 'food';
+function renderItemBox() {
+  const root = $('screen-shop');
+  root.replaceChildren();
+  root.append(el('h2', 'section-title', '아이템박스'));
+  const tabs = el('div', 'box-tabs');
+  ITEMBOX_TABS.forEach(t => {
+    const b = el('button');
+    const img = el('img');
+    img.src = `assets/ui/itembox/tab_itembox_${t.img}_${boxView === t.id ? 'on' : 'off'}.gif`;
+    img.alt = { food: '음식', deco: '꾸미기', goods: '용품', medicine: '약품' }[t.id];
+    b.append(img);
+    b.setAttribute('aria-pressed', String(boxView === t.id));
+    b.addEventListener('click', () => { boxView = t.id; renderItemBox(); });
+    tabs.append(b);
+  });
+  root.append(tabs);
+  const panel = el('div', 'box-panel');
+  const tab = ITEMBOX_TABS.find(t => t.id === boxView);
+  const cards = boxView === 'food' ? foodCards() : boxView === 'deco' ? decoCards() : boxView === 'medicine' ? medCards() : [];
+  if (!cards.length) panel.append(el('p', 'note', `아직 없어요. ${tab.empty}`));
+  else {
+    const grid = el('div', 'food-grid');
+    cards.forEach(c => grid.append(c));
+    panel.append(grid);
+  }
+  root.append(panel);
+}
+
+function foodCards() {
+  return ownedFoods().map(f => {
+    const card = el('div', 'food-card');
+    const img = el('img');
+    img.src = foodImg(f.id);
+    img.alt = '';
+    const bad = f.id === FOOD.bad.id;
+    const btn = el('button', null, bad ? '먹일 수 없어요' : '먹이기');
+    btn.disabled = bad || !S.pet || S.careLeft <= 0;
+    btn.addEventListener('click', () => { showTab('farm'); feedFood(f); });
+    card.append(img, el('strong', null, f.name), el('small', null, `${bad ? '연금술 재료로 쓸 수 있어요' : gainText(f.gain)} · ${f.count}개`), btn);
+    return card;
+  });
+}
+
+function medCards() {
+  return MEDICINES.filter(m => (S.medBag[m.id] || 0) > 0).map(m => {
+    const card = el('div', 'food-card');
+    const img = el('img');
+    img.src = medImg(m.id);
+    img.alt = '';
+    const btn = el('button', null, '먹이기');
+    btn.disabled = !S.pet;
+    btn.addEventListener('click', () => giveMedicine(m));
+    card.append(img, el('strong', null, m.name), el('small', null, `${m.tier}단계 · ${S.medBag[m.id]}개`), btn);
+    return card;
+  });
+}
+
+function giveMedicine(m) {
+  const pet = S.pet;
+  if (!pet || (S.medBag[m.id] || 0) < 1) return;
+  if (!pet.sick) return toast(`${josa(pet.name, '은', '는')} 아프지 않아요`);
+  if (pet.sick.sev >= SEVERE.level) return toast('중병은 약으로 나을 수 없어요. 입원해야 해요');
+  const d = DISEASE_BY_ID[pet.sick.id];
+  S.medBag[m.id] -= 1;
+  let msg;
+  if (m.fam !== d.med) {
+    msg = pet.sick.known ? '이 병에는 맞지 않는 약이에요.' : '효과가 없었어요. 먼저 진료를 받아 처방을 알아보세요.';
+  } else if (m.tier >= pet.sick.sev) {
+    pet.sick = null;
+    pet.lastLine = '이제 다 나았어요! 고마워요!';
+    msg = `${josa(pet.name, '이', '가')} 다 나았어요!`;
+  } else {
+    pet.sick.sev = Math.max(1, pet.sick.sev - m.tier);
+    pet.sick.known = true;
+    msg = `조금 나아졌어요. 병이 '${SEVERITY[pet.sick.sev]}' 단계로 내려갔지만 아직 다 낫지는 않았어요.`;
+  }
+  save();
+  openModal(box => {
+    const img = el('img', 'cook-result');
+    img.src = medImg(m.id);
+    img.alt = '';
+    box.append(el('h3', null, m.name), img, el('p', null, msg));
+    const ok = el('button', 'btn', '확인');
+    ok.addEventListener('click', () => { closeModal(); showTab(currentTab); });
+    box.append(ok);
+  });
+}
+
+function decoCards() {
+  return DECO.filter(d => (S.decoBag[d.id] || 0) > 0).map(d => {
+    const card = el('div', 'food-card');
+    const img = el('img');
+    img.src = decoIcon(d.id);
+    img.alt = '';
+    const have = S.decoBag[d.id];
+    const placed = placedCount(d.id);
+    const btn = el('button', null, '농장에 놓기');
+    btn.disabled = placed >= have;
+    btn.addEventListener('click', () => { yardEdit = true; yardSel = null; showTab('yard'); });
+    card.append(img, el('strong', null, d.name), el('small', null, `${have}개 · 놓은 것 ${placed}`), btn);
+    return card;
+  });
+}
+
+// ===== 동물병원 (원작: 진료실 / 약국 / 입원실) =====
+let hospitalView = 'clinic';
+const HOSP_IMG = 'assets/ui/hospital/';
+function renderHospital(root) {
+  const back = el('button', 'back-btn', '← 마을');
+  back.addEventListener('click', () => { townView = 'hub'; renderTown(); });
+  root.append(back);
+  const seg = el('div', 'seg');
+  [['clinic', '진료실'], ['pharmacy', '약국'], ['ward', '입원실']].forEach(([id, label]) => {
+    const b = el('button', null, label);
+    b.setAttribute('aria-pressed', String(hospitalView === id));
+    b.addEventListener('click', () => { hospitalView = id; renderTown(); });
+    seg.append(b);
+  });
+  root.append(seg);
+  const banner = el('img', 'cook-banner');
+  banner.style.marginTop = '10px';
+  banner.src = HOSP_IMG + { clinic: 'img_hospital02', pharmacy: 'img_hospital04', ward: 'img_hospital05' }[hospitalView] + '.gif';
+  banner.alt = {
+    clinic: '진료실',
+    pharmacy: '약은 종류에 따라 가격이 다 틀려요. 먼저 진료를 받고 처방에 따라 약을 먹는 게 제일 좋다는 것 잊지 마세요.',
+    ward: '아파서 병원에 입원한 동물환자예요',
+  }[hospitalView];
+  root.append(banner);
+  const pet = S.pet;
+
+  if (hospitalView === 'clinic') {
+    const txt = el('img', 'hosp-txt');
+    txt.src = HOSP_IMG + 'sub05_txt02.gif';
+    txt.alt = '아픈 동물을 병원에 데려오세요. 의사선생님이 친절하게 진료해 주신답니다. 진료를 받으려면 20포인트가 필요해요.';
+    root.append(txt);
+    const go = el('button', 'cook-btn', `진료 받을래요 (${HOSPITAL.diagnose}P)`);
+    go.disabled = !pet || S.points < HOSPITAL.diagnose;
+    go.addEventListener('click', diagnose);
+    root.append(go);
+    if (pet && S.points < HOSPITAL.diagnose) root.append(noPointsImg());
+    return;
+  }
+
+  if (hospitalView === 'pharmacy') {
+    if (pet && pet.sick && pet.sick.known) {
+      const d = DISEASE_BY_ID[pet.sick.id];
+      root.append(el('p', 'rx', `처방전: ${d.name} (${SEVERITY[pet.sick.sev]}) → ${rxText(pet.sick)}`));
+    }
+    const grid = el('div', 'food-grid');
+    MEDICINES.forEach(m => {
+      const card = el('div', 'food-card');
+      const img = el('img');
+      img.src = medImg(m.id);
+      img.alt = '';
+      const have = S.medBag[m.id] || 0;
+      const buy = el('button', null, `${m.price}P`);
+      buy.disabled = S.points < m.price;
+      buy.setAttribute('aria-label', `${m.name} ${m.price}포인트에 사기`);
+      buy.addEventListener('click', () => {
+        if (S.points < m.price) return;
+        S.points -= m.price;
+        S.medBag[m.id] = have + 1;
+        save();
+        renderPoints();
+        toast(`${josa(m.name, '을', '를')} 샀어요. 아이템박스 약품에 들어갔어요`);
+        renderTown();
+      });
+      card.append(img, el('strong', null, m.name), el('small', null, have ? `${m.tier}단계 · ${have}개` : `${m.tier}단계`), buy);
+      grid.append(card);
+    });
+    root.append(grid);
+    return;
+  }
+
+  root.append(el('p', 'note', `입원하면 일주일 동안 병원에서 지내요. 어떤 병이든 낫고 피로도 모두 풀려요. 비용 ${HOSPITAL.stay}P.`));
+  const stay = el('button', 'cook-btn', `입원시키기 (${HOSPITAL.stay}P)`);
+  stay.disabled = !pet || S.points < HOSPITAL.stay;
+  stay.addEventListener('click', () => {
+    if (!pet.sick && fatigueNow(pet) < FATIGUE.tiredAt) return toast(`${josa(pet.name, '은', '는')} 건강해서 입원할 필요가 없어요`);
+    openModal(box => {
+      box.append(el('h3', null, '입원'), el('p', null, `${josa(pet.name, '이', '가')} 일주일 동안 입원해요. 이번 주가 지나가요.`));
+      const row = el('div', 'modal-actions');
+      const no = el('button', 'btn ghost', '안 할래요');
+      no.addEventListener('click', closeModal);
+      const yes = el('button', 'btn', `${HOSPITAL.stay}P 내고 입원`);
+      yes.addEventListener('click', () => {
+        closeModal();
+        townView = 'hub';
+        endPeriod({
+          id: 'hospital', title: '퇴원했어요!', cost: HOSPITAL.stay, gain: {}, fatigue: -FATIGUE.max,
+          line: '이제 하나도 안 아파요!',
+          after: () => { pet.sick = null; },
+        });
+      });
+      row.append(no, yes);
+      box.append(row);
+    });
+  });
+  root.append(stay);
+}
+
+let severeLock = false;
+let pendingFestival = false;
+function severeHospital() {
+  const pet = S.pet;
+  if (!pet || !pet.sick || pet.sick.sev < SEVERE.level || !$('modal').hidden) return;
+  const d = DISEASE_BY_ID[pet.sick.id];
+  severeLock = true;
+  openModal(box => {
+    box.append(el('h3', null, '중병에 걸렸어요!'));
+    const img = el('img', 'travel-img');
+    img.src = HOSP_IMG + 'img_hospital05.gif';
+    img.alt = '아파서 병원에 입원한 동물환자예요';
+    box.append(img, el('p', null, `${d.name}이 너무 심해져서 중병이 됐어요. 약으로는 나을 수 없어서 지금 바로 동물병원에 입원해야 해요.`));
+    box.append(el('p', 'warn', `입원비는 받지 않지만 일주일이 지나가고, 몸이 많이 약해져서 모든 지수가 ${Math.round((1 - SEVERE.keep) * 100)}% 줄어요. 성장 단계가 내려갈 수도 있어요.`));
+    const go = el('button', 'btn', '입원시키기');
+    go.addEventListener('click', severeStay);
+    box.append(go);
+  });
+}
+
+function severeStay() {
+  const pet = S.pet;
+  const before = { ...pet.stats };
+  const beforeStage = pet.stage;
+  STATS.forEach(x => { pet.stats[x.k] = Math.floor(pet.stats[x.k] * SEVERE.keep); });
+  pet.sick = null;
+  setFatigue(pet, 0);
+  const newStage = stageFor(lowest(pet));
+  if (newStage < pet.stage) pet.stage = newStage;
+  pet.lastLine = '이제 안 아파요... 그래도 아직 기운이 하나도 없어요';
+  pet.activities = pet.activities || {};
+  pet.activities.severe = (pet.activities.severe || 0) + 1;
+  const { festival, news } = advancePeriod();
+  const fest = festival || pendingFestival;
+  pendingFestival = false;
+  save();
+  closeModal();
+  openModal(box => {
+    box.append(el('h3', null, '퇴원했어요'));
+    const img = el('img', 'big-sprite');
+    img.src = sprite(pet.slug, pet.stage);
+    img.alt = '';
+    box.append(img, el('p', null, `일주일 동안 입원해서 병은 다 나았지만 몸이 많이 약해졌어요.`));
+    box.append(el('p', null, STATS.map(x => `${x.name} ${before[x.k]}→${pet.stats[x.k]}`).join(' · ')));
+    if (pet.stage < beforeStage) box.append(el('p', 'warn', `${STAGE_NAMES[beforeStage]}에서 ${STAGE_NAMES[pet.stage]} 모습으로 돌아갔어요.`));
+    box.append(el('p', 'next-date', `일주일이 지나 ${dateText(S.calendar)}가 됐어요.`));
+    news.forEach(t => box.append(el('p', 'warn', t)));
+    const ok = el('button', 'btn', '확인');
+    ok.addEventListener('click', () => {
+      severeLock = false;
+      closeModal();
+      showTab('farm');
+      if (fest) setTimeout(harvestFestival, 50);
+    });
+    box.append(ok);
+  });
+}
+
+function noPointsImg() {
+  const img = el('img', 'hosp-txt');
+  img.src = HOSP_IMG + 'img_pop13.gif';
+  img.alt = '포인트가 모자라서 약을 먹을 수 없어요. 얼른 포인트를 모아 아픈 동물을 꼭 병원에 데려 가세요.';
+  return img;
+}
+
+function diagnose() {
+  const pet = S.pet;
+  if (!pet || S.points < HOSPITAL.diagnose) return;
+  S.points -= HOSPITAL.diagnose;
+  if (pet.sick) pet.sick.known = true;
+  save();
+  renderPoints();
+  openModal(box => {
+    box.append(el('h3', null, '진료 결과'));
+    const img = el('img', 'big-sprite');
+    img.src = sprite(pet.slug, pet.stage);
+    img.alt = '';
+    box.append(img);
+    if (pet.sick) {
+      const d = DISEASE_BY_ID[pet.sick.id];
+      box.append(el('p', null, `${d.name}(${SEVERITY[pet.sick.sev]})이에요. ${d.symptom}.`));
+      box.append(el('p', 'rx', `처방: ${rxText(pet.sick)}${pet.sick.sev >= SEVERE.level ? '' : '. 약국에서 살 수 있어요'}.`));
+    } else {
+      const f = fatigueNow(pet);
+      box.append(el('p', null, f >= FATIGUE.tiredAt
+        ? `아픈 곳은 없지만 많이 지쳐 있어요(피로 ${f}). 이대로면 병에 걸리기 쉬우니 푹 쉬게 해주세요.`
+        : `아주 건강해요! (피로 ${f})`));
+    }
+    const row = el('div', 'modal-actions');
+    if (pet.sick) {
+      const ph = el('button', 'btn', '약국 가기');
+      ph.addEventListener('click', () => { closeModal(); hospitalView = 'pharmacy'; renderTown(); });
+      row.append(ph);
+    }
+    const ok = el('button', 'btn ghost', '닫기');
+    ok.addEventListener('click', () => { closeModal(); renderTown(); });
+    row.append(ok);
+    box.append(row);
+  });
+}
+
+// ===== 동물학교 (원작: 올리볼리 선생님 / 수업하기·색칠하기·소설책방·말 가르치기) =====
+// 활동 하나를 고르면 한 주가 지나간다. 수치·퀴즈·이야기는 임시(원작 자료 없음), 색칠 도안은 원작.
+const SCHOOL_IMG = 'assets/school/';
+const SCHOOL_FEE = 10;
+const SCHOOL_ACTS = [
+  { id: 'class', img: 'btn_school01', name: '수업하기' },
+  { id: 'paint', img: 'btn_school02', name: '색칠하기' },
+  { id: 'books', img: 'btn_school04', name: '소설책방' },
+  { id: 'talk', img: 'btn_talk060124_school', name: '말 가르치기' },
+];
+const QUIZ = [
+  ['펭귄이 많이 사는 곳은?', '남극', '사막', '정글'],
+  ['거미의 다리는 몇 개일까요?', '8개', '6개', '10개'],
+  ['곤충의 다리는 몇 개일까요?', '6개', '8개', '4개'],
+  ['고래는 어떤 동물일까요?', '포유류', '어류', '양서류'],
+  ['개구리의 새끼를 뭐라고 할까요?', '올챙이', '송사리', '애벌레'],
+  ['나비가 되기 전의 모습은?', '애벌레', '올챙이', '병아리'],
+  ['판다가 즐겨 먹는 것은?', '대나무', '당근', '생선'],
+  ['코알라가 먹는 나뭇잎은?', '유칼립투스', '소나무', '단풍나무'],
+  ['가장 키가 큰 동물은?', '기린', '코끼리', '말'],
+  ['땅 위에 사는 가장 큰 동물은?', '코끼리', '하마', '곰'],
+  ['박쥐가 주로 활동하는 시간은?', '밤', '아침', '한낮'],
+  ['닭의 새끼를 뭐라고 할까요?', '병아리', '망아지', '송아지'],
+  ['소의 새끼를 뭐라고 할까요?', '송아지', '강아지', '망아지'],
+  ['말의 새끼를 뭐라고 할까요?', '망아지', '송아지', '병아리'],
+  ['1년은 몇 달일까요?', '12달', '10달', '24달'],
+  ['일주일은 며칠일까요?', '7일', '5일', '10일'],
+  ['빨강과 노랑을 섞으면?', '주황', '초록', '보라'],
+  ['파랑과 노랑을 섞으면?', '초록', '주황', '분홍'],
+  ['빨강과 파랑을 섞으면?', '보라', '초록', '주황'],
+  ['물이 꽁꽁 얼면 무엇이 될까요?', '얼음', '수증기', '구름'],
+  ['해가 뜨는 쪽은?', '동쪽', '서쪽', '북쪽'],
+  ['봄 다음에 오는 계절은?', '여름', '가을', '겨울'],
+  ['3 더하기 4는?', '7', '6', '8'],
+  ['5 곱하기 2는?', '10', '7', '12'],
+  ['10 빼기 3은?', '7', '8', '6'],
+  ['다람쥐가 겨울을 나려고 모아두는 것은?', '도토리', '조개', '사탕'],
+  ['곰이 겨울에 오래 자는 것을 뭐라고 할까요?', '겨울잠', '낮잠', '꿀잠'],
+  ['거북이 등을 덮고 있는 단단한 것은?', '등딱지', '깃털', '솜털'],
+  ['문어의 다리는 몇 개일까요?', '8개', '6개', '10개'],
+  ['물고기는 무엇으로 숨을 쉴까요?', '아가미', '코', '지느러미'],
+  ['꿀벌이 모아서 만드는 것은?', '꿀', '우유', '실'],
+  ['감자는 어디에서 자랄까요?', '땅속', '나무 위', '물속'],
+  ['몽게몽게왕국 사람들을 동물로 바꿔버린 것은?', '마녀의 주문', '거인의 발걸음', '무지개 폭풍'],
+];
+// 소설책방: 짧은 이야기(임시). 나중에 오리지널 스토리 조각을 여기에 둘 수 있다.
+const BOOKS = [
+  { title: '마녀의 실수', text: '옛날 몽게몽게왕국에 깜빡깜빡 잘 잊어버리는 마녀가 살았어요. 어느 날 마녀는 꽃을 피우는 주문을 외우다가 그만 한 글자를 틀리고 말았어요. 펑! 하는 소리와 함께 왕국 사람들은 모두 귀여운 동물이 되어 버렸지요. 마녀는 울면서 말했어요. "동물들을 정성껏 키워 주세요. 그러면 언젠가 주문이 풀릴 거예요."' },
+  { title: '용감한 아기 용', text: '불을 뿜지 못하는 아기 용이 있었어요. 친구들은 "불도 못 뿜는 용이래!" 하고 놀렸지요. 그런데 겨울밤, 숲 속 친구들이 추위에 떨자 아기 용은 있는 힘을 다해 숨을 내쉬었어요. 따뜻한 바람이 솔솔 불어와 모두를 감싸 주었답니다. 그날부터 아기 용은 숲에서 가장 따뜻한 친구가 되었어요.' },
+  { title: '토끼와 거북이의 두 번째 경주', text: '경주에서 진 토끼는 다시 한 번 겨루자고 했어요. 이번에는 거북이가 말했지요. "강 건너까지 가 보자." 토끼는 강가에서 멈춰 섰고, 거북이는 유유히 헤엄쳐 건너갔어요. 그리고 다시 돌아와 토끼를 등에 태워 주었답니다. 둘은 그날 함께 결승선을 넘었어요.' },
+  { title: '반딧불의 작은 빛', text: '밤이 무서운 꼬마 다람쥐가 있었어요. 반딧불 한 마리가 날아와 속삭였어요. "내 빛은 작지만, 네 곁에 있으면 덜 무섭지?" 다람쥐는 고개를 끄덕였어요. 그날부터 다람쥐는 밤마다 반딧불과 이야기를 나누다 스르르 잠들었답니다.' },
+  { title: '요리사 언니의 비법서', text: '쿠킹샵 요리사 언니에게는 낡은 비법서가 한 권 있어요. 거기에는 이상한 재료를 섞으면 맛있는 요리가 된다는 비밀이 적혀 있지요. 하지만 몇 장은 찢어져 있어서, 언니는 지금도 새로운 조합을 찾고 있답니다. 혹시 여러분이 찾게 되면 꼭 알려 주세요!' },
+];
+let schoolView = 'hub';
+let quizState = null;
+let paintState = null;
+
+function renderSchool(root) {
+  const back = el('button', 'back-btn', schoolView === 'hub' ? '← 마을' : '← 동물학교');
+  back.addEventListener('click', () => {
+    if (schoolView === 'hub') townView = 'hub';
+    schoolView = 'hub';
+    quizState = paintState = null;
+    renderTown();
+  });
+  root.append(back);
+  if (schoolView === 'class') return renderClass(root);
+  if (schoolView === 'paint') return renderPaint(root);
+  if (schoolView === 'books') return renderBooks(root);
+  if (schoolView === 'talk') return renderTalk(root);
+
+  const banner = el('img', 'cook-banner');
+  banner.src = SCHOOL_IMG + 'img_school01.gif';
+  banner.alt = '동물들도 매일 학교에 가서 수업을 받아야 해요. 수업을 들으면 지식지수가 쑥쑥! 올라갑니다';
+  root.append(banner);
+  const txt = el('img', 'hosp-txt');
+  txt.src = SCHOOL_IMG + 'txt_school03.gif';
+  txt.alt = '매일 새로운 수업을 들으세요. 재미있는 퀴즈도 풀고 신나는 게임, 동물들이 좋아하는 동화도 볼 수 있어요.';
+  root.append(txt);
+  if (!S.pet) return root.append(el('p', 'note', '학교에 보낼 동물이 없어요.'));
+  root.append(el('p', 'note', `활동 하나를 하면 일주일이 지나가요. 수업료 ${SCHOOL_FEE}P.`));
+  const grid = el('div', 'school-grid');
+  SCHOOL_ACTS.forEach(a => {
+    const b = el('button', 'school-btn');
+    const img = el('img');
+    img.src = SCHOOL_IMG + a.img + '.gif';
+    img.alt = a.name;
+    b.append(img);
+    b.disabled = S.points < SCHOOL_FEE;
+    b.addEventListener('click', () => startSchool(a.id));
+    grid.append(b);
+  });
+  root.append(grid);
+  if (S.points < SCHOOL_FEE) root.append(el('p', 'warn', '수업료가 모자라요.'));
+  if ((S.drawings || []).length) {
+    root.append(el('h3', 'sub-title', '그림 모음'));
+    const g = el('div', 'gallery');
+    S.drawings.forEach(d => {
+      const im = el('img');
+      im.src = d;
+      im.alt = '색칠한 그림';
+      g.append(im);
+    });
+    root.append(g);
+  }
+}
+
+function startSchool(id) {
+  const pet = S.pet;
+  if (pet.sick) return toast('아픈 동안에는 학교에 갈 수 없어요. 동물병원에 데려가 주세요');
+  if (fatigueNow(pet) >= FATIGUE.max) return toast('너무 지쳐서 학교에 갈 수 없어요. 푹 쉬게 해주세요');
+  schoolView = id;
+  if (id === 'class') {
+    const qs = [...QUIZ].sort(() => Math.random() - .5).slice(0, 3)
+      .map(([q, ...opts]) => ({ q, answer: opts[0], opts: [...opts].sort(() => Math.random() - .5) }));
+    quizState = { qs, i: 0, correct: 0, picked: null };
+  }
+  if (id === 'paint') {
+    const sheets = DRAWINGS.slice().sort(() => Math.random() - .5).slice(0, 3);
+    paintState = { choices: sheets, sheet: null, color: PAINT_COLORS[0], fills: 0 };
+  }
+  renderTown();
+  document.querySelector('.app > main').scrollTop = 0;
+}
+
+function finishSchool({ title, gain, fatigue, effort, line, decorate, extra }) {
+  schoolView = 'hub';
+  quizState = paintState = null;
+  townView = 'hub';
+  endPeriod({ id: 'school', title, cost: SCHOOL_FEE, gain, fatigue, effort, line, decorate, extra });
+}
+
+// --- 수업하기: 퀴즈 3문제, 맞힌 만큼 지식이 더 오른다
+function renderClass(root) {
+  const st = quizState;
+  const q = st.qs[st.i];
+  const teacher = el('div', 'teacher');
+  const t = el('img');
+  t.src = SCHOOL_IMG + 'img_witch_teacher01.gif';
+  t.alt = '올리볼리 선생님';
+  teacher.append(t);
+  root.append(teacher);
+  root.append(el('p', 'quiz-count', `문제 ${st.i + 1} / ${st.qs.length}`));
+  root.append(el('p', 'quiz-q', q.q));
+  const opts = el('div', 'quiz-opts');
+  q.opts.forEach(o => {
+    const b = el('button', 'quiz-opt' + (st.picked ? (o === q.answer ? ' right' : o === st.picked ? ' wrong' : '') : ''), o);
+    b.disabled = !!st.picked;
+    b.addEventListener('click', () => {
+      st.picked = o;
+      if (o === q.answer) st.correct += 1;
+      renderTown();
+    });
+    opts.append(b);
+  });
+  root.append(opts);
+  if (!st.picked) return;
+  root.append(el('p', st.picked === q.answer ? 'quiz-ok' : 'warn', st.picked === q.answer ? '딩동댕! 정답이에요.' : `땡! 정답은 '${q.answer}'이에요.`));
+  const last = st.i === st.qs.length - 1;
+  const next = el('button', 'cook-btn', last ? '수업 끝내기' : '다음 문제');
+  next.addEventListener('click', () => {
+    if (!last) { st.i += 1; st.picked = null; return renderTown(); }
+    const c = st.correct;
+    finishSchool({
+      title: '수업 끝!', gain: { know: 15 + 10 * c, charm: 3 }, fatigue: 20, effort: 2 + c,
+      line: c === 3 ? '오늘 퀴즈 다 맞혔어요! 선생님이 칭찬해 주셨어요!' : '오늘 학교에서 많이 배웠어요!',
+      extra: [`퀴즈 ${st.qs.length}문제 중 ${c}문제를 맞혔어요.`],
+    });
+  });
+  root.append(next);
+}
+
+// --- 색칠하기: 원작 도안에 칠하기(누른 곳을 고른 색으로 채움)
+const DRAWINGS = ['01', '02', '03', '04', '05', '06', '07',
+  ...['x', 'y', 'z'].flatMap(p => Array.from({ length: 13 }, (_, i) => p + String(i + 1).padStart(2, '0')))]
+  .map(n => `${SCHOOL_IMG}drawing/name_painting${/^\d/.test(n) ? n : '_' + n}_b.gif`);
+const PAINT_COLORS = ['#ff6b81', '#ffa94d', '#ffe066', '#8ce99a', '#38d9a9', '#74c0fc', '#4dabf7', '#b197fc',
+  '#f783ac', '#c08457', '#ffffff', '#495057'];
+
+function renderPaint(root) {
+  const st = paintState;
+  if (!st.sheet) {
+    root.append(el('h2', 'section-title', '오늘의 도안 고르기'));
+    const g = el('div', 'sheet-pick');
+    st.choices.forEach(src => {
+      const b = el('button');
+      const im = el('img');
+      im.src = src;
+      im.alt = '색칠 도안';
+      b.append(im);
+      b.addEventListener('click', () => { st.sheet = src; renderTown(); });
+      g.append(b);
+    });
+    root.append(g);
+    return;
+  }
+  const pal = el('div', 'palette');
+  PAINT_COLORS.forEach(c => {
+    const b = el('button');
+    b.style.background = c;
+    b.setAttribute('aria-label', `색 ${c}`);
+    b.setAttribute('aria-pressed', String(st.color === c));
+    b.addEventListener('click', () => {
+      st.color = c;
+      pal.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    });
+    pal.append(b);
+  });
+  const canvas = el('canvas', 'paint-canvas');
+  canvas.width = 360;
+  canvas.height = 570;
+  const ctx = canvas.getContext('2d', { willReadFrequently: true });
+  const img = new Image();
+  img.onload = () => {
+    if (st.saved) ctx.putImageData(st.saved, 0, 0);
+    else { ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, 360, 570); ctx.drawImage(img, 0, 0); }
+  };
+  img.src = st.sheet;
+  canvas.addEventListener('pointerdown', e => {
+    const r = canvas.getBoundingClientRect();
+    const x = Math.floor((e.clientX - r.left) / r.width * 360);
+    const y = Math.floor((e.clientY - r.top) / r.height * 570);
+    if (floodFill(ctx, x, y, st.color)) {
+      st.fills += 1;
+      st.saved = ctx.getImageData(0, 0, 360, 570);
+    }
+  });
+  root.append(el('p', 'note', '색을 고르고 칠하고 싶은 곳을 눌러요.'), pal, canvas);
+  const done = el('button', 'cook-btn', '다 칠했어요');
+  done.addEventListener('click', () => {
+    if (st.fills < 3) return toast('조금 더 칠해 주세요');
+    const thumb = document.createElement('canvas');
+    thumb.width = 120;
+    thumb.height = 190;
+    thumb.getContext('2d').drawImage(canvas, 0, 0, 120, 190);
+    const data = thumb.toDataURL('image/jpeg', 0.8);
+    S.drawings = [data, ...(S.drawings || [])].slice(0, 12);
+    const bonus = Math.min(10, Math.floor(st.fills / 3));
+    finishSchool({
+      title: '색칠 완성!', gain: { charm: 20 + bonus, know: 5 }, fatigue: 10, effort: 2,
+      line: '제가 칠한 그림 예쁘죠?',
+      decorate: box => { const im = el('img', 'paint-result'); im.src = data; im.alt = '색칠한 그림'; box.append(im); },
+      extra: ['그림은 동물학교 그림 모음에 걸어 둘게요.'],
+    });
+  });
+  root.append(done);
+}
+
+function floodFill(ctx, x, y, hex) {
+  const W = 360, H = 570;
+  if (x < 0 || y < 0 || x >= W || y >= H) return false;
+  const im = ctx.getImageData(0, 0, W, H);
+  const d = im.data;
+  const i0 = (y * W + x) * 4;
+  const sr = d[i0], sg = d[i0 + 1], sb = d[i0 + 2];
+  if (sr + sg + sb < 330) return false; // 선 위를 누름
+  const fr = parseInt(hex.slice(1, 3), 16), fg = parseInt(hex.slice(3, 5), 16), fb = parseInt(hex.slice(5, 7), 16);
+  if (Math.abs(sr - fr) + Math.abs(sg - fg) + Math.abs(sb - fb) < 10) return false;
+  const match = i => d[i] + d[i + 1] + d[i + 2] >= 330 && Math.abs(d[i] - sr) + Math.abs(d[i + 1] - sg) + Math.abs(d[i + 2] - sb) < 90;
+  const stack = [[x, y]];
+  const seen = new Uint8Array(W * H);
+  while (stack.length) {
+    const [cx, cy] = stack.pop();
+    let lx = cx;
+    while (lx > 0 && !seen[cy * W + lx - 1] && match((cy * W + lx - 1) * 4)) lx--;
+    let rx = cx;
+    while (rx < W - 1 && !seen[cy * W + rx + 1] && match((cy * W + rx + 1) * 4)) rx++;
+    for (let px = lx; px <= rx; px++) {
+      const k = cy * W + px;
+      seen[k] = 1;
+      d[k * 4] = fr; d[k * 4 + 1] = fg; d[k * 4 + 2] = fb; d[k * 4 + 3] = 255;
+      for (const ny of [cy - 1, cy + 1]) {
+        if (ny < 0 || ny >= H) continue;
+        const nk = ny * W + px;
+        if (!seen[nk] && match(nk * 4)) stack.push([px, ny]);
+      }
+    }
+  }
+  ctx.putImageData(im, 0, 0);
+  return true;
+}
+
+// --- 소설책방
+function renderBooks(root) {
+  const banner = el('img', 'cook-banner');
+  banner.src = SCHOOL_IMG + 'img_studyex.gif';
+  banner.alt = '동물농장 작가들이 지은 재미있는 이야기가 소설 책으로 출간 되었습니다~ 학교 책방에서 무료로 볼 수 있어요.';
+  root.append(banner);
+  root.append(el('p', 'note', '읽어 줄 책을 골라요.'));
+  const list = el('div', 'town-list');
+  BOOKS.forEach(bk => {
+    const b = el('button', 'book-row');
+    const read = (S.pet.booksRead || []).includes(bk.title);
+    b.append(el('strong', null, bk.title), el('small', null, read ? '읽은 책' : '새 책'));
+    b.addEventListener('click', () => {
+      openModal(box => {
+        box.append(el('h3', null, bk.title), el('p', 'book-text', bk.text));
+        const ok = el('button', 'btn', '다 읽었어요');
+        ok.addEventListener('click', () => {
+          closeModal();
+          S.pet.booksRead = [...new Set([...(S.pet.booksRead || []), bk.title])];
+          finishSchool({
+            title: '책 읽기 끝!', gain: read ? { know: 12, love: 5 } : { know: 22, love: 8 }, fatigue: 5, effort: read ? 1 : 2,
+            line: `'${bk.title}' 정말 재미있었어요!`,
+            extra: read ? ['전에 읽은 책이라 조금만 올랐어요.'] : [],
+          });
+        });
+        box.append(ok);
+      });
+    });
+    list.append(b);
+  });
+  root.append(list);
+}
+
+// --- 말 가르치기: 가르친 말에 동물이 대화창에서 그대로 대답한다
+function renderTalk(root) {
+  const pet = S.pet;
+  root.append(el('h2', 'section-title', '말 가르치기'));
+  root.append(el('p', 'note', `이렇게 말하면, 이렇게 대답하도록 가르쳐요. 가르친 말은 키우기의 '동물과 대화하기'에서 써요.`));
+  const form = el('form', 'teach-form');
+  const q = el('input');
+  q.placeholder = '이렇게 말하면 (예: 잘 자)';
+  q.maxLength = 20;
+  q.setAttribute('aria-label', '이렇게 말하면');
+  const a = el('input');
+  a.placeholder = '이렇게 대답해요 (예: 좋은 꿈 꿔요!)';
+  a.maxLength = 40;
+  a.setAttribute('aria-label', '이렇게 대답해요');
+  form.append(q, a, el('button', 'cook-btn', '가르치기'));
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const qq = q.value.trim(), aa = a.value.trim();
+    if (!qq || !aa) return toast('두 칸을 다 채워 주세요');
+    if (hasBadWord(qq) || hasBadWord(aa)) return toast('그런 말은 배우기 싫대요. 고운 말을 가르쳐 주세요');
+    pet.taught = [{ q: qq, a: aa }, ...(pet.taught || []).filter(t => t.q !== qq)].slice(0, 30);
+    finishSchool({
+      title: '말을 배웠어요!', gain: { love: 15, know: 10 }, fatigue: 10, effort: 2,
+      line: aa,
+      extra: [`이제 '${qq}'라고 말하면 '${aa}'라고 대답해요.`],
+    });
+  });
+  root.append(form);
+  if ((pet.taught || []).length) {
+    root.append(el('h3', 'sub-title', '가르친 말'));
+    const ul = el('div', 'taught-list');
+    pet.taught.forEach(t => ul.append(el('div', null, `"${t.q}" → "${t.a}"`)));
+    root.append(ul);
+  }
+}
+
+// 마을 아이템 가게: 원작 꾸미기 아이템 판매
+function renderItemShop(root) {
+  const back = el('button', 'back-btn', '← 마을');
+  back.addEventListener('click', () => { townView = 'hub'; renderTown(); });
+  root.append(back);
+  root.append(el('h2', 'section-title', '아이템 가게'));
+  root.lastChild.append(el('span', null, '산 아이템은 꾸미기에서 마당에 놓아요'));
+  const grid = el('div', 'deco-grid');
+  DECO.forEach(d => {
+    const card = el('div', 'deco-card');
+    const img = el('img');
+    img.src = decoIcon(d.id);
+    img.alt = '';
+    img.loading = 'lazy';
+    const have = S.decoBag[d.id] || 0;
+    const buy = el('button', null, `${d.price}P`);
+    buy.disabled = S.points < d.price;
+    buy.setAttribute('aria-label', `${d.name} ${d.price}포인트에 사기`);
+    buy.addEventListener('click', () => {
+      if (S.points < d.price) return;
+      S.points -= d.price;
+      S.decoBag[d.id] = have + 1;
+      save();
+      renderPoints();
+      toast(`${josa(d.name, '을', '를')} 샀어요`);
+      renderTown();
+    });
+    card.append(img, el('strong', null, d.name), el('small', null, have ? `가진 것 ${have}개` : ' '), buy);
+    grid.append(card);
+  });
+  root.append(grid);
+}
+
+// ===== 동물수첩 / 동료 =====
+let dexView = 'animals';
+function renderDex() {
+  const root = $('screen-dex');
+  root.replaceChildren();
+  const seg = el('div', 'seg');
+  [['animals', '동물수첩'], ['companions', `동료 ${S.companions.length}`]].forEach(([id, label]) => {
+    const b = el('button', null, label);
+    b.setAttribute('aria-pressed', String(dexView === id));
+    b.addEventListener('click', () => { dexView = id; renderDex(); });
+    seg.append(b);
+  });
+  root.append(seg);
+  if (dexView === 'companions') return renderCompanions(root);
+
+  const found = ANIMALS.filter(a => (S.dex[a.slug] || {}).seen >= 0).length;
+  root.append(el('h2', 'section-title', '동물수첩'));
+  root.lastChild.append(el('span', null, `${found} / ${ANIMALS.length} 만남`));
+  const grid = el('div', 'grid');
+  ANIMALS.forEach(a => {
+    const d = S.dex[a.slug] || { seen: -1, ended: 0, bestScore: 0 };
+    const t = el('button', 'tile' + (d.seen < 0 ? ' locked' : ''));
+    const img = el('img');
+    img.src = sprite(a.slug, Math.max(0, d.seen));
+    img.alt = '';
+    img.loading = 'lazy';
+    t.append(img, el('span', null, d.seen < 0 ? '???' : a.name));
+    if (companionOf(a.slug)) t.append(el('span', 'done', '동료'));
+    t.addEventListener('click', () => {
+      if (d.seen < 0) return toast('아직 만나지 못한 동물이에요');
+      openModal(box => {
+        box.append(el('h3', null, a.name));
+        const st = el('div', 'stages');
+        STAGE_NAMES.forEach((n, i) => {
+          const f = el('figure');
+          const img2 = el('img', i > d.seen ? 'locked' : null);
+          img2.src = sprite(a.slug, i);
+          img2.alt = i > d.seen ? '' : `${a.name} ${n}`;
+          f.append(img2, el('figcaption', null, i > d.seen ? '???' : n));
+          st.append(f);
+        });
+        box.append(st);
+        if (d.ended) box.append(el('p', null, `엔딩 ${d.ended}회 · 최고 점수 ${d.bestScore}`));
+        const ok = el('button', 'btn', '닫기');
+        ok.addEventListener('click', closeModal);
+        box.append(ok);
+      });
+    });
+    grid.append(t);
+  });
+  root.append(grid);
+}
+
+function renderCompanions(root) {
+  root.append(el('h2', 'section-title', '탐험 파티'));
+  root.lastChild.append(el('span', null, `최대 ${PARTY_SIZE}명`));
+  const slots = el('div', 'party');
+  for (let i = 0; i < PARTY_SIZE; i++) {
+    const c = companionOf(S.party[i]);
+    const slot = el('div', 'slot' + (c ? '' : ' empty'));
+    if (c) {
+      const img = el('img');
+      img.src = sprite(c.slug, 2);
+      img.alt = '';
+      slot.append(img, el('span', null, c.name));
+    } else {
+      slot.append(el('span', null, '빈 자리'));
+    }
+    slots.append(slot);
+  }
+  root.append(slots);
+
+  root.append(el('h2', 'section-title', '동료 목록'));
+  root.lastChild.append(el('span', null, '눌러서 파티에 넣거나 빼요'));
+  if (!S.companions.length) {
+    root.append(el('p', 'note', '아직 동료가 없어요. 동물을 키워 엔딩을 보면 사람이 되어 동료로 합류해요.'));
+    return;
+  }
+  const list = el('div', 'roster');
+  S.companions.forEach(c => {
+    const inParty = S.party.includes(c.slug);
+    const b = el('button', 'mate' + (inParty ? ' in' : ''));
+    b.setAttribute('aria-pressed', String(inParty));
+    const img = el('img');
+    img.src = sprite(c.slug, 2);
+    img.alt = '';
+    const info = el('div', 'mate-info');
+    const top = el('div', 'mate-top');
+    top.append(el('strong', null, c.name), el('span', 'grade grade-' + c.grade, c.grade));
+    info.append(top, el('div', 'pet-kind', `${ANIMAL_BY_SLUG[c.slug].name} · ${c.score}점`));
+    const st = el('div', 'mate-stats');
+    STATS.forEach(s => st.append(el('span', null, `${s.name} ${c.stats[s.k]}`)));
+    info.append(st);
+    b.append(img, info);
+    b.addEventListener('click', () => {
+      if (inParty) S.party = S.party.filter(x => x !== c.slug);
+      else if (S.party.length >= PARTY_SIZE) return toast(`파티는 ${PARTY_SIZE}명까지예요`);
+      else S.party.push(c.slug);
+      save();
+      renderDex();
+    });
+    list.append(b);
+  });
+  root.append(list);
+  root.append(el('p', 'note', '사람 모습 그림과 전투 능력치는 준비 중이에요. 지금은 2차성장 모습으로 표시해요.'));
+}
+
+// ===== 시작 =====
+renderPoints();
+showTab('farm');
+
+if ('serviceWorker' in navigator && window.top === window && location.protocol.startsWith('http')) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+})();
+</script>
