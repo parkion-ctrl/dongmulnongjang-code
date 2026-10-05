@@ -298,7 +298,7 @@ img{max-width:100%}
 
 /* 하단 메뉴 */
 .nav{flex:none;position:relative;z-index:10;padding-bottom:env(safe-area-inset-bottom,0px);background:#fff;border-top:3px solid var(--gold);box-shadow:0 -4px 12px rgba(90,58,18,.08)}
-.nav-inner{max-width:480px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;height:var(--nav-h);padding:0 6px;align-items:end}
+.nav-inner{max-width:480px;margin:0 auto;display:grid;grid-template-columns:repeat(6,1fr);gap:2px;height:var(--nav-h);padding:0 4px;align-items:end}
 .nav button{position:relative;height:calc(var(--nav-h) - 6px);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:1px;padding:0 0 7px;border-radius:14px 14px 0 0;font-family:var(--display);font-size:14px;color:var(--c);transition:background .15s}
 .nav button img{width:36px;height:32px;object-fit:contain;opacity:.75;filter:saturate(.6);transition:transform .2s,opacity .2s,filter .2s}
 .nav button[aria-current=page]{background:var(--c);color:#fff}
@@ -309,6 +309,145 @@ img{max-width:100%}
 .nav button[aria-current=page]::after{right:5px;border-right:2px solid #fff;border-top-right-radius:8px}
 @media (prefers-reduced-motion:reduce){.nav button img{transition:none}}
 
+/* 탐험 (원작 보라색 성 + 몬스터 도감 남색) */
+.explore{--ex-deep:#2a1460;--ex-mid:#5b2fb5;--ex-glow:#ffd75e}
+.ex-head{display:block;width:calc(100% + 32px);max-width:none;margin:0 -16px;height:auto}
+.ex-legend{display:flex;flex-direction:column;gap:6px;margin-top:10px;padding:10px;border-radius:14px;background:#fff;border:2px solid #cdb8f2}
+.ex-legend img{width:100%;height:auto;border-radius:10px}
+.ex-legend p{margin:0;font-size:13px;color:var(--ink-soft);word-break:keep-all}
+.ex-progress{display:flex;justify-content:space-between;gap:8px;margin-top:10px;padding:8px 12px;border-radius:12px;background:var(--ex-deep);color:var(--ex-glow);font-family:var(--display);font-size:15px;font-variant-numeric:tabular-nums}
+.ex-party{display:flex;flex-direction:column;gap:8px}
+.ex-mate{display:grid;grid-template-columns:56px 1fr auto;gap:10px;align-items:center;width:100%;padding:8px 10px;border-radius:14px;background:#fff;border:2px solid #cdb8f2;text-align:left}
+.ex-mate>img{width:56px;height:56px;object-fit:contain}
+.ex-mate-info strong{font-family:var(--display);font-weight:400;font-size:16px}
+.ex-stats{display:flex;flex-wrap:wrap;gap:0 10px;font-size:12px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.ex-gear{display:flex;gap:4px}
+.ex-gear img,.ex-gear-empty{width:34px;height:34px;object-fit:contain;border-radius:8px;background:#f1eafd}
+.ex-gear-empty{display:grid;place-items:center;font-size:10px;color:#9a87c2;border:1px dashed #cdb8f2}
+.ex-gear-pick{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:6px}
+.ex-gear-pick button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:64px;padding:4px;border-radius:10px;background:#fff;border:2px solid var(--line);word-break:keep-all}
+.ex-gear-pick button[aria-pressed=true]{border-color:#5b2fb5;background:#f1eafd}
+.ex-gear-pick img{width:40px;height:40px;object-fit:contain}
+.ex-gear-pick small{font-size:10px;line-height:1.2}
+.ex-go{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.ex-btn{display:block;width:100%;padding:12px;border-radius:14px;font-family:var(--display);font-size:18px;color:#fff;background:#5b2fb5;border-bottom:4px solid #2a1460}
+.ex-btn.ghost{background:#efe7fc;color:#2a1460;border:2px solid #cdb8f2;border-bottom-width:4px}
+.ex-btn:disabled{background:#d9d2e6;border-bottom-color:#b9afc9;color:#8a809b}
+.ex-menu{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.ex-menu-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 6px;border-radius:14px;background:#fff;border:2px solid #cdb8f2;text-align:center;word-break:keep-all}
+.ex-menu-btn img{height:64px;width:auto;max-width:100%;object-fit:contain}
+.ex-menu-btn strong{font-family:var(--display);font-weight:400;font-size:15px}
+.ex-menu-btn small{font-size:11px;color:var(--ink-soft)}
+.ex-merchant{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.ex-merchant img{width:42%;height:auto}
+.ex-merchant p{flex:1;margin:0;padding:10px;border-radius:12px;background:#f1eafd;font-size:13px;word-break:keep-all}
+.ex-book{display:flex;flex-direction:column;gap:8px}
+.ex-book-row{display:grid;grid-template-columns:96px 1fr;gap:10px;align-items:center;padding:10px;border-radius:14px;background:#fff;border:2px solid #cdb8f2}
+.ex-book-row img{width:96px;height:80px;object-fit:contain}
+.ex-book-row strong{font-family:var(--display);font-weight:400;font-size:17px;color:#b0127a}
+.ex-book-row small{display:block;font-size:12px;color:var(--ink-soft);word-break:keep-all}
+.ex-book-row.unseen img{filter:brightness(0) opacity(.25)}
+.ex-floorbar{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin:0 -16px;padding:8px 16px;background:#2a1460;color:#fff;font-size:12px;font-variant-numeric:tabular-nums}
+.ex-floorbar strong{font-family:var(--display);font-weight:400;font-size:18px;color:#ffd75e}
+.ex-stage{display:flex;flex-direction:column;align-items:center;gap:6px;margin:0 -16px;padding:12px 16px 14px;min-height:230px;background:radial-gradient(ellipse at 50% 55%,#d9c8fb 0%,#9a74e6 30%,#4a248f 70%,#1b0c40 100%);color:#fff}
+.ex-stage.talk{justify-content:center}
+.ex-foe-name{font-family:var(--display);font-size:19px;color:#ffd75e;text-shadow:0 2px 0 #1b0c40}
+.ex-foe{height:150px;width:auto;max-width:90%;object-fit:contain;filter:drop-shadow(0 0 8px rgba(255,255,255,.75)) drop-shadow(0 6px 8px rgba(0,0,0,.35))}
+.ex-foe-stat{font-size:12px;opacity:.85;font-variant-numeric:tabular-nums}
+.ex-quiz-q{margin:0;max-width:30em;font-family:var(--display);font-size:18px;text-align:center;word-break:keep-all}
+.ex-bar{position:relative;width:100%;height:14px;border-radius:999px;background:rgba(0,0,0,.25);overflow:hidden}
+.ex-bar b{display:block;height:100%;border-radius:999px;transition:width .3s}
+.ex-bar span{position:absolute;inset:0;font-size:10px;line-height:14px;text-align:center;color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.6);font-variant-numeric:tabular-nums}
+.ex-bar.foe{max-width:260px;height:16px}
+.ex-bar.foe span{line-height:16px;font-size:11px}
+.ex-bar.foe b{background:linear-gradient(90deg,#ff5a5a,#ff9a3c)}
+.ex-bar.hp b{background:#43c35a}
+.ex-bar.mp b{background:#4f9be6}
+.ex-run-party{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
+.ex-run-mate{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;border-radius:12px;background:#fff;border:2px solid #cdb8f2;font-size:11px;text-align:center;word-break:keep-all}
+.ex-run-mate img{height:44px;width:auto;object-fit:contain}
+.ex-run-mate .ex-bar{height:12px;background:#e4def0}
+.ex-run-mate .ex-bar span{line-height:12px;color:#2a1460;text-shadow:none}
+.ex-run-mate.down{opacity:.45;filter:grayscale(1)}
+.ex-log{margin-top:10px;padding:8px 12px;border-radius:12px;background:#f6f2fd;border:2px dashed #cdb8f2;font-size:13px;line-height:1.6;font-variant-numeric:tabular-nums}
+.ex-cmds{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.ex-cmds.one{grid-template-columns:1fr}
+.ex-cmd{display:flex;flex-direction:column;align-items:center;gap:1px;padding:10px 6px;border-radius:14px;color:#fff;font-family:var(--display);background:linear-gradient(#3a5bb8,#1f3577);border-bottom:4px solid #142452}
+.ex-cmd strong{font-weight:400;font-size:18px}
+.ex-cmd small{font-family:var(--body);font-size:11px;opacity:.85}
+.ex-cmd-guard{background:linear-gradient(#c79a1a,#8a6400);border-bottom-color:#5c4300}
+.ex-cmd-magic{background:linear-gradient(#b4389a,#6e1a5e);border-bottom-color:#4a0f3f}
+.ex-cmd-item{background:linear-gradient(#3fa36b,#1f6a40);border-bottom-color:#134428}
+.ex-cmd:disabled{filter:grayscale(1) opacity(.5)}
+.ex-leave{display:block;margin:12px auto 0}
+.ex-door{display:flex;flex-direction:column;align-items:center;gap:2px;padding:16px 8px 12px;border-radius:60px 60px 12px 12px;background:linear-gradient(#6b3fc9,#3a1c86);border:3px solid #ffd75e;border-bottom-width:6px;color:#fff;text-align:center;word-break:keep-all}
+.ex-door strong{font-family:var(--display);font-weight:400;font-size:19px;color:#ffd75e}
+.ex-door small{font-size:12px;opacity:.9}
+.ex-door-no{font-size:11px;opacity:.7}
+.ex-door.hidden-door{background:linear-gradient(#4a4458,#24202e);border-color:#9a8fb0}
+.ex-door.hidden-door strong{color:#d8d0ea}
+.ex-stage.scene{background-size:cover;background-position:center}
+.ex-stage.scene.talk{justify-content:space-between;min-height:270px}
+.ex-stage.scene.talk .ex-quiz-q{font-size:16px}
+.ex-stage.scene .ex-quiz-q{padding:8px 12px;border-radius:12px;background:rgba(27,12,64,.62);text-shadow:0 1px 2px rgba(0,0,0,.5)}
+.ex-stage.scene .ex-foe-name{padding:0 12px;border-radius:999px;background:rgba(27,12,64,.55)}
+.ex-orig{width:62%;max-width:240px;height:auto;border-radius:10px;border:3px solid #ffd75e}
+.ex-guest{height:110px;width:auto;max-width:60%;object-fit:contain;filter:drop-shadow(0 0 8px rgba(255,255,255,.7))}
+.ex-foe-row{display:flex;gap:8px;justify-content:center;width:100%}
+.ex-foe-card{flex:1;max-width:170px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px;border-radius:12px;background:rgba(27,12,64,.45);border:3px solid transparent;color:#fff;font-size:12px}
+.ex-foe-card.target{border-color:#ffd75e;background:rgba(27,12,64,.7)}
+.ex-foe-card.dead{opacity:.35;filter:grayscale(1)}
+.ex-foe.small{height:96px}
+.ex-maze{width:100%;max-width:330px;height:auto;aspect-ratio:1;border-radius:10px;border:3px solid #ffd75e;touch-action:none;background:#1b0c40}
+.ex-maze-time{font-family:var(--display);font-size:17px;color:#ffd75e;font-variant-numeric:tabular-nums}
+.ex-maze-time.hurry{color:#ff6b6b}
+.ex-pad{display:grid;grid-template-columns:repeat(3,64px);grid-template-areas:". up ." "left . right" ". down .";gap:6px;justify-content:center}
+.ex-pad button{height:56px;border-radius:14px;background:#5b2fb5;border-bottom:4px solid #2a1460;color:#fff;font-size:22px}
+.ex-pad-up{grid-area:up}.ex-pad-left{grid-area:left}.ex-pad-right{grid-area:right}.ex-pad-down{grid-area:down}
+.ex-status{display:flex;flex-wrap:wrap;gap:4px;margin:0 -16px;padding:6px 16px;background:#3a0f2e;font-size:12px;color:#ffc2d6}
+.ex-status span{padding:1px 8px;border-radius:999px;background:rgba(255,255,255,.12)}
+/* 전투 효과 */
+.ex-stage{position:relative}
+.ex-foe-wrap{position:relative;display:inline-flex}
+.ex-foe-wrap.dead,.ex-foe-card.dead .ex-foe{animation:fx-die .5s ease-out forwards}
+.ex-foe-card,.ex-run-mate{position:relative}
+.ex-bar b{transition:width .35s ease-out}
+.ex-cmds.busy{pointer-events:none}
+.ex-cmds.busy .ex-cmd{filter:saturate(.6) brightness(.9)}
+.fx-num{position:absolute;top:30%;z-index:6;transform:translateX(-50%);font-family:var(--display);font-size:28px;line-height:1;color:#fff;pointer-events:none;
+  text-shadow:2px 0 0 #b3123c,-2px 0 0 #b3123c,0 2px 0 #b3123c,0 -2px 0 #b3123c,2px 2px 0 #b3123c,-2px -2px 0 #b3123c,2px -2px 0 #b3123c,-2px 2px 0 #b3123c;
+  animation:fx-rise .85s ease-out forwards}
+.fx-num.fire{color:#ffe14d;font-size:32px}
+.fx-num.hurt{top:10%;font-size:22px;color:#ff4d6d;text-shadow:2px 0 0 #fff,-2px 0 0 #fff,0 2px 0 #fff,0 -2px 0 #fff}
+.fx-num.heal{top:10%;font-size:20px;color:#2fb34a;text-shadow:2px 0 0 #fff,-2px 0 0 #fff,0 2px 0 #fff,0 -2px 0 #fff}
+.fx-num.mana{top:34%;font-size:18px;color:#2f7fe0;text-shadow:2px 0 0 #fff,-2px 0 0 #fff,0 2px 0 #fff,0 -2px 0 #fff}
+.fx-burst{position:absolute;inset:0;z-index:5;pointer-events:none}
+.fx-burst.slash{background:linear-gradient(135deg,transparent 44%,rgba(255,255,255,.95) 48%,#fff 50%,rgba(255,255,255,.95) 52%,transparent 56%);animation:fx-slash .35s ease-out forwards}
+.fx-burst.fire{background:radial-gradient(circle at 50% 55%,rgba(255,250,200,.95) 0,rgba(255,170,40,.85) 22%,rgba(255,70,20,.55) 42%,transparent 62%);animation:fx-fire .45s ease-out forwards}
+.fx-burst.shield{border-radius:12px;box-shadow:inset 0 0 0 3px #6fd0ff,0 0 14px 4px rgba(90,190,255,.8);animation:fx-fade .7s ease-out forwards}
+.fx-burst.heal{border-radius:12px;background:radial-gradient(circle,rgba(130,255,150,.55),transparent 70%);box-shadow:0 0 14px 4px rgba(90,230,120,.7);animation:fx-fade .7s ease-out forwards}
+.fx-burst.sweep{background:radial-gradient(circle,rgba(255,40,60,.15),rgba(160,0,30,.6));animation:fx-fade .6s ease-out forwards}
+.fx-hit{animation:fx-hit .4s ease-out}
+.fx-hurt{animation:fx-hurt .4s ease-out}
+.fx-hop{animation:fx-hop .3s ease-out}
+.fx-lunge{animation:fx-lunge .4s ease-in-out}
+@keyframes fx-rise{0%{opacity:0;transform:translate(-50%,8px) scale(.6)}15%{opacity:1;transform:translate(-50%,0) scale(1.15)}100%{opacity:0;transform:translate(-50%,-48px) scale(1)}}
+@keyframes fx-slash{0%{opacity:0;transform:translate(-30%,-30%) scale(.6)}30%{opacity:1}100%{opacity:0;transform:translate(25%,25%) scale(1.1)}}
+@keyframes fx-fire{0%{opacity:0;transform:scale(.3)}35%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.35)}}
+@keyframes fx-fade{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
+@keyframes fx-hit{0%,100%{transform:translateX(0);filter:none}20%{transform:translateX(-8px);filter:brightness(2.2)}40%{transform:translateX(7px)}60%{transform:translateX(-5px);filter:brightness(1.4)}80%{transform:translateX(3px)}}
+@keyframes fx-hurt{0%,100%{transform:translateX(0);background:#fff}20%{transform:translateX(-6px);background:#ffd0d8}50%{transform:translateX(5px);background:#ffb3c0}80%{transform:translateX(-2px)}}
+@keyframes fx-hop{0%,100%{transform:translateY(0)}45%{transform:translateY(-10px)}}
+@keyframes fx-lunge{0%,100%{transform:translateY(0) scale(1)}40%{transform:translateY(18px) scale(1.12)}}
+@keyframes fx-die{to{opacity:.15;transform:translateY(12px) scale(.9);filter:grayscale(1)}}
+@media (prefers-reduced-motion:reduce){.fx-num,.fx-burst,.fx-hit,.fx-hurt,.fx-hop,.fx-lunge,.ex-foe-wrap.dead{animation-duration:.01s}.ex-bar b{transition:none}}
+.ex-puzzle{width:100%;max-width:340px;height:auto;aspect-ratio:1;border-radius:12px;border:3px solid #ffd75e;touch-action:manipulation;background:#1b0c40;cursor:pointer}
+.ex-wanderer{width:46%;max-width:180px;height:auto}
+.ex-btn-sub{display:block;font-family:var(--body);font-size:12px;opacity:.85;margin-top:2px}
+@media (prefers-reduced-motion:reduce){.ex-bar b{transition:none}}
+/* 하단 메뉴 6칸 */
+.nav button{font-size:13px}
+.nav button img{width:32px;height:30px}
 /* 모달 */
 .modal{position:fixed;inset:0;z-index:20;background:rgba(60,40,10,.45);display:grid;place-items:center;padding:16px}
 .modal-box{width:100%;max-width:400px;background:var(--paper);border:3px solid var(--gold);border-radius:20px;padding:18px;text-align:center}
@@ -336,6 +475,7 @@ img{max-width:100%}
     <section id="screen-yard" class="screen" hidden></section>
     <section id="screen-shop" class="screen" hidden></section>
     <section id="screen-town" class="screen" hidden></section>
+    <section id="screen-explore" class="screen explore" hidden></section>
     <section id="screen-dex" class="screen" hidden></section>
   </main>
 
@@ -346,6 +486,7 @@ img{max-width:100%}
     <button data-tab="yard" style="--c:#74bf17"><img src="assets/ui/nav_deco.png" alt=""><span>꾸미기</span></button>
     <button data-tab="shop" style="--c:#5a8ee6"><img src="assets/ui/nav_item.png" alt=""><span>아이템</span></button>
     <button data-tab="town" style="--c:#2fb6e3"><img src="assets/ui/nav_game.png" alt=""><span>마을</span></button>
+    <button data-tab="explore" style="--c:#7b4fd6"><img src="assets/ui/nav_explore.png" alt=""><span>탐험</span></button>
     <button data-tab="dex" style="--c:#ee9a00"><img src="assets/ui/nav_book.png" alt=""><span>수첩</span></button>
   </div>
 </nav>
@@ -523,7 +664,9 @@ const SAVE_KEY = 'dongmulnongjang.save.v1';
 // 완결 후엔 다시 키울 수 있지만 동료로는 합류하지 않는다.
 const blankSave = () => ({ v: 1, points: 50, pet: null, dex: {}, companions: [], party: [], gameCleared: false,
   calendar: { year: 1, month: 3, period: 0 }, careLeft: CARE_PER_PERIOD,
-  decoBag: {}, yard: { skin: 'bg_skin04', items: [], nextId: 1 }, foodBag: {}, recipeKnown: [], medBag: {}, drawings: [] });
+  decoBag: {}, yard: { skin: 'bg_skin04', items: [], nextId: 1 }, foodBag: {}, recipeKnown: [], medBag: {}, drawings: [],
+  // 탐험: goodsBag = 용품(검·방패·물약·황금덩어리 등), tower = 북쪽 탑 진행
+  goodsBag: {}, tower: { best: 0, saved: 1, cleared: false, run: null, seen: {}, story: {}, doorOpen: false } });
 
 function load() {
   try {
@@ -609,9 +752,9 @@ function showTab(tab) {
   document.querySelectorAll('.nav button').forEach(b => {
     if (b.dataset.tab === tab) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
   });
-  ['farm', 'yard', 'shop', 'town', 'dex'].forEach(t => { $('screen-' + t).hidden = t !== tab; });
+  ['farm', 'yard', 'shop', 'town', 'explore', 'dex'].forEach(t => { $('screen-' + t).hidden = t !== tab; });
   if (tab !== 'yard') clearInterval(wanderTimer);
-  ({ farm: renderFarm, yard: renderYard, shop: renderItemBox, town: renderTown, dex: renderDex })[tab]();
+  ({ farm: renderFarm, yard: renderYard, shop: renderItemBox, town: renderTown, explore: renderExplore, dex: renderDex })[tab]();
   document.querySelector('.app > main').scrollTop = 0;
 }
 
@@ -1755,7 +1898,7 @@ function confirmAdopt(a) {
 const ITEMBOX_TABS = [
   { id: 'food', img: 'food', empty: '쿠킹샵에서 요리하거나 여행 기념품으로 얻을 수 있어요.' },
   { id: 'deco', img: 'deco', empty: '마을의 아이템 가게에서 살 수 있어요.' },
-  { id: 'goods', img: 'item', empty: '용품은 연금술과 탐험에서 얻을 수 있어요. (준비 중)' },
+  { id: 'goods', img: 'item', empty: '탐험의 마법 상인에게 사거나 북쪽 탑 몬스터를 물리치면 얻어요.' },
   { id: 'medicine', img: 'mad', empty: '마을 동물병원 약국에서 살 수 있어요.' },
 ];
 let boxView = 'food';
@@ -1777,7 +1920,7 @@ function renderItemBox() {
   root.append(tabs);
   const panel = el('div', 'box-panel');
   const tab = ITEMBOX_TABS.find(t => t.id === boxView);
-  const cards = boxView === 'food' ? foodCards() : boxView === 'deco' ? decoCards() : boxView === 'medicine' ? medCards() : [];
+  const cards = boxView === 'food' ? foodCards() : boxView === 'deco' ? decoCards() : boxView === 'medicine' ? medCards() : boxView === 'goods' ? goodsCards() : [];
   if (!cards.length) panel.append(el('p', 'note', `아직 없어요. ${tab.empty}`));
   else {
     const grid = el('div', 'food-grid');
@@ -2540,6 +2683,7 @@ function renderCompanions(root) {
     info.append(st);
     b.append(img, info);
     b.addEventListener('click', () => {
+      if (S.tower.run) return toast('탑에 오르는 중에는 파티를 바꿀 수 없어요');
       if (inParty) S.party = S.party.filter(x => x !== c.slug);
       else if (S.party.length >= PARTY_SIZE) return toast(`파티는 ${PARTY_SIZE}명까지예요`);
       else S.party.push(c.slug);
@@ -2549,7 +2693,1726 @@ function renderCompanions(root) {
     list.append(b);
   });
   root.append(list);
-  root.append(el('p', 'note', '사람 모습 그림과 전투 능력치는 준비 중이에요. 지금은 2차성장 모습으로 표시해요.'));
+  root.append(el('p', 'note', '사람 모습 그림은 준비 중이라 지금은 2차성장 모습으로 표시해요. 전투 능력치와 장비는 탐험 탭에서 볼 수 있어요.'));
+}
+
+// ===== 탐험: 북쪽 탑 =====
+// 원작(쥬니버 동물농장 '탐험', 2007): 동물 지수가 전투 능력이 된다(공격=애정/10, 방어=매력/10, 체력=건강, 마력=지식).
+// 명령은 공격하기·방어하기·마법공격 3가지, 10층마다 저장(저장 안 하고 나가면 전리품을 잃음), 몬스터 7종(도감 수치 그대로).
+// 리메이크: 한 마리 대신 사람이 된 동료 4명이 같은 명령으로 함께 싸운다. 탐험은 날짜를 쓰지 않는다.
+// 층 구성·보상·장비 수치·드롭 확률은 임시 값.
+const TOWER_TOP = 30;
+const TOWER_SAVE_EVERY = 10;
+const MAGIC_COST = 30;
+const GUARD_TAKEN = 0.25;          // 방어하기: 받는 피해 25%
+const BOSS_SWEEP_EVERY = 3;        // 보스는 3턴마다 파티 전체 공격(60%)
+const MONSTERS = [
+  { id: 'bat', img: 'ex_01.gif', name: '거대 박쥐', atk: 15, def: 5, hp: 60, desc: '세 마리씩 무리 지어 다니는 커다란 박쥐. 밤에 창문을 두드려도 열어 주면 안 돼요.' },
+  { id: 'zombie', img: 'ex_02.gif', name: '좀비', atk: 20, def: 10, hp: 150, desc: '탑에 숨은 누군가에게 조종당해, 들어오는 것은 뭐든 공격해요.' },
+  { id: 'wolf', img: 'ex_03.gif', name: '죽음의 늑대', atk: 42, def: 8, hp: 170, desc: '푸른 털에 머리가 둘. 발톱 공격이 아주 매서워요.' },
+  { id: 'dracula', img: 'ex_04.gif', name: '드라큘라', atk: 55, def: 20, hp: 240, desc: '수백 년 동안 어둠을 다스린 강자. 잘 자란 동료가 아니면 이기기 어려워요.' },
+  { id: 'reaper', img: 'ex_05.gif', name: '사신', atk: 200, def: 70, hp: 600, boss: true, desc: '탑의 중간 보스. 커다란 낫과 검은 망토, 얼굴은 보이지 않아요.' },
+  { id: 'spider', img: 'ex_06.gif', name: '왕거미', atk: 60, def: 24, hp: 320, desc: '거미 왕의 새끼들. 체력이 강하고, 진짜 거미 왕은 독을 쓴대요.' },
+  { id: 'mage', img: 'mage.png', name: '암흑의 마도사', atk: 500, def: 130, hp: 1000, boss: true, desc: '이번 사건의 주인공. 장비를 가득 채워도 이기기 힘들 만큼 강해요.' },
+];
+const MONSTER_BY_ID = Object.fromEntries(MONSTERS.map(m => [m.id, m]));
+// 층별 몬스터: [시작층, 끝층, 몬스터]. 같은 구간 안에서는 한 층 오를 때마다 10%씩 강해진다.
+const TOWER_BANDS = [[1, 4, 'bat'], [5, 9, 'zombie'], [10, 14, 'wolf'], [15, 19, 'dracula'], [20, 20, 'reaper'], [21, 29, 'spider'], [30, 30, 'mage']];
+// 층마다 문 두 개 중 하나를 고른다. 문 뒤의 방 종류와 나올 확률(가중치). 숫자는 임시 값.
+// 10·20·30층(저장 지점·보스)과 1층은 갈림길 없이 바로 전투.
+const ROOMS = {
+  battle: { name: '몬스터', hint: '으르렁… 무언가 기다리고 있어요', w: 34 },
+  elite: { name: '강한 몬스터', hint: '무시무시한 기운이 새어 나와요', w: 9, from: 3 },
+  chest: { name: '보물상자', hint: '자물쇠 걸린 상자가 보여요', w: 15 },
+  spring: { name: '회복의 샘', hint: '맑은 물소리가 들려요', w: 10 },
+  trap: { name: '함정 복도', hint: '바닥이 수상해 보여요', w: 12 },
+  merchant: { name: '떠돌이 상인', hint: '이히히… 웃음소리가 들려요', w: 7 },
+  quiz: { name: '퀴즈 지배인', hint: '“문제를 맞히면 보물을 주지~”', w: 8 },
+  lost: { name: '도움 요청', hint: '누군가 도와 달라고 외치는 소리가 나요', w: 6 },
+};
+// 방 종류 → 배경 장면(assets/explore/room_*.jpg, research/gen_explore.py)
+const ROOM_SCENE = { battle: 'hall', elite: 'hall', chest: 'chest', spring: 'spring', trap: 'trap', merchant: 'hall', quiz: 'hall', lost: 'lost' };
+const HIDDEN_DOOR = 0.25;          // 문 뒤가 무엇인지 안 보일 확률
+const ELITE = { hp: 1.6, atk: 1.3, def: 1.2 };
+const TRAP_OPTIONS = [
+  ['know', '살금살금 살펴서 지나가기', '지식'],
+  ['power', '힘껏 달려서 지나가기', '건강'],
+];
+// 도움 요청: 파티에 없는 동물 하나가 게스트로 나와 세 가지 중 하나를 부탁한다.
+// 들어주면 90%는 보상, 10%는 동물로 위장한 유령의 장난이라 손해.
+const HELP = {
+  maze: { title: '길 찾기', ask: '길을 잃어버렸어요… 출구까지 같이 가 줄래요?', accept: '길 찾아 주기 (미로)' },
+  supply: { title: '물자 부탁', ask: '친구가 다쳤어요. 물약 하나만 나눠 줄 수 있어요?', accept: '물약 1개 주기' },
+  hunt: { title: '몬스터 퇴치', ask: '몬스터들이 쫓아와요! 제발 도와주세요!', accept: '몬스터 물리쳐 주기 (2마리)' },
+};
+const HELP_GHOST = 0.1;
+const HELP_REWARD_POINTS = 500;
+const HELP_MATERIALS = ['spirit_aura', 'god_fabric', 'solidwood'];
+// 무구 보상 등급별 비율(1등급 나무 : 2등급 기사·철 : 3등급 번개·크리스탈 : 4등급 엑스칼리버·무지개 = 4:3:2:1)
+const HELP_GEAR_TIER_WEIGHT = { 1: 4, 2: 3, 3: 2, 4: 1 };
+const HELP_PENALTY = { points: 200, potions: 2, debuffFloors: 3, debuffRatio: 0.8, retreat: 5 };
+// 미로: 층이 높을수록 커진다. 제한 시간은 칸 수에 비례.
+const mazeSize = floor => Math.min(13, 7 + Math.floor(floor / 5));
+const mazeSeconds = n => 15 + n * 3;
+const POTION_ORDER = ['game_shealingpotion', 'game_magicpotion', 'game_healingpotion'];
+// 원작 팁: '문을 열 수 있는 주문은 익스 피니트 릭투'. 마도사 방 앞 봉인된 문.
+const DOOR_SPELL = '익스피니트릭투';
+const NONSENSE = [
+  ['세상에서 가장 뜨거운 과일은?', ['천도복숭아', '수박', '불고구마'], 0],
+  ['왕이 넘어지면?', ['킹콩', '왕눈이', '꽈당왕'], 0],
+  ['소가 웃으면?', ['음매', '우하하', '소소'], 1],
+  ['딸기가 회사에서 잘리면?', ['딸기잼', '딸기시럽', '딸기우유'], 1],
+  ['세상에서 가장 쉬운 숫자는?', ['1', '100', '190000'], 2],
+  ['아몬드가 죽으면?', ['다이아몬드', '호두', '땅콩'], 0],
+];
+// 탐험 용품(원작 item/game_*.gif). price 가 있는 것만 마법 상인이 판다.
+const EX_ITEMS = {
+  game_shealingpotion: { name: '체력 회복 약(소)', kind: 'potion', hp: 100, price: 20 },
+  game_healingpotion: { name: '체력 회복 약(대)', kind: 'potion', hp: 300, price: 50 },
+  game_magicpotion: { name: '마력 회복 약', kind: 'potion', mp: 100, price: 40 },
+  game_woodsword: { name: '나무 검', kind: 'weapon', atk: 5, price: 60, tier: 1 },
+  game_knightsword: { name: '기사의 검', kind: 'weapon', atk: 12, price: 200, tier: 2 },
+  game_lightningsword: { name: '번개의 검', kind: 'weapon', atk: 25, tier: 3 },
+  game_xsword: { name: '엑스칼리버', kind: 'weapon', atk: 40, tier: 4 },
+  game_woodshield: { name: '나무 방패', kind: 'shield', def: 5, price: 60, tier: 1 },
+  game_ironshield: { name: '철 방패', kind: 'shield', def: 12, price: 200, tier: 2 },
+  game_crystalshield: { name: '크리스탈 방패', kind: 'shield', def: 25, tier: 3 },
+  game_rainbowshield: { name: '무지개 방패', kind: 'shield', def: 40, tier: 4 },
+  gold_bar: { name: '황금덩어리', kind: 'material' },
+  magicsoul: { name: '마법의 정령', kind: 'material' },
+  northtowercoin: { name: '북쪽탑 코인', kind: 'material' },
+  spirit_aura: { name: '정령의 기운', kind: 'material' },
+  god_fabric: { name: '신의 직물', kind: 'material' },
+  solidwood: { name: '튼튼한 목재', kind: 'material' },
+};
+const exImg = id => asset(`assets/explore/${id}.png`);
+const EX_KIND = { potion: '물약', weapon: '무기', shield: '방패', material: '재료' };
+// 층을 처음 깼을 때 보너스
+const FIRST_CLEAR = {
+  10: { game_magicpotion: 3, gold_bar: 1 },
+  20: { game_lightningsword: 1, game_crystalshield: 1 },
+  30: { game_xsword: 1, game_rainbowshield: 1, northtowercoin: 1 },
+};
+// 특정 층을 깨면 열리는 이야기. 오리지널 스토리 대본이 나오면 교체.
+const TOWER_STORY = {
+  10: ['탑 10층', '어디선가 흐느끼는 소리가 들려요. 위층으로 이어진 계단에 누군가 떨어뜨린 리본이 놓여 있어요.', '(오리지널 스토리 준비 중)'],
+  20: ['탑 20층', '사신이 쓰러진 자리에 낡은 펜던트 조각이 남았어요. 봉인이 풀리기 시작한 건 이것 때문일까요?', '(오리지널 스토리 준비 중)'],
+  30: ['탑 꼭대기', '암흑의 마도사가 물러가자 탑을 뒤덮던 어둠이 걷혔어요. 하지만 섬 저편 동굴에서 새로운 기운이 느껴져요…', '(오리지널 스토리 준비 중)'],
+};
+
+const roll = n => Math.max(1, Math.round(n * (0.9 + Math.random() * 0.2)));
+const hitDamage = (atk, def) => roll(atk * 50 / (50 + def));
+const towerCheckpoints = () => [1, 11, 21].filter(f => f <= S.tower.saved);
+
+function floorFoe(floor) {
+  const [start, , id] = TOWER_BANDS.find(([a, b]) => floor >= a && floor <= b);
+  const m = MONSTER_BY_ID[id];
+  const k = 1 + 0.1 * (floor - start);
+  return { id, name: m.name, img: m.img, boss: !!m.boss,
+    atk: Math.round(m.atk * k), def: Math.round(m.def * k), hp: Math.round(m.hp * k), maxHp: Math.round(m.hp * k) };
+}
+
+// 동료의 전투 능력(원작 환산 + 장비)
+function fighter(c) {
+  const g = c.gear || {};
+  const run = S.tower.run;
+  // 유령의 장난으로 봉인된 장비는 이번 탐험이 끝날 때까지 효과 없음
+  const sealed = run && run.sealed ? run.sealed.filter(x => x.slug === c.slug).map(x => x.kind) : [];
+  const w = sealed.includes('weapon') ? null : EX_ITEMS[g.weapon];
+  const sh = sealed.includes('shield') ? null : EX_ITEMS[g.shield];
+  const k = cursed() ? run.debuff.ratio : 1;
+  return {
+    atk: Math.round((Math.round(c.stats.love / 10) + (w ? w.atk : 0)) * k),
+    def: Math.round((Math.round(c.stats.charm / 10) + (sh ? sh.def : 0)) * k),
+    hp: c.stats.power, mp: c.stats.know, mag: Math.round(c.stats.know / 10 * k),
+  };
+}
+// 저주(능력치 감소)가 지금 층에 걸려 있는지
+function cursed() {
+  const run = S.tower.run;
+  return !!(run && run.debuff && run.floor > run.debuff.from && run.floor <= run.debuff.until);
+}
+const partyMates = () => S.party.map(companionOf).filter(Boolean);
+function liveMembers() {
+  const r = S.tower.run;
+  return partyMates().filter(c => r.members[c.slug] && r.members[c.slug].hp > 0)
+    .map(c => ({ c, f: fighter(c), st: r.members[c.slug] }));
+}
+function bagCount(id) {
+  const r = S.tower.run;
+  return (S.goodsBag[id] || 0) + (r ? r.loot.items[id] || 0 : 0);
+}
+function addItems(bag, items) {
+  Object.entries(items).forEach(([id, n]) => { bag[id] = (bag[id] || 0) + n; });
+}
+const itemsText = items => Object.entries(items).map(([id, n]) => `${EX_ITEMS[id].name}${n > 1 ? ' ×' + n : ''}`).join(', ');
+
+let exploreView = 'hub';
+function renderExplore() {
+  const root = $('screen-explore');
+  root.replaceChildren();
+  if (S.tower.run) return renderTowerRun(root);
+  if (exploreView === 'shop') return renderMerchant(root);
+  if (exploreView === 'book') return renderMonsterBook(root);
+  const head = el('img', 'ex-head');
+  head.src = 'assets/explore/head.png';
+  head.alt = '탐험';
+  root.append(head);
+  const legend = el('div', 'ex-legend');
+  const lim = el('img');
+  lim.src = 'assets/explore/legend.gif';
+  lim.alt = '';
+  legend.append(lim, el('p', null, '북쪽 탑에는 오래전 마법사가 무서운 악마를 봉인해 두었어요. 그런데 봉인이 풀리기 시작해 몬스터들이 나타났대요. 사람이 된 동료들과 함께 탑 꼭대기까지 올라가 봐요.'));
+  root.append(legend);
+
+  const prog = el('div', 'ex-progress');
+  prog.append(
+    el('div', null, `최고 기록 ${S.tower.best}층 / ${TOWER_TOP}층`),
+    el('div', null, S.tower.cleared ? '탑 정상 정복!' : `저장 지점 ${S.tower.saved}층`));
+  root.append(prog);
+
+  root.append(el('h2', 'section-title', '탐험 파티'));
+  root.lastChild.append(el('span', null, '눌러서 장비를 바꿔요'));
+  const mates = partyMates();
+  if (!S.companions.length) {
+    root.append(el('p', 'note', '아직 동료가 없어요. 동물을 키워 엔딩을 보면 사람이 되어 탐험 동료로 합류해요.'));
+  } else {
+    const list = el('div', 'ex-party');
+    mates.forEach(c => list.append(fighterCard(c)));
+    if (!mates.length) list.append(el('p', 'note', '파티가 비어 있어요. 수첩 → 동료에서 파티를 꾸려 주세요.'));
+    root.append(list);
+    const edit = el('button', 'link-btn', '파티 편성 바꾸기 (수첩 → 동료)');
+    edit.addEventListener('click', () => { dexView = 'companions'; showTab('dex'); });
+    root.append(edit);
+  }
+
+  const go = el('div', 'ex-go');
+  const cps = towerCheckpoints();
+  cps.slice().reverse().forEach((f, i) => {
+    const b = el('button', i === 0 ? 'ex-btn' : 'ex-btn ghost', `${f}층부터 오르기`);
+    b.disabled = !mates.length;
+    b.addEventListener('click', () => startRun(f));
+    go.append(b);
+  });
+  root.append(go);
+
+  const menu = el('div', 'ex-menu');
+  const shop = el('button', 'ex-menu-btn');
+  const mimg = el('img');
+  mimg.src = 'assets/explore/merchant.png';
+  mimg.alt = '';
+  shop.append(mimg, el('strong', null, '마법 상인 길데스텐'), el('small', null, '물약과 검·방패를 팔아요'));
+  shop.addEventListener('click', () => { exploreView = 'shop'; renderExplore(); });
+  const book = el('button', 'ex-menu-btn');
+  const bimg = el('img');
+  bimg.src = 'assets/explore/ex_03.gif';
+  bimg.alt = '';
+  book.append(bimg, el('strong', null, '몬스터 도감'), el('small', null, `${Object.keys(S.tower.seen).length} / ${MONSTERS.length} 만남`));
+  book.addEventListener('click', () => { exploreView = 'book'; renderExplore(); });
+  menu.append(shop, book);
+  root.append(menu);
+  root.append(el('p', 'note', `${TOWER_SAVE_EVERY}층마다 저장할 수 있어요. 저장하지 않고 나가거나 파티가 모두 쓰러지면 그동안 모은 포인트와 아이템을 잃어요. 탐험은 날짜가 지나지 않아요.`));
+}
+
+function fighterCard(c) {
+  const f = fighter(c);
+  const b = el('button', 'ex-mate');
+  const img = el('img');
+  img.src = sprite(c.slug, 2);
+  img.alt = '';
+  const info = el('div', 'ex-mate-info');
+  info.append(el('strong', null, c.name));
+  const st = el('div', 'ex-stats');
+  [['공격', f.atk], ['방어', f.def], ['체력', f.hp], ['마력', f.mp]].forEach(([k, v]) => st.append(el('span', null, `${k} ${v}`)));
+  info.append(st);
+  const gear = el('div', 'ex-gear');
+  ['weapon', 'shield'].forEach(kind => {
+    const id = (c.gear || {})[kind];
+    if (id) {
+      const gi = el('img');
+      gi.src = exImg(id);
+      gi.alt = EX_ITEMS[id].name;
+      gear.append(gi);
+    } else gear.append(el('span', 'ex-gear-empty', kind === 'weapon' ? '검' : '방패'));
+  });
+  b.append(img, info, gear);
+  b.addEventListener('click', () => openGear(c));
+  return b;
+}
+
+function openGear(c) {
+  openModal(box => {
+    box.append(el('h3', null, `${c.name}의 장비`));
+    const f = fighter(c);
+    box.append(el('p', null, `공격 ${f.atk} · 방어 ${f.def} · 체력 ${f.hp} · 마력 ${f.mp}`));
+    ['weapon', 'shield'].forEach(kind => {
+      box.append(el('div', 'sub-title', kind === 'weapon' ? '무기' : '방패'));
+      const row = el('div', 'ex-gear-pick');
+      const cur = (c.gear || {})[kind];
+      const opts = [null, ...Object.keys(EX_ITEMS).filter(id => EX_ITEMS[id].kind === kind && ((S.goodsBag[id] || 0) > 0 || id === cur))];
+      opts.forEach(id => {
+        const b = el('button');
+        b.setAttribute('aria-pressed', String((cur || null) === id));
+        if (id) {
+          const gi = el('img');
+          gi.src = exImg(id);
+          gi.alt = '';
+          const it = EX_ITEMS[id];
+          b.append(gi, el('small', null, `${it.name} +${it.atk || it.def}`));
+        } else b.append(el('small', null, '없음'));
+        b.addEventListener('click', () => {
+          if (S.tower.run) return toast('탑에 오르는 중에는 장비를 바꿀 수 없어요');
+          c.gear = c.gear || {};
+          if (cur) S.goodsBag[cur] = (S.goodsBag[cur] || 0) + 1;
+          if (id) S.goodsBag[id] -= 1;
+          c.gear[kind] = id;
+          save();
+          openGear(c);
+          renderExplore();
+        });
+        row.append(b);
+      });
+      box.append(row);
+    });
+    const ok = el('button', 'btn', '닫기');
+    ok.addEventListener('click', closeModal);
+    box.append(ok);
+  });
+}
+
+function renderMerchant(root) {
+  const back = el('button', 'back-btn', '‹ 탐험으로');
+  back.addEventListener('click', () => { exploreView = 'hub'; renderExplore(); });
+  root.append(back);
+  const top = el('div', 'ex-merchant');
+  const img = el('img');
+  img.src = 'assets/explore/merchant.png';
+  img.alt = '마법 상인 길데스텐';
+  top.append(img, el('p', null, '이히히… 마법 상인 길데스텐이오. 탐험에 필요한 물약과 장비라면 여기 다 있지. 아, 탑 꼭대기 봉인된 문을 여는 주문은 「익스 피니트 릭투」라더군.'));
+  root.append(top);
+  const grid = el('div', 'food-grid');
+  Object.entries(EX_ITEMS).filter(([, it]) => it.price).forEach(([id, it]) => {
+    const card = el('div', 'food-card');
+    const im = el('img');
+    im.src = exImg(id);
+    im.alt = '';
+    const eff = it.kind === 'potion' ? (it.hp ? `체력 +${it.hp}` : `마력 +${it.mp}`) : it.kind === 'weapon' ? `공격 +${it.atk}` : `방어 +${it.def}`;
+    const btn = el('button', null, `${it.price}P`);
+    btn.disabled = S.points < it.price;
+    btn.addEventListener('click', () => {
+      if (S.points < it.price) return;
+      S.points -= it.price;
+      S.goodsBag[id] = (S.goodsBag[id] || 0) + 1;
+      save();
+      renderPoints();
+      toast(`${josa(it.name, '을', '를')} 샀어요`);
+      renderExplore();
+    });
+    card.append(im, el('strong', null, it.name), el('small', null, `${eff} · 가진 것 ${S.goodsBag[id] || 0}`), btn);
+    grid.append(card);
+  });
+  root.append(grid);
+  root.append(el('p', 'note', '더 좋은 검과 방패는 탑의 보스를 처음 물리치면 얻을 수 있어요.'));
+}
+
+function renderMonsterBook(root) {
+  const back = el('button', 'back-btn', '‹ 탐험으로');
+  back.addEventListener('click', () => { exploreView = 'hub'; renderExplore(); });
+  root.append(back);
+  root.append(el('h2', 'section-title', '몬스터 도감'));
+  root.lastChild.append(el('span', null, '북쪽 탑에 사는 몬스터'));
+  const list = el('div', 'ex-book');
+  MONSTERS.forEach(m => {
+    const seen = !!S.tower.seen[m.id];
+    const row = el('div', 'ex-book-row' + (seen ? '' : ' unseen'));
+    const img = el('img');
+    img.src = asset(`assets/explore/${seen ? m.img : 'ex_07.gif'}`);
+    img.alt = '';
+    const info = el('div');
+    info.append(el('strong', null, seen ? m.name : '???'));
+    info.append(el('div', 'ex-stats', null));
+    [['공격', m.atk], ['방어', m.def], ['체력', m.hp]].forEach(([k, v]) => info.lastChild.append(el('span', null, `${k} ${seen ? v : '?'}`)));
+    info.append(el('small', null, seen ? m.desc : '아직 만나지 못했어요.'));
+    row.append(img, info);
+    list.append(row);
+  });
+  root.append(list);
+}
+
+// ----- 탑 오르기 -----
+function startRun(from) {
+  const members = {};
+  partyMates().forEach(c => { const f = fighter(c); members[c.slug] = { hp: f.hp, mp: f.mp }; });
+  S.tower.run = { floor: from, members, loot: { points: 0, items: {} }, room: null, foe: null, turn: 0, log: [] };
+  enterFloor();
+}
+
+function rollRoom(floor, not) {
+  const pool = Object.entries(ROOMS).filter(([id, rm]) => id !== not && (!rm.from || floor >= rm.from));
+  let n = Math.random() * pool.reduce((a, [, rm]) => a + rm.w, 0);
+  for (const [id, rm] of pool) { n -= rm.w; if (n < 0) return id; }
+  return 'battle';
+}
+
+function enterFloor() {
+  const r = S.tower.run;
+  r.turn = 0;
+  r.log = [];
+  r.result = null;
+  r.title = null;
+  r.foes = null;
+  r.guest = null;
+  r.helpResult = null;
+  if (r.floor === TOWER_TOP && !S.tower.doorOpen) {
+    r.room = 'door';
+    r.scene = 'hall';
+  } else if (r.floor === 1 || r.floor % TOWER_SAVE_EVERY === 0) {
+    openRoom('battle');
+    return;
+  } else {
+    // 갈림길: 서로 다른 방 두 개, 가끔 문 뒤가 안 보임
+    const a = rollRoom(r.floor);
+    r.room = 'fork';
+    r.scene = 'fork';
+    r.doors = [a, rollRoom(r.floor, a)].map(id => ({ id, hidden: Math.random() < HIDDEN_DOOR }));
+  }
+  save();
+  renderExplore();
+  document.querySelector('.app > main').scrollTop = 0;
+}
+
+function openRoom(id) {
+  const r = S.tower.run;
+  r.doors = null;
+  r.puzzle = null;
+  r.log = [];
+  r.room = id;
+  r.scene = ROOM_SCENE[id];
+  if (id === 'battle' || id === 'elite') {
+    const foe = floorFoe(r.floor);
+    if (id === 'elite') {
+      Object.assign(foe, { name: '성난 ' + foe.name, elite: true,
+        atk: Math.round(foe.atk * ELITE.atk), def: Math.round(foe.def * ELITE.def), hp: Math.round(foe.hp * ELITE.hp) });
+      foe.maxHp = foe.hp;
+    }
+    r.room = 'battle';
+    r.foes = [foe];
+    r.target = 0;
+    S.tower.seen[foe.id] = true;
+    r.log = [`${josa(foe.name, '이', '가')} 나타났다!`];
+  } else if (id === 'quiz') {
+    r.quiz = Math.floor(Math.random() * NONSENSE.length);
+  } else if (id === 'spring') {
+    liveMembers().forEach(({ f, st }) => {
+      st.hp = Math.min(f.hp, st.hp + Math.round(f.hp * 0.3));
+      st.mp = Math.min(f.mp, st.mp + Math.round(f.mp * 0.3));
+    });
+    return clearRoom(['맑은 샘물을 마시고 체력과 마력을 조금 되찾았어요. (최대치의 30%)']);
+  } else if (id === 'lost') {
+    const pool = ANIMALS.filter(a => !S.party.includes(a.slug));
+    r.guest = { slug: pick(pool).slug, ask: pick(Object.keys(HELP)) };
+  }
+  save();
+  renderExplore();
+  document.querySelector('.app > main').scrollTop = 0;
+}
+
+// 전투가 아닌 방을 마치고 다음 층으로 갈 수 있는 상태로
+function clearRoom(lines, title) {
+  const r = S.tower.run;
+  r.title = title || null;
+  Object.values(r.members).forEach(st => { if (st.hp < 0) st.hp = 0; });
+  if (!liveMembers().length) return wipeOut();
+  S.tower.best = Math.max(S.tower.best, r.floor);
+  r.log = lines;
+  r.room = 'cleared';
+  r.result = '위층으로 올라갈까요?';
+  save();
+  renderExplore();
+}
+
+// 함정·상자 피해: 살아 있는 동료 모두 최대 체력의 일정 비율(쓰러지지는 않음)
+function hurtAll(ratio) {
+  liveMembers().forEach(({ f, st }) => { st.hp = Math.max(1, st.hp - Math.round(f.hp * ratio)); });
+}
+
+// 보물상자 자물쇠 퍼즐 3종(무작위). 시간 제한·실패 없음, 포기하면 그냥 지나감.
+// 상태는 세이브(r.puzzle)에 들어가므로 앱을 껐다 켜도 이어서 풀 수 있다.
+const PUZZLES = {
+  pipe: { name: '길 잇기', rule: '타일을 눌러 돌려서 왼쪽 입구부터 오른쪽 자물쇠까지 빛의 길을 이어요.' },
+  lights: { name: '보석 밝히기', rule: '보석을 누르면 그 보석과 위아래·양옆 보석이 함께 켜지고 꺼져요. 모두 켜요.' },
+  dials: { name: '연동 원판', rule: '원판을 누르면 그 원판과 아래 색 칩에 적힌 원판이 함께 한 칸씩 돌아요. 화살표를 모두 별(위)로 맞춰요.' },
+};
+// 벽/연결 비트: 1=위 2=오른쪽 4=아래 8=왼쪽. 시계 방향으로 90도 돌리기
+const rotMask = (m, k) => { for (let i = 0; i < (k % 4 + 4) % 4; i++) m = ((m << 1) | (m >> 3)) & 15; return m; };
+const PIPE_DIRS = [[0, -1, 1, 4], [1, 0, 2, 8], [0, 1, 4, 1], [-1, 0, 8, 2]];
+
+function makePuzzle(floor) {
+  const type = pick(Object.keys(PUZZLES));
+  if (type === 'pipe') {
+    const n = floor < 10 ? 4 : floor < 20 ? 5 : 6;
+    // 입구(왼쪽 sr행)에서 출구(오른쪽 er행)까지 무작위 길을 판다
+    const sr = Math.floor(Math.random() * n), er = Math.floor(Math.random() * n);
+    let path = null;
+    for (let tries = 0; !path && tries < 200; tries++) {
+      const seen = new Set([sr * n]);
+      const walk = [[0, sr]];
+      const dfs = () => {
+        const [x, y] = walk[walk.length - 1];
+        if (x === n - 1 && y === er) return walk.length >= n + 1;
+        const order = PIPE_DIRS.slice().sort(() => Math.random() - 0.5);
+        for (const [dx, dy] of order) {
+          const nx = x + dx, ny = y + dy;
+          if (nx < 0 || ny < 0 || nx >= n || ny >= n || seen.has(ny * n + nx)) continue;
+          seen.add(ny * n + nx); walk.push([nx, ny]);
+          if (dfs()) return true;
+          walk.pop(); seen.delete(ny * n + nx);
+        }
+        return false;
+      };
+      if (dfs()) path = walk.map(([x, y]) => y * n + x);
+    }
+    const base = Array(n * n).fill(0);
+    path.forEach((c, i) => {
+      const x = c % n, y = Math.floor(c / n);
+      let m = 0;
+      [path[i - 1], path[i + 1]].forEach(o => {
+        if (o == null) return;
+        const ox = o % n, oy = Math.floor(o / n);
+        m |= ox > x ? 2 : ox < x ? 8 : oy > y ? 4 : 1;
+      });
+      if (i === 0) m |= 8;
+      if (i === path.length - 1) m |= 2;
+      base[c] = m;
+    });
+    for (let c = 0; c < n * n; c++) if (!base[c]) base[c] = rotMask(pick([5, 3, 7, 3, 5]), Math.floor(Math.random() * 4));
+    const puz = { type, n, sr, er, base, rot: base.map(() => 0), path };
+    do { puz.rot = base.map(() => 1 + Math.floor(Math.random() * 3)); } while (puzzleSolved(puz));
+    return puz;
+  }
+  if (type === 'lights') {
+    const n = floor < 10 ? 3 : floor < 20 ? 4 : 5;
+    const puz = { type, n, on: Array(n * n).fill(1) };
+    // 다 켜진 상태에서 무작위로 눌러 섞으므로 항상 풀 수 있다
+    do {
+      const presses = new Set();
+      while (presses.size < Math.ceil(n * n / 3) + Math.floor(Math.random() * 2)) presses.add(Math.floor(Math.random() * n * n));
+      puz.on = Array(n * n).fill(1);
+      presses.forEach(c => toggleLights(puz, c));
+    } while (puzzleSolved(puz));
+    return puz;
+  }
+  // dials: 원판마다 '함께 도는 원판' 하나. 돌리기는 더하기라 순서와 상관없이 섞어도 항상 풀 수 있다
+  // 10층 미만 3개, 20층 미만 4개, 그 위로 5개. 원판마다 다른 원판 하나가 같이 돈다
+  const n = floor < 10 ? 3 : floor < 20 ? 4 : 5;
+  const many = 1;
+  const link = Array.from({ length: n }, (_, i) => {
+    const others = [...Array(n).keys()].filter(j => j !== i).sort(() => Math.random() - 0.5);
+    return others.slice(0, many).sort((a, b) => a - b);
+  });
+  const puz = { type, n, link, pos: Array(n).fill(0) };
+  do {
+    puz.pos = Array(n).fill(0);
+    for (let k = 0; k < n * 2; k++) turnDial(puz, Math.floor(Math.random() * n), -1);
+  } while (puzzleSolved(puz));
+  return puz;
+}
+
+function toggleLights(puz, c) {
+  const n = puz.n, x = c % n, y = Math.floor(c / n);
+  [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1]].forEach(([dx, dy]) => {
+    const nx = x + dx, ny = y + dy;
+    if (nx >= 0 && ny >= 0 && nx < n && ny < n) puz.on[ny * n + nx] ^= 1;
+  });
+}
+// 원판 i 를 누르면 같이 도는 원판들(예전 세이브는 숫자 하나)
+const dialLinks = (puz, i) => [].concat(puz.link[i]);
+function turnDial(puz, i, dir = 1) {
+  [i, ...dialLinks(puz, i)].forEach(k => { puz.pos[k] = (puz.pos[k] + dir + 6) % 6; });
+}
+// 길 잇기: 입구에서 이어진 칸들
+function pipeLit(puz) {
+  const { n, sr } = puz;
+  const tile = c => rotMask(puz.base[c], puz.rot[c]);
+  const lit = new Set();
+  const start = sr * n;
+  if (!(tile(start) & 8)) return lit;
+  const q = [start];
+  lit.add(start);
+  while (q.length) {
+    const c = q.shift(), x = c % n, y = Math.floor(c / n), m = tile(c);
+    PIPE_DIRS.forEach(([dx, dy, bit, back]) => {
+      const nx = x + dx, ny = y + dy, ni = ny * n + nx;
+      if (!(m & bit) || nx < 0 || ny < 0 || nx >= n || ny >= n || lit.has(ni)) return;
+      if (tile(ni) & back) { lit.add(ni); q.push(ni); }
+    });
+  }
+  return lit;
+}
+function puzzleSolved(puz) {
+  if (puz.type === 'pipe') {
+    const exit = puz.er * puz.n + puz.n - 1;
+    return pipeLit(puz).has(exit) && !!(rotMask(puz.base[exit], puz.rot[exit]) & 2);
+  }
+  if (puz.type === 'lights') return puz.on.every(Boolean);
+  return puz.pos.every(v => v === 0);
+}
+
+// 상자에 손을 대면 20%는 함정 상자: 퍼즐 없이 독가스로 체력만 깎임
+const CHEST_TRAP = { chance: 0.2, hurt: 0.15 };
+
+function startChestPuzzle() {
+  const r = S.tower.run;
+  if (Math.random() < CHEST_TRAP.chance) {
+    hurtAll(CHEST_TRAP.hurt);
+    return clearRoom([`자물쇠를 만지자 독가스가 뿜어져 나왔어요! 모두 체력이 ${Math.round(CHEST_TRAP.hurt * 100)}% 줄었어요.`, '함정 상자였나 봐요…'], '함정 상자!');
+  }
+  r.puzzle = makePuzzle(r.floor);
+  r.log = [];
+  save();
+  renderExplore();
+}
+
+// 연동 원판: 원판마다 색을 달리하고, 3개는 한 줄, 4개는 2×2, 5개는 3+2줄
+const DIAL_COLORS = ['#ff6b8b', '#4fb3ff', '#6fdc6f', '#ffb340', '#c38bff'];
+function dialLayout(n) {
+  if (n <= 3) return { W: 600, H: 330, R: 86, centers: Array.from({ length: n }, (_, i) => [600 * (i + 0.5) / n, 118]) };
+  if (n === 4) return { W: 600, H: 620, R: 94, centers: [[150, 118], [450, 118], [150, 420], [450, 420]] };
+  return { W: 600, H: 620, R: 86, centers: [[100, 118], [300, 118], [500, 118], [200, 420], [400, 420]] };
+}
+const puzzleCanvasHeight = puz => (puz.type === 'dials' ? dialLayout(puz.n).H : 600);
+// 원판이 돌아가는 모습(표시용 각도, 칸 단위로 누적)
+let dialAnim = null;
+
+function drawPuzzle() {
+  const cv = document.getElementById('puzzle-canvas');
+  const puz = S.tower.run && S.tower.run.puzzle;
+  if (!cv || !puz) return;
+  const g = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  g.clearRect(0, 0, W, H);
+  g.fillStyle = '#1b0c40';
+  g.fillRect(0, 0, W, H);
+  const gold = '#ffd75e', dim = '#7d6ba8';
+  if (puz.type === 'pipe') {
+    const { n } = puz, pad = 30, cs = (W - pad * 2) / n;
+    const lit = pipeLit(puz);
+    for (let c = 0; c < n * n; c++) {
+      const x = pad + (c % n) * cs, y = pad + Math.floor(c / n) * cs, m = rotMask(puz.base[c], puz.rot[c]);
+      g.fillStyle = '#2e1868';
+      g.fillRect(x + 3, y + 3, cs - 6, cs - 6);
+      g.strokeStyle = lit.has(c) ? gold : dim;
+      g.lineWidth = cs * 0.2;
+      g.lineCap = 'round';
+      const cx = x + cs / 2, cy = y + cs / 2;
+      g.beginPath();
+      if (m & 1) { g.moveTo(cx, cy); g.lineTo(cx, y); }
+      if (m & 2) { g.moveTo(cx, cy); g.lineTo(x + cs, cy); }
+      if (m & 4) { g.moveTo(cx, cy); g.lineTo(cx, y + cs); }
+      if (m & 8) { g.moveTo(cx, cy); g.lineTo(x, cy); }
+      g.stroke();
+    }
+    // 입구(빛)와 출구(자물쇠)
+    const ey = pad + (puz.sr + 0.5) * cs, xy = pad + (puz.er + 0.5) * cs;
+    g.fillStyle = gold;
+    g.beginPath(); g.arc(pad / 2, ey, pad * 0.42, 0, Math.PI * 2); g.fill();
+    g.fillStyle = puzzleSolved(puz) ? gold : '#c94f7c';
+    g.fillRect(W - pad + 3, xy - pad * 0.4, pad - 8, pad * 0.8);
+  } else if (puz.type === 'lights') {
+    const { n } = puz, pad = 24, cs = (W - pad * 2) / n;
+    puz.on.forEach((v, c) => {
+      const cx = pad + (c % n + 0.5) * cs, cy = pad + (Math.floor(c / n) + 0.5) * cs, rr = cs * 0.36;
+      if (v) {
+        const gr = g.createRadialGradient(cx, cy, rr * 0.2, cx, cy, rr * 1.4);
+        gr.addColorStop(0, '#fff6c2'); gr.addColorStop(0.5, gold); gr.addColorStop(1, 'rgba(255,215,94,0)');
+        g.fillStyle = gr;
+        g.beginPath(); g.arc(cx, cy, rr * 1.4, 0, Math.PI * 2); g.fill();
+      }
+      g.fillStyle = v ? gold : '#3b2675';
+      g.strokeStyle = v ? '#fff3b0' : dim;
+      g.lineWidth = 4;
+      g.beginPath();
+      g.moveTo(cx, cy - rr); g.lineTo(cx + rr, cy); g.lineTo(cx, cy + rr); g.lineTo(cx - rr, cy); g.closePath();
+      g.fill(); g.stroke();
+    });
+  } else {
+    drawDials(g, puz);
+  }
+}
+
+function drawDials(g, puz) {
+  const { R, centers } = dialLayout(puz.n);
+  if (!dialAnim || dialAnim.puz !== puz) dialAnim = { puz, shown: puz.pos.slice(), target: puz.pos.slice(), raf: 0 };
+  const chip = (x, y, i, r) => {
+    g.fillStyle = DIAL_COLORS[i];
+    g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill();
+    g.fillStyle = '#1b0c40';
+    g.font = `bold ${Math.round(r * 1.1)}px sans-serif`;
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillText(String(i + 1), x, y + 1);
+  };
+  centers.forEach(([cx, cy], i) => {
+    const col = DIAL_COLORS[i], done = puz.pos[i] === 0;
+    // 판
+    g.fillStyle = done ? '#3a2a10' : '#2e1868';
+    g.beginPath(); g.arc(cx, cy, R, 0, Math.PI * 2); g.fill();
+    g.lineWidth = 12;
+    g.strokeStyle = done ? '#ffd75e' : col;
+    g.beginPath(); g.arc(cx, cy, R, 0, Math.PI * 2); g.stroke();
+    // 눈금 6개, 맨 위는 목표(별)
+    for (let k = 0; k < 6; k++) {
+      const a = -Math.PI / 2 + k * Math.PI / 3, px = cx + Math.cos(a) * R * 0.74, py = cy + Math.sin(a) * R * 0.74;
+      if (k === 0) {
+        g.fillStyle = '#ffd75e';
+        g.beginPath();
+        for (let t = 0; t < 10; t++) {
+          const rr = t % 2 ? R * 0.09 : R * 0.2, aa = -Math.PI / 2 + t * Math.PI / 5;
+          g.lineTo(px + Math.cos(aa) * rr, py + Math.sin(aa) * rr);
+        }
+        g.closePath(); g.fill();
+      } else {
+        g.fillStyle = 'rgba(233,222,252,.55)';
+        g.beginPath(); g.arc(px, py, R * 0.06, 0, Math.PI * 2); g.fill();
+      }
+    }
+    // 화살표(돌아가는 중이면 중간 각도)
+    const a = -Math.PI / 2 + dialAnim.shown[i] * Math.PI / 3, L = R * 0.6;
+    const tx = cx + Math.cos(a) * L, ty = cy + Math.sin(a) * L;
+    g.lineCap = 'round';
+    g.strokeStyle = '#ffffff';
+    g.lineWidth = 16;
+    g.beginPath(); g.moveTo(cx, cy); g.lineTo(tx, ty); g.stroke();
+    g.strokeStyle = done ? '#ffd75e' : col;
+    g.lineWidth = 10;
+    g.beginPath(); g.moveTo(cx, cy); g.lineTo(tx, ty); g.stroke();
+    g.fillStyle = done ? '#ffd75e' : col;
+    g.beginPath();
+    g.moveTo(cx + Math.cos(a) * (L + R * 0.2), cy + Math.sin(a) * (L + R * 0.2));
+    g.lineTo(tx + Math.cos(a + Math.PI / 2) * R * 0.15, ty + Math.sin(a + Math.PI / 2) * R * 0.15);
+    g.lineTo(tx + Math.cos(a - Math.PI / 2) * R * 0.15, ty + Math.sin(a - Math.PI / 2) * R * 0.15);
+    g.closePath(); g.fill();
+    chip(cx, cy, i, R * 0.17);
+    // 누르면 같이 도는 원판: [자기] + [이어진 원판]
+    g.fillStyle = '#cdb8f2';
+    g.font = `${Math.round(R * 0.25)}px sans-serif`;
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillText('누르면', cx, cy + R + 32);
+    const y3 = cy + R + 68;
+    const group = [i, ...dialLinks(puz, i)], gap = R * 0.6;
+    group.forEach((k, j) => {
+      const x = cx + (j - (group.length - 1) / 2) * gap;
+      chip(x, y3, k, R * 0.19);
+      if (j) {
+        g.fillStyle = '#e9defc';
+        g.font = `bold ${Math.round(R * 0.3)}px sans-serif`;
+        g.fillText('+', x - gap / 2, y3);
+      }
+    });
+  });
+}
+
+function animateDials() {
+  if (!dialAnim) return;
+  const step = () => {
+    let moving = false;
+    dialAnim.shown = dialAnim.shown.map((v, i) => {
+      const d = dialAnim.target[i] - v;
+      if (Math.abs(d) < 0.02) return dialAnim.target[i];
+      moving = true;
+      return v + d * 0.28;
+    });
+    drawPuzzle();
+    dialAnim.raf = moving ? requestAnimationFrame(step) : 0;
+  };
+  cancelAnimationFrame(dialAnim.raf);
+  if (FX_REDUCED) { dialAnim.shown = dialAnim.target.slice(); drawPuzzle(); } else step();
+}
+
+function tapPuzzle(e) {
+  const r = S.tower.run, puz = r && r.puzzle;
+  if (!puz || puz.done) return; // 풀린 뒤 상자가 열리기 전까지 더 누른 건 무시(보상 중복 방지)
+  const cv = e.currentTarget, rect = cv.getBoundingClientRect();
+  const x = (e.clientX - rect.left) / rect.width * cv.width, y = (e.clientY - rect.top) / rect.height * cv.height;
+  if (puz.type === 'pipe' || puz.type === 'lights') {
+    const pad = puz.type === 'pipe' ? 30 : 24, cs = (cv.width - pad * 2) / puz.n;
+    const cx = Math.floor((x - pad) / cs), cy = Math.floor((y - pad) / cs);
+    if (cx < 0 || cy < 0 || cx >= puz.n || cy >= puz.n) return;
+    const c = cy * puz.n + cx;
+    if (puz.type === 'pipe') puz.rot[c] = (puz.rot[c] + 1) % 4; else toggleLights(puz, c);
+  } else {
+    const { R, centers } = dialLayout(puz.n);
+    const i = centers.findIndex(([cx, cy]) => Math.hypot(x - cx, y - cy) <= R * 1.25);
+    if (i < 0) return;
+    turnDial(puz, i);
+    // 표시 각도는 늘 앞으로(시계 방향) 돌아가게 누적
+    if (dialAnim && dialAnim.puz === puz) {
+      [i, ...dialLinks(puz, i)].forEach(k => { dialAnim.target[k] += 1; });
+      save();
+      animateDials();
+      if (puzzleSolved(puz)) { puz.done = true; save(); setTimeout(openChest, FX_REDUCED ? 0 : 450); }
+      return;
+    }
+  }
+  save();
+  drawPuzzle();
+  if (puzzleSolved(puz)) {
+    puz.done = true;
+    save();
+    setTimeout(openChest, FX_REDUCED ? 0 : 350);
+  }
+}
+
+function openChest() {
+  const r = S.tower.run;
+  if (!r || !r.puzzle) return;
+  r.puzzle = null;
+  const pts = 30 + r.floor * 4;
+  r.loot.points += pts;
+  const lines = ['찰칵! 자물쇠가 풀렸어요.', `상자 안에서 ${pts}P를 찾았어요!`];
+  if (Math.random() < 0.7) {
+    const item = pick(['game_shealingpotion', 'game_shealingpotion', 'game_healingpotion', 'game_magicpotion']);
+    addItems(r.loot.items, { [item]: 1 });
+    lines.push(`${EX_ITEMS[item].name}도 들어 있었어요.`);
+  }
+  if (r.floor >= 15 && Math.random() < 0.15) {
+    addItems(r.loot.items, { gold_bar: 1 });
+    lines.push('반짝! 황금덩어리도 있었어요.');
+  }
+  clearRoom(lines, '보물상자 열림!');
+}
+
+function passTrap(stat) {
+  const live = liveMembers();
+  const avg = live.reduce((a, { c }) => a + c.stats[stat], 0) / live.length;
+  const ok = Math.random() < Math.min(0.9, avg / (avg + 300));
+  if (ok) {
+    const pts = 10 + S.tower.run.floor * 2;
+    S.tower.run.loot.points += pts;
+    return clearRoom([stat === 'know' ? '바닥의 이상한 무늬를 피해 무사히 지나갔어요.' : '함정이 작동하기 전에 재빨리 빠져나갔어요!', `지나가다 떨어진 동전을 주웠어요. +${pts}P`]);
+  }
+  hurtAll(0.2);
+  clearRoom([stat === 'know' ? '앗, 숨겨진 발판을 밟았어요! 화살이 쏟아졌어요.' : '달리다 바닥이 꺼졌어요! 아래로 굴러떨어졌다가 겨우 올라왔어요.', '모두 체력이 20% 줄었어요.']);
+}
+
+function buyFromWanderer(id) {
+  const it = EX_ITEMS[id];
+  if (S.points < it.price) return toast('포인트가 모자라요');
+  S.points -= it.price;
+  S.goodsBag[id] = (S.goodsBag[id] || 0) + 1;
+  renderPoints();
+  save();
+  toast(`${josa(it.name, '을', '를')} 샀어요`);
+  renderExplore();
+}
+
+function doorCard(d, i) {
+  const rm = ROOMS[d.id];
+  const b = el('button', 'ex-door' + (d.hidden ? ' hidden-door' : ''));
+  b.append(el('span', 'ex-door-no', i ? '오른쪽 문' : '왼쪽 문'));
+  b.append(el('strong', null, d.hidden ? '???' : rm.name));
+  b.append(el('small', null, d.hidden ? '문 너머가 조용해요…' : rm.hint));
+  b.addEventListener('click', () => openRoom(d.id));
+  return b;
+}
+
+function renderTowerRun(root) {
+  const r = S.tower.run;
+  if (r.room === 'battle' && r.foes && !fxBusy) {
+    if (!r.foes.some(f => f.hp > 0)) return winFloor(r.log.slice());
+    if (!liveMembers().length) return wipeOut();
+  }
+  const bar = el('div', 'ex-floorbar');
+  bar.append(el('strong', null, `북쪽 탑 ${r.floor}층`), el('span', null, `모은 것 ${r.loot.points}P${Object.keys(r.loot.items).length ? ' · 아이템 ' + Object.values(r.loot.items).reduce((a, b) => a + b, 0) + '개' : ''}`));
+  root.append(bar);
+  const status = [];
+  if (cursed()) status.push(`유령의 저주: 능력치 -${Math.round((1 - r.debuff.ratio) * 100)}% (${r.debuff.until}층까지)`);
+  (r.sealed || []).forEach(x => {
+    const c = companionOf(x.slug);
+    const id = c && (c.gear || {})[x.kind];
+    if (id) status.push(`봉인: ${c.name}의 ${EX_ITEMS[id].name}`);
+  });
+  if (status.length) {
+    const st = el('div', 'ex-status');
+    status.forEach(t => st.append(el('span', null, t)));
+    root.append(st);
+  }
+  const stage = el('div', 'ex-stage');
+  stage.id = 'ex-stage';
+  if (r.scene) {
+    stage.classList.add('scene');
+    stage.style.backgroundImage = `linear-gradient(rgba(27,12,64,.15),rgba(27,12,64,.55)),url(${asset(`assets/explore/room_${r.scene}.jpg`)})`;
+  }
+  root.append(stage);
+  if (r.foe && !r.foes) { r.foes = [r.foe]; delete r.foe; } // 이전 버전 세이브
+  if (r.room === 'battle' && r.foes) {
+    const foeSrc = foe => asset(`assets/explore/${foe.img.includes('.') ? foe.img : foe.img === 'ex_07' ? 'mage.png' : foe.img + '.gif'}`);
+    if (r.foes.length === 1) {
+      const foe = r.foes[0];
+      stage.append(el('div', 'ex-foe-name', `${foe.name}${foe.boss ? ' (보스)' : ''}`));
+      const wrap = el('div', 'ex-foe-wrap' + (foe.hp <= 0 ? ' dead' : ''));
+      wrap.dataset.fx = 'foe-0';
+      const img = el('img', 'ex-foe');
+      img.src = foeSrc(foe);
+      img.alt = foe.name;
+      wrap.append(img);
+      stage.append(wrap);
+      stage.append(hpBar(foe.hp, foe.maxHp, 'foe', 'foe-0'));
+      stage.append(el('div', 'ex-foe-stat', `공격 ${foe.atk} · 방어 ${foe.def}`));
+    } else {
+      // 여러 마리: 눌러서 공격할 대상을 고른다
+      stage.append(el('div', 'ex-foe-name', '몬스터 무리'));
+      const row = el('div', 'ex-foe-row');
+      const tgt = battleTarget();
+      r.foes.forEach((foe, i) => {
+        const b = el('button', 'ex-foe-card' + (foe.hp <= 0 ? ' dead' : '') + (foe === tgt ? ' target' : ''));
+        const img = el('img', 'ex-foe small');
+        img.src = foeSrc(foe);
+        img.alt = foe.name;
+        b.dataset.fx = 'foe-' + i;
+        b.append(img, el('small', null, foe.name), hpBar(foe.hp, foe.maxHp, 'foe', 'foe-' + i));
+        b.disabled = foe.hp <= 0;
+        b.addEventListener('click', () => { r.target = i; save(); renderExplore(); });
+        row.append(b);
+      });
+      stage.append(row, el('div', 'ex-foe-stat', '공격할 몬스터를 눌러서 골라요'));
+    }
+  } else if (r.room === 'lost' && r.guest) {
+    stage.classList.add('talk');
+    const h = HELP[r.guest.ask];
+    stage.append(el('div', 'ex-foe-name', `도움 요청 · ${h.title}`));
+    const gi = el('img', 'ex-guest');
+    gi.src = sprite(r.guest.slug, 0);
+    gi.alt = '';
+    stage.append(gi, el('p', 'ex-quiz-q', `${ANIMAL_BY_SLUG[r.guest.slug].name} 아이: “${h.ask}”`));
+  } else if (r.room === 'maze') {
+    stage.classList.add('talk');
+    stage.append(el('div', 'ex-foe-name', '길 찾기'));
+    const cv = el('canvas', 'ex-maze');
+    cv.id = 'maze-canvas';
+    cv.width = 600;
+    cv.height = 600;
+    stage.append(cv, el('div', 'ex-maze-time'), el('div', 'ex-foe-stat', '왼쪽 위 입구에서 노란 출구까지! 화면을 밀거나 화살표를 눌러요.'));
+    bindMazeSwipe(cv);
+  } else if (r.room === 'fork') {
+    stage.classList.add('talk');
+    stage.append(el('div', 'ex-foe-name', '갈림길'));
+    stage.append(el('p', 'ex-quiz-q', '문이 두 개 있어요. 어느 쪽으로 갈까요?'));
+  } else if (r.room === 'chest') {
+    stage.classList.add('talk');
+    if (r.puzzle) {
+      const pz = PUZZLES[r.puzzle.type];
+      stage.append(el('div', 'ex-foe-name', `자물쇠 · ${pz.name}`));
+      const cv = el('canvas', 'ex-puzzle');
+      cv.id = 'puzzle-canvas';
+      cv.width = 600;
+      cv.height = puzzleCanvasHeight(r.puzzle);
+      cv.style.aspectRatio = `600 / ${cv.height}`;
+      cv.style.maxWidth = cv.height < 600 ? '440px' : '';
+      cv.addEventListener('click', tapPuzzle);
+      stage.append(cv, el('div', 'ex-foe-stat', pz.rule));
+    } else {
+      stage.append(el('div', 'ex-foe-name', '보물상자'));
+      stage.append(el('p', 'ex-quiz-q', '방 한가운데 낡은 보물상자가 놓여 있어요. 마법 자물쇠가 걸려 있네요. 가끔 함정 상자도 있대요.'));
+    }
+  } else if (r.room === 'trap') {
+    stage.classList.add('talk');
+    stage.append(el('div', 'ex-foe-name', '함정 복도'));
+    stage.append(el('p', 'ex-quiz-q', '바닥 곳곳에 이상한 무늬가 있어요. 어떻게 지나갈까요?'));
+  } else if (r.room === 'merchant') {
+    stage.classList.add('talk');
+    stage.append(el('div', 'ex-foe-name', '떠돌이 길데스텐'));
+    const mi = el('img', 'ex-wanderer');
+    mi.src = 'assets/explore/merchant.png';
+    mi.alt = '';
+    stage.append(mi, el('p', 'ex-quiz-q', '“이히히, 이런 데서 다 만나는군. 물약 좀 사 가겠소?”'));
+  } else if (r.room === 'quiz') {
+    stage.classList.add('talk');
+    stage.append(el('div', 'ex-foe-name', '퀴즈 지배인의 방'));
+    const qi = el('img', 'ex-orig');
+    qi.src = 'assets/explore/quiz_sisters.png';
+    qi.alt = '';
+    stage.append(qi);
+    stage.append(el('p', 'ex-quiz-q', `“문제를 맞히면 보물을 주지. ${NONSENSE[r.quiz][0]}”`));
+  } else if (r.room === 'door') {
+    stage.classList.add('talk');
+    stage.append(el('div', 'ex-foe-name', '봉인된 문'));
+    const di = el('img', 'ex-orig');
+    di.src = 'assets/explore/sealed_door.png';
+    di.alt = '';
+    stage.append(di);
+    stage.append(el('p', 'ex-quiz-q', '굳게 닫힌 문에 마법진이 빛나고 있어요. 주문을 외워야 열릴 것 같아요.'));
+  } else if (r.room === 'cleared') {
+    stage.classList.add('talk');
+    stage.append(el('div', 'ex-foe-name', r.title || `${r.floor}층 돌파!`));
+    if (r.helpResult) {
+      const gi = el('img', 'ex-guest');
+      gi.src = r.helpResult.ghost ? 'assets/explore/ghost.png' : sprite(r.helpResult.slug, 0);
+      gi.alt = '';
+      stage.append(gi);
+    }
+    stage.append(el('p', 'ex-quiz-q', r.result || ''));
+  }
+
+  const party = el('div', 'ex-run-party');
+  partyMates().forEach(c => {
+    const st = r.members[c.slug];
+    if (!st) return;
+    const f = fighter(c);
+    const m = el('div', 'ex-run-mate' + (st.hp <= 0 ? ' down' : ''));
+    const img = el('img');
+    img.src = sprite(c.slug, 2);
+    img.alt = '';
+    m.dataset.fx = 'mate-' + c.slug;
+    m.append(img, el('small', null, c.name), hpBar(st.hp, f.hp, 'hp', 'hp-' + c.slug), hpBar(st.mp, f.mp, 'mp', 'mp-' + c.slug));
+    party.append(m);
+  });
+  // 미로 중에는 화살표가 미로 바로 밑에 오도록 파티·기록을 숨긴다
+  const boardRoom = r.room === 'maze' || (r.room === 'chest' && r.puzzle);
+  if (!boardRoom) root.append(party);
+
+  if (r.log.length && !boardRoom) {
+    const log = el('div', 'ex-log');
+    r.log.forEach(line => log.append(el('div', null, line)));
+    root.append(log);
+  }
+
+  const cmds = el('div', 'ex-cmds');
+  cmds.id = 'ex-cmds';
+  if (r.room === 'battle') {
+    const live = liveMembers();
+    const canMagic = live.some(x => x.st.mp >= MAGIC_COST);
+    [['attack', '공격하기', '무기로 공격'], ['guard', '방어하기', '받는 피해를 줄여요'], ['magic', '마법공격', `불 마법 · 마력 ${MAGIC_COST}`], ['item', '아이템', '물약 쓰기']].forEach(([id, label, sub]) => {
+      const b = el('button', 'ex-cmd ex-cmd-' + id);
+      b.append(el('strong', null, label), el('small', null, sub));
+      if (id === 'magic') b.disabled = !canMagic;
+      b.addEventListener('click', () => (id === 'item' ? openPotions() : towerTurn(id)));
+      cmds.append(b);
+    });
+  } else if (r.room === 'lost' && r.guest) {
+    const h = HELP[r.guest.ask];
+    const yes = el('button', 'ex-btn', h.accept);
+    if (r.guest.ask === 'supply') {
+      const has = POTION_ORDER.find(id => bagCount(id) > 0);
+      yes.disabled = !has;
+      if (!has) yes.textContent = '줄 수 있는 물약이 없어요';
+    }
+    yes.addEventListener('click', acceptHelp);
+    const no = el('button', 'ex-btn ghost', '미안하지만 지나가기');
+    no.addEventListener('click', () => clearRoom([`${ANIMAL_BY_SLUG[r.guest.slug].name} 아이를 두고 지나갔어요…`]));
+    cmds.append(yes, no);
+    cmds.classList.add('one');
+  } else if (r.room === 'maze') {
+    const pad = el('div', 'ex-pad');
+    [['up', '▲', 0, -1], ['left', '◀', -1, 0], ['right', '▶', 1, 0], ['down', '▼', 0, 1]].forEach(([cls, t, dx, dy]) => {
+      const b = el('button', 'ex-pad-' + cls, t);
+      b.setAttribute('aria-label', { up: '위로', left: '왼쪽으로', right: '오른쪽으로', down: '아래로' }[cls]);
+      b.addEventListener('click', () => moveMaze(dx, dy));
+      pad.append(b);
+    });
+    cmds.append(pad);
+    cmds.classList.add('one');
+  } else if (r.room === 'fork') {
+    r.doors.forEach((d, i) => cmds.append(doorCard(d, i)));
+  } else if (r.room === 'chest') {
+    if (!r.puzzle) {
+      const open = el('button', 'ex-btn', '자물쇠 풀기');
+      open.addEventListener('click', startChestPuzzle);
+      cmds.append(open);
+    }
+    const skip = el('button', 'ex-btn ghost', r.puzzle ? '포기하고 지나가기' : '그냥 지나가기');
+    skip.addEventListener('click', () => { r.puzzle = null; clearRoom(['상자를 두고 조용히 지나갔어요.']); });
+    cmds.append(skip);
+    cmds.classList.add('one');
+  } else if (r.room === 'trap') {
+    const live = liveMembers();
+    TRAP_OPTIONS.forEach(([stat, label, statName]) => {
+      const avg = Math.round(live.reduce((a, { c }) => a + c.stats[stat], 0) / live.length);
+      const b = el('button', 'ex-btn ' + (stat === 'know' ? '' : 'ghost'));
+      b.append(document.createTextNode(label), el('small', 'ex-btn-sub', `파티 평균 ${statName} ${avg} · 성공률 ${Math.round(Math.min(0.9, avg / (avg + 300)) * 100)}%`));
+      b.addEventListener('click', () => passTrap(stat));
+      cmds.append(b);
+    });
+    cmds.classList.add('one');
+  } else if (r.room === 'merchant') {
+    const grid = el('div', 'food-grid');
+    ['game_shealingpotion', 'game_healingpotion', 'game_magicpotion'].forEach(id => {
+      const it = EX_ITEMS[id];
+      const card = el('div', 'food-card');
+      const im = el('img');
+      im.src = exImg(id);
+      im.alt = '';
+      const btn = el('button', null, `${it.price}P`);
+      btn.disabled = S.points < it.price;
+      btn.addEventListener('click', () => buyFromWanderer(id));
+      card.append(im, el('strong', null, it.name), el('small', null, `가진 것 ${bagCount(id)}`), btn);
+      grid.append(card);
+    });
+    const done = el('button', 'ex-btn', '인사하고 지나가기');
+    done.addEventListener('click', () => clearRoom(['“또 보세나, 이히히.” 상인이 어둠 속으로 사라졌어요.']));
+    cmds.append(grid, done);
+    cmds.classList.add('one');
+  } else if (r.room === 'quiz') {
+    NONSENSE[r.quiz][1].forEach((ans, i) => {
+      const b = el('button', 'quiz-opt', ans);
+      b.addEventListener('click', () => answerQuiz(i));
+      cmds.append(b);
+    });
+    cmds.classList.add('one');
+  } else if (r.room === 'door') {
+    const input = el('input', 'name-input');
+    input.placeholder = '주문을 입력해요';
+    input.maxLength = 20;
+    const b = el('button', 'ex-btn', '주문 외우기');
+    b.addEventListener('click', () => {
+      if (input.value.replace(/\s/g, '') === DOOR_SPELL) {
+        S.tower.doorOpen = true;
+        toast('문이 열렸어요!');
+        enterFloor();
+      } else toast('아무 일도 일어나지 않았어요…');
+    });
+    cmds.append(input, b);
+    cmds.classList.add('one');
+  } else if (r.room === 'cleared') {
+    if (r.floor % TOWER_SAVE_EVERY === 0) {
+      const sv = el('button', 'ex-btn', r.floor === TOWER_TOP ? '저장하고 탑을 나가기' : '저장하기 (체력·마력 회복)');
+      sv.addEventListener('click', saveTower);
+      cmds.append(sv);
+    }
+    if (r.floor < TOWER_TOP) {
+      const nx = el('button', r.floor % TOWER_SAVE_EVERY === 0 ? 'ex-btn ghost' : 'ex-btn', `${r.floor + 1}층으로 올라가기`);
+      nx.addEventListener('click', () => { r.floor += 1; enterFloor(); });
+      cmds.append(nx);
+    }
+    cmds.classList.add('one');
+  }
+  root.append(cmds);
+  if (r.room === 'maze') {
+    if (!maze) startMaze(true);
+    drawMaze();
+  }
+  if (r.room === 'chest' && r.puzzle) {
+    drawPuzzle();
+    if (r.puzzle.done) setTimeout(openChest, 0);
+  }
+  const leave = el('button', 'link-btn ex-leave', '탑에서 나가기');
+  leave.addEventListener('click', confirmLeave);
+  root.append(leave);
+}
+
+function hpBar(v, max, kind, key) {
+  const w = el('div', 'ex-bar ' + kind);
+  if (key) { w.dataset.bar = key; w.dataset.max = max; }
+  const b = el('b');
+  b.style.width = `${Math.max(0, Math.min(100, v / Math.max(1, max) * 100))}%`;
+  w.append(b, el('span', null, kind === 'foe' ? `${Math.max(0, v)} / ${max}` : String(Math.max(0, v))));
+  return w;
+}
+
+// 지금 공격할 몬스터: 고른 대상이 살아 있으면 그것, 아니면 살아 있는 첫 번째
+function battleTarget() {
+  const r = S.tower.run;
+  const t = r.foes[r.target];
+  return t && t.hp > 0 ? t : r.foes.find(f => f.hp > 0);
+}
+
+function towerTurn(cmd) {
+  if (fxBusy) return;
+  const r = S.tower.run;
+  const lines = [];
+  const fx = [];
+  const before = snapshotBars();
+  const live = liveMembers();
+  if (cmd === 'guard') {
+    lines.push('모두 방어 자세를 취했어요.');
+    fx.push({ t: 'guard' });
+  } else {
+    live.forEach(({ c, f, st }) => {
+      const foe = battleTarget();
+      if (!foe) return;
+      const fi = r.foes.indexOf(foe);
+      let dmg;
+      const magic = cmd === 'magic' && st.mp >= MAGIC_COST;
+      if (magic) {
+        st.mp -= MAGIC_COST;
+        dmg = roll(f.mag * 2);
+        lines.push(`${c.name}의 불 마법! ${dmg}`);
+      } else {
+        dmg = hitDamage(f.atk, foe.def);
+        lines.push(`${c.name}의 공격! ${dmg}`);
+      }
+      foe.hp = Math.max(0, foe.hp - dmg);
+      fx.push({ t: magic ? 'fire' : 'slash', slug: c.slug, foe: fi, dmg, hp: foe.hp, mp: magic ? st.mp : null, kill: foe.hp <= 0 });
+      if (foe.hp <= 0 && r.foes.length > 1) lines.push(`${josa(foe.name, '을', '를')} 쓰러뜨렸어요!`);
+    });
+  }
+  const won = !r.foes.some(f => f.hp > 0);
+  if (!won) {
+    r.turn += 1;
+    const guard = cmd === 'guard' ? GUARD_TAKEN : 1;
+    r.foes.forEach((foe, fi) => {
+      if (foe.hp <= 0) return;
+      const now = liveMembers();
+      if (!now.length) return;
+      if (foe.boss && r.turn % BOSS_SWEEP_EVERY === 0) {
+        lines.push(`${foe.name}의 전체 공격!`);
+        const hits = now.map(({ c, f, st }) => {
+          const d = Math.max(1, Math.round(hitDamage(foe.atk, f.def) * 0.6 * guard));
+          st.hp = Math.max(0, st.hp - d);
+          lines.push(`${c.name} -${d}`);
+          return { slug: c.slug, dmg: d, hp: st.hp };
+        });
+        fx.push({ t: 'sweep', foe: fi, hits });
+      } else {
+        const t = pick(now);
+        const d = Math.max(1, Math.round(hitDamage(foe.atk, t.f.def) * guard));
+        t.st.hp = Math.max(0, t.st.hp - d);
+        lines.push(`${foe.name}의 공격! ${t.c.name} -${d}`);
+        fx.push({ t: 'bite', foe: fi, hits: [{ slug: t.c.slug, dmg: d, hp: t.st.hp }] });
+      }
+    });
+  }
+  r.log = lines;
+  save();
+  const wiped = !won && !liveMembers().length;
+  fxBusy = true;
+  renderExplore();
+  playFx(before, fx, () => {
+    fxBusy = false;
+    if (won) return winFloor(lines);
+    if (wiped) return wipeOut();
+    renderExplore();
+  });
+}
+
+// ----- 전투 효과 -----
+let fxBusy = false;
+const FX_REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fxWait = ms => new Promise(res => setTimeout(res, FX_REDUCED ? Math.min(ms, 60) : ms));
+
+// 턴 시작 전 막대 값(효과가 끝날 때까지 이 값에서 줄어드는 모습을 보여 준다)
+function snapshotBars() {
+  const r = S.tower.run;
+  const v = {};
+  (r.foes || []).forEach((f, i) => { v['foe-' + i] = f.hp; });
+  Object.entries(r.members).forEach(([slug, st]) => { v['hp-' + slug] = st.hp; v['mp-' + slug] = st.mp; });
+  return v;
+}
+
+function setBar(key, value) {
+  const w = document.querySelector(`[data-bar="${key}"]`);
+  if (!w) return;
+  const max = +w.dataset.max || 1;
+  w.querySelector('b').style.width = `${Math.max(0, Math.min(100, value / max * 100))}%`;
+  w.querySelector('span').textContent = w.classList.contains('foe') ? `${Math.max(0, value)} / ${max}` : String(Math.max(0, value));
+}
+
+function fxNode(key) { return document.querySelector(`[data-fx="${key}"]`); }
+
+function popNumber(target, text, cls) {
+  if (!target) return;
+  const n = el('span', 'fx-num ' + (cls || ''), text);
+  n.style.left = `${35 + Math.random() * 30}%`;
+  target.append(n);
+  setTimeout(() => n.remove(), 900);
+}
+
+function burst(target, cls, ms = 450) {
+  if (!target) return;
+  const b = el('span', 'fx-burst ' + cls);
+  target.append(b);
+  setTimeout(() => b.remove(), ms);
+}
+
+function shake(node, cls = 'fx-shake') {
+  if (!node) return;
+  node.classList.remove(cls);
+  void node.offsetWidth;
+  node.classList.add(cls);
+  setTimeout(() => node.classList.remove(cls), 420);
+}
+
+async function playFx(before, fx, done) {
+  const cmds = document.getElementById('ex-cmds');
+  if (cmds) cmds.classList.add('busy');
+  // 화면은 이미 결과 값으로 그려졌으니, 막대·쓰러짐 표시를 턴 시작 전으로 되돌려 놓고 시작
+  Object.entries(before).forEach(([k, v]) => setBar(k, v));
+  // 이번 턴에 쓰러진 것만 '쓰러짐' 표시를 잠시 되돌린다(이미 쓰러져 있던 건 그대로)
+  Object.entries(before).forEach(([k, v]) => {
+    if (v <= 0) return;
+    if (k.startsWith('foe-')) { const n = fxNode(k); if (n) n.classList.remove('dead'); }
+    if (k.startsWith('hp-')) { const m = fxNode('mate-' + k.slice(3)); if (m) m.classList.remove('down'); }
+  });
+  for (const e of fx) {
+    if (e.t === 'guard') {
+      document.querySelectorAll('.ex-run-mate:not(.down)').forEach(m => burst(m, 'shield', 700));
+      await fxWait(450);
+    } else if (e.t === 'slash' || e.t === 'fire') {
+      const mate = fxNode('mate-' + e.slug);
+      if (mate) shake(mate, 'fx-hop');
+      if (e.mp != null) setBar('mp-' + e.slug, e.mp);
+      const target = fxNode('foe-' + e.foe);
+      burst(target, e.t);
+      await fxWait(120);
+      shake(target, 'fx-hit');
+      popNumber(target, String(e.dmg), e.t === 'fire' ? 'fire' : '');
+      setBar('foe-' + e.foe, e.hp);
+      if (e.kill && target) target.classList.add('dead');
+      await fxWait(190);
+    } else if (e.t === 'bite' || e.t === 'sweep') {
+      const foeNode = fxNode('foe-' + e.foe);
+      shake(foeNode, 'fx-lunge');
+      if (e.t === 'sweep') {
+        const st = document.getElementById('ex-stage');
+        burst(st, 'sweep', 600);
+      }
+      await fxWait(220);
+      e.hits.forEach(h => {
+        const m = fxNode('mate-' + h.slug);
+        shake(m, 'fx-hurt');
+        popNumber(m, '-' + h.dmg, 'hurt');
+        setBar('hp-' + h.slug, h.hp);
+        if (h.hp <= 0 && m) m.classList.add('down');
+      });
+      await fxWait(380);
+    }
+  }
+  await fxWait(120);
+  done();
+}
+
+function winFloor(lines) {
+  const r = S.tower.run;
+  let pts = 0;
+  const drops = {};
+  const chance = (id, p) => { if (Math.random() < p) drops[id] = (drops[id] || 0) + 1; };
+  r.foes.forEach(foe => {
+    pts += Math.round(foe.maxHp / 5);
+    S.tower.seen[foe.id] = true;
+    chance('game_shealingpotion', foe.elite ? 0.5 : 0.15);
+    if (foe.elite) { chance('game_healingpotion', 0.3); chance(r.floor >= 15 ? 'gold_bar' : 'game_magicpotion', 0.3); }
+    if (foe.id === 'dracula') chance('gold_bar', 0.08);
+    if (foe.id === 'spider') chance('magicsoul', 0.1);
+    if (foe.id === 'reaper') { drops.gold_bar = (drops.gold_bar || 0) + 1; chance('magicsoul', 0.5); }
+    if (foe.id === 'mage') { drops.gold_bar = (drops.gold_bar || 0) + 1; drops.magicsoul = (drops.magicsoul || 0) + 1; }
+  });
+  r.loot.points += pts;
+  if (r.floor > S.tower.best && FIRST_CLEAR[r.floor]) addItems(drops, FIRST_CLEAR[r.floor]);
+  addItems(r.loot.items, drops);
+  S.tower.best = Math.max(S.tower.best, r.floor);
+  lines.push(r.foes.length > 1 ? `몬스터 ${r.foes.length}마리를 모두 물리쳤어요! +${pts}P` : `${josa(r.foes[0].name, '을', '를')} 물리쳤어요! +${pts}P`);
+  if (Object.keys(drops).length) lines.push(`얻은 것: ${itemsText(drops)}`);
+  r.foes = null;
+  if (r.guest && r.guest.ask === 'hunt') return resolveHelp(lines);
+  r.log = lines;
+  r.room = 'cleared';
+  r.scene = 'stairs';
+  r.result = r.floor % TOWER_SAVE_EVERY === 0 ? '저장 지점이에요. 저장하면 모은 포인트와 아이템이 내 것이 되고, 파티가 회복해요.' : '위층으로 올라갈까요?';
+  save();
+  renderExplore();
+  showTowerStory(r.floor);
+}
+
+// ----- 도움 요청 -----
+function takeItem(id) {
+  const r = S.tower.run;
+  if (r.loot.items[id]) { r.loot.items[id] -= 1; if (!r.loot.items[id]) delete r.loot.items[id]; return true; }
+  if ((S.goodsBag[id] || 0) > 0) { S.goodsBag[id] -= 1; return true; }
+  return false;
+}
+
+function acceptHelp() {
+  const r = S.tower.run;
+  const ask = r.guest.ask;
+  if (ask === 'maze') return startMaze();
+  if (ask === 'supply') {
+    const id = POTION_ORDER.find(x => bagCount(x) > 0);
+    if (!id || !takeItem(id)) return toast('줄 수 있는 물약이 없어요');
+    return resolveHelp([`${josa(EX_ITEMS[id].name, '을', '를')} 건네줬어요.`]);
+  }
+  // 몬스터 퇴치: 그 층 수준의 잡몹 2마리
+  const foes = [floorFoe(r.floor), floorFoe(r.floor)];
+  r.room = 'battle';
+  r.scene = 'hall';
+  r.foes = foes;
+  r.target = 0;
+  r.log = [`${josa(foes[0].name, '이', '가')} 두 마리나 나타났다!`];
+  save();
+  renderExplore();
+}
+
+function resolveHelp(lines) {
+  const r = S.tower.run;
+  const name = ANIMAL_BY_SLUG[r.guest.slug].name;
+  r.scene = 'lost';
+  if (Math.random() < HELP_GHOST) return ghostTrick(lines, name);
+  const kind = pick(['points', 'gear', ...HELP_MATERIALS]);
+  if (kind === 'points') {
+    r.loot.points += HELP_REWARD_POINTS;
+    lines.push(`${name} 아이: “정말 고마워요! 이거 받으세요!” +${HELP_REWARD_POINTS}P`);
+  } else {
+    const id = kind === 'gear' ? pickGear() : kind;
+    addItems(r.loot.items, { [id]: 1 });
+    lines.push(`${name} 아이: “정말 고마워요! 이거 받으세요!” ${josa(EX_ITEMS[id].name, '을', '를')} 받았어요.`);
+  }
+  r.helpResult = { ghost: false, slug: r.guest.slug };
+  clearRoom(lines, '도움 성공!');
+}
+
+function pickGear() {
+  const gear = Object.keys(EX_ITEMS).filter(x => EX_ITEMS[x].tier);
+  let n = Math.random() * gear.reduce((a, x) => a + HELP_GEAR_TIER_WEIGHT[EX_ITEMS[x].tier], 0);
+  for (const x of gear) { n -= HELP_GEAR_TIER_WEIGHT[EX_ITEMS[x].tier]; if (n < 0) return x; }
+  return gear[0];
+}
+
+function ghostTrick(lines, name) {
+  const r = S.tower.run;
+  const P = HELP_PENALTY;
+  const potions = () => Object.keys(EX_ITEMS).filter(id => EX_ITEMS[id].kind === 'potion' && bagCount(id) > 0);
+  const gearSlots = [];
+  partyMates().forEach(c => ['weapon', 'shield'].forEach(kind => {
+    if ((c.gear || {})[kind] && !(r.sealed || []).some(x => x.slug === c.slug && x.kind === kind)) gearSlots.push({ slug: c.slug, kind });
+  }));
+  const options = ['points', 'curse', 'retreat'];
+  if (potions().length) options.push('potions');
+  if (gearSlots.length) options.push('seal');
+  const kind = pick(options);
+  lines.push(`“속았지롱~!” ${name} 아이는 장난꾸러기 유령이 변신한 거였어요!`);
+  if (kind === 'points') {
+    const lost = Math.min(S.points, P.points);
+    S.points -= lost;
+    renderPoints();
+    lines.push(`유령이 주머니를 털어 갔어요. -${lost}P`);
+  } else if (kind === 'potions') {
+    const gone = [];
+    for (let i = 0; i < P.potions; i++) {
+      const left = potions();
+      if (!left.length) break;
+      const id = pick(left);
+      takeItem(id);
+      gone.push(EX_ITEMS[id].name);
+    }
+    lines.push(`유령이 물약을 훔쳐 달아났어요: ${gone.join(', ')}`);
+  } else if (kind === 'curse') {
+    r.debuff = { from: r.floor, until: r.floor + P.debuffFloors, ratio: P.debuffRatio };
+    lines.push(`유령의 저주! 앞으로 ${P.debuffFloors}층 동안 능력치가 ${Math.round((1 - P.debuffRatio) * 100)}% 줄어요.`);
+  } else if (kind === 'retreat') {
+    const to = Math.max(1, r.floor - P.retreat);
+    lines.push(`유령이 길을 비틀어 놓았어요! ${to}층으로 떨어졌어요.`);
+    r.floor = to;
+  } else {
+    const slot = pick(gearSlots);
+    r.sealed = [...(r.sealed || []), slot];
+    const c = companionOf(slot.slug);
+    lines.push(`유령이 ${c.name}의 ${EX_ITEMS[c.gear[slot.kind]].name}에 봉인을 걸었어요. 이번 탐험 동안 쓸 수 없어요.`);
+  }
+  r.helpResult = { ghost: true };
+  clearRoom(lines, '유령의 장난!');
+}
+
+// ----- 미로 찾기 -----
+// 칸마다 벽 비트(1=위, 2=오른쪽, 4=아래, 8=왼쪽). 무작위 깊이 우선 탐색으로 길을 판다.
+let maze = null;
+let mazeTimer = null;
+function makeMaze(n) {
+  const walls = Array(n * n).fill(15);
+  const seen = Array(n * n).fill(false);
+  const stack = [0];
+  seen[0] = true;
+  const dirs = [[0, -1, 1, 4], [1, 0, 2, 8], [0, 1, 4, 1], [-1, 0, 8, 2]];
+  while (stack.length) {
+    const cur = stack[stack.length - 1];
+    const x = cur % n, y = Math.floor(cur / n);
+    const next = dirs.map(([dx, dy, w, back]) => [x + dx, y + dy, w, back])
+      .filter(([nx, ny]) => nx >= 0 && ny >= 0 && nx < n && ny < n && !seen[ny * n + nx]);
+    if (!next.length) { stack.pop(); continue; }
+    const [nx, ny, w, back] = pick(next);
+    const ni = ny * n + nx;
+    walls[cur] &= ~w;
+    walls[ni] &= ~back;
+    seen[ni] = true;
+    stack.push(ni);
+  }
+  return { n, walls, x: 0, y: 0 };
+}
+
+function startMaze(resume) {
+  const r = S.tower.run;
+  const n = mazeSize(r.floor);
+  maze = makeMaze(n);
+  maze.end = Date.now() + mazeSeconds(n) * 1000;
+  maze.img = new Image();
+  maze.img.onload = drawMaze;
+  maze.img.src = sprite(r.guest.slug, 0);
+  clearInterval(mazeTimer);
+  mazeTimer = setInterval(() => {
+    if (!maze) return clearInterval(mazeTimer);
+    if (Date.now() >= maze.end) return endMaze(false);
+    drawMaze();
+  }, 250);
+  if (!resume) {
+    r.room = 'maze';
+    r.log = [];
+    save();
+    renderExplore();
+  }
+}
+
+function drawMaze() {
+  const cv = document.getElementById('maze-canvas');
+  if (!cv || !maze) return;
+  const g = cv.getContext('2d');
+  const { n, walls } = maze;
+  const W = cv.width, cell = W / n;
+  g.fillStyle = '#1b0c40';
+  g.fillRect(0, 0, W, W);
+  // 출구
+  g.fillStyle = '#ffd75e';
+  g.beginPath();
+  g.arc((n - 0.5) * cell, (n - 0.5) * cell, cell * 0.32, 0, Math.PI * 2);
+  g.fill();
+  g.strokeStyle = '#cdb8f2';
+  g.lineWidth = Math.max(3, cell * 0.09);
+  g.lineCap = 'round';
+  g.beginPath();
+  for (let i = 0; i < n * n; i++) {
+    const x = (i % n) * cell, y = Math.floor(i / n) * cell, w = walls[i];
+    if (w & 1) { g.moveTo(x, y); g.lineTo(x + cell, y); }
+    if (w & 2) { g.moveTo(x + cell, y); g.lineTo(x + cell, y + cell); }
+    if (w & 4) { g.moveTo(x, y + cell); g.lineTo(x + cell, y + cell); }
+    if (w & 8) { g.moveTo(x, y); g.lineTo(x, y + cell); }
+  }
+  g.stroke();
+  const px = maze.x * cell, py = maze.y * cell;
+  if (maze.img && maze.img.complete && maze.img.naturalWidth) {
+    const s = cell * 0.9, ratio = maze.img.naturalWidth / maze.img.naturalHeight;
+    const w = ratio >= 1 ? s : s * ratio, h = ratio >= 1 ? s / ratio : s;
+    g.drawImage(maze.img, px + (cell - w) / 2, py + (cell - h) / 2, w, h);
+  } else {
+    g.fillStyle = '#ff7aa2';
+    g.beginPath();
+    g.arc(px + cell / 2, py + cell / 2, cell * 0.3, 0, Math.PI * 2);
+    g.fill();
+  }
+  const t = document.querySelector('.ex-maze-time');
+  if (t) {
+    const left = Math.max(0, Math.ceil((maze.end - Date.now()) / 1000));
+    t.textContent = `남은 시간 ${left}초`;
+    t.classList.toggle('hurry', left <= 5);
+  }
+}
+
+function moveMaze(dx, dy) {
+  if (!maze) return;
+  const { n, walls } = maze;
+  const bit = dy === -1 ? 1 : dx === 1 ? 2 : dy === 1 ? 4 : 8;
+  if (walls[maze.y * n + maze.x] & bit) return;
+  maze.x += dx;
+  maze.y += dy;
+  if (maze.x === n - 1 && maze.y === n - 1) return endMaze(true);
+  drawMaze();
+}
+
+function bindMazeSwipe(cv) {
+  let sx = null, sy = null;
+  cv.addEventListener('pointerdown', e => { sx = e.clientX; sy = e.clientY; });
+  cv.addEventListener('pointerup', e => {
+    if (sx == null) return;
+    const dx = e.clientX - sx, dy = e.clientY - sy;
+    sx = null;
+    if (Math.max(Math.abs(dx), Math.abs(dy)) < 18) return;
+    if (Math.abs(dx) > Math.abs(dy)) moveMaze(Math.sign(dx), 0); else moveMaze(0, Math.sign(dy));
+  });
+}
+document.addEventListener('keydown', e => {
+  if (!maze || currentTab !== 'explore') return;
+  const k = { ArrowUp: [0, -1], ArrowDown: [0, 1], ArrowLeft: [-1, 0], ArrowRight: [1, 0] }[e.key];
+  if (k) { e.preventDefault(); moveMaze(...k); }
+});
+
+// 브라우저 테스트용: ?test 로 열었을 때만 미로 상태를 들여다볼 수 있게
+if (location.search.includes('test')) window.__dnMaze = () => maze;
+
+function endMaze(ok) {
+  clearInterval(mazeTimer);
+  maze = null;
+  const r = S.tower.run;
+  if (!r || r.room !== 'maze') return;
+  if (ok) return resolveHelp(['출구를 찾았어요!']);
+  r.scene = 'lost';
+  clearRoom([`시간 안에 출구를 찾지 못했어요. ${ANIMAL_BY_SLUG[r.guest.slug].name} 아이는 혼자 길을 찾아보겠대요.`], '길 찾기 실패');
+}
+
+function showTowerStory(floor) {
+  const story = TOWER_STORY[floor];
+  if (!story || S.tower.story[floor]) return;
+  S.tower.story[floor] = true;
+  save();
+  openModal(box => {
+    box.append(el('h3', null, story[0]));
+    story.slice(1).forEach(line => box.append(el('p', null, line)));
+    const ok = el('button', 'btn', '계속');
+    ok.addEventListener('click', closeModal);
+    box.append(ok);
+  });
+}
+
+function answerQuiz(i) {
+  const r = S.tower.run;
+  const [, opts, right] = NONSENSE[r.quiz];
+  const lines = [];
+  if (i === right) {
+    const prize = pick(['game_healingpotion', 'game_magicpotion', 'game_shealingpotion']);
+    addItems(r.loot.items, { [prize]: 1 });
+    r.loot.points += 30;
+    lines.push(`정답! “${opts[right]}” 보물로 ${josa(EX_ITEMS[prize].name, '과', '와')} 30P를 받았어요.`);
+  } else {
+    lines.push(`땡! 정답은 “${opts[right]}”. 지배인이 깔깔 웃는 사이 지나갔어요.`);
+  }
+  clearRoom(lines);
+}
+
+function openPotions() {
+  const potions = Object.keys(EX_ITEMS).filter(id => EX_ITEMS[id].kind === 'potion' && bagCount(id) > 0);
+  openModal(box => {
+    box.append(el('h3', null, '물약 쓰기'));
+    box.append(el('p', null, '살아 있는 동료 모두에게 효과가 있어요. 물약은 차례를 쓰지 않아요.'));
+    if (!potions.length) box.append(el('p', null, '가진 물약이 없어요. 마법 상인 길데스텐에게 살 수 있어요.'));
+    const grid = el('div', 'food-grid');
+    potions.forEach(id => {
+      const it = EX_ITEMS[id];
+      const card = el('div', 'food-card');
+      const im = el('img');
+      im.src = exImg(id);
+      im.alt = '';
+      const btn = el('button', null, '쓰기');
+      btn.addEventListener('click', () => usePotion(id));
+      card.append(im, el('strong', null, it.name), el('small', null, `${it.hp ? '체력 +' + it.hp : '마력 +' + it.mp} · ${bagCount(id)}개`), btn);
+      grid.append(card);
+    });
+    box.append(grid);
+    const ok = el('button', 'btn ghost', '닫기');
+    ok.addEventListener('click', closeModal);
+    box.append(ok);
+  });
+}
+
+function usePotion(id) {
+  const r = S.tower.run;
+  const it = EX_ITEMS[id];
+  if (r.loot.items[id]) { r.loot.items[id] -= 1; if (!r.loot.items[id]) delete r.loot.items[id]; }
+  else S.goodsBag[id] -= 1;
+  const before = snapshotBars();
+  const healed = [];
+  liveMembers().forEach(({ c, f, st }) => {
+    const h0 = st.hp, m0 = st.mp;
+    if (it.hp) st.hp = Math.min(f.hp, st.hp + it.hp);
+    if (it.mp) st.mp = Math.min(f.mp, st.mp + it.mp);
+    healed.push({ slug: c.slug, hp: st.hp, mp: st.mp, dh: st.hp - h0, dm: st.mp - m0 });
+  });
+  r.log = [`${josa(it.name, '을', '를')} 썼어요.`];
+  save();
+  closeModal();
+  fxBusy = true;
+  renderExplore();
+  Object.entries(before).forEach(([k, v]) => setBar(k, v));
+  setTimeout(() => {
+    healed.forEach(h => {
+      const m = fxNode('mate-' + h.slug);
+      burst(m, 'heal', 700);
+      if (h.dh) popNumber(m, '+' + h.dh, 'heal');
+      if (h.dm) popNumber(m, '+' + h.dm, 'mana');
+      setBar('hp-' + h.slug, h.hp);
+      setBar('mp-' + h.slug, h.mp);
+    });
+    setTimeout(() => { fxBusy = false; }, 500);
+  }, FX_REDUCED ? 0 : 60);
+}
+
+function bankLoot() {
+  const r = S.tower.run;
+  S.points += r.loot.points;
+  addItems(S.goodsBag, r.loot.items);
+  const got = r.loot.points || Object.keys(r.loot.items).length ? `${r.loot.points}P${Object.keys(r.loot.items).length ? ', ' + itemsText(r.loot.items) : ''}` : '없음';
+  r.loot = { points: 0, items: {} };
+  renderPoints();
+  return got;
+}
+
+function saveTower() {
+  const r = S.tower.run;
+  const got = bankLoot();
+  if (r.floor >= TOWER_TOP) {
+    S.tower.cleared = true;
+    S.tower.run = null;
+    save();
+    openModal(box => {
+      box.append(el('h3', null, '북쪽 탑 정복!'));
+      box.append(el('p', null, `암흑의 마도사를 물리치고 탑 꼭대기에 올랐어요. 받은 것: ${got}`));
+      box.append(el('p', null, '이제 1·11·21층 어디서든 다시 올라 재료를 모을 수 있어요.'));
+      const ok = el('button', 'btn', '확인');
+      ok.addEventListener('click', () => { closeModal(); renderExplore(); });
+      box.append(ok);
+    });
+    renderExplore();
+    return;
+  }
+  S.tower.saved = Math.max(S.tower.saved, r.floor + 1);
+  partyMates().forEach(c => { const f = fighter(c); if (r.members[c.slug]) r.members[c.slug] = { hp: f.hp, mp: f.mp }; });
+  r.log = [`저장했어요! 받은 것: ${got}`, '파티의 체력과 마력이 모두 회복됐어요.'];
+  r.result = `다음부터는 ${r.floor + 1}층에서 시작할 수 있어요.`;
+  save();
+  renderExplore();
+}
+
+function confirmLeave() {
+  const r = S.tower.run;
+  const lose = r.loot.points || Object.keys(r.loot.items).length;
+  openModal(box => {
+    box.append(el('h3', null, '탑에서 나갈까요?'));
+    box.append(el('p', null, lose ? `저장하지 않은 전리품을 잃어요: ${r.loot.points}P${Object.keys(r.loot.items).length ? ', ' + itemsText(r.loot.items) : ''}` : '잃는 것은 없어요.'));
+    const row = el('div', 'modal-actions');
+    const no = el('button', 'btn ghost', '계속 탐험');
+    no.addEventListener('click', closeModal);
+    const yes = el('button', 'btn', '나가기');
+    yes.addEventListener('click', () => { clearInterval(mazeTimer); maze = null; S.tower.run = null; save(); closeModal(); exploreView = 'hub'; renderExplore(); });
+    row.append(no, yes);
+    box.append(row);
+  });
+}
+
+function wipeOut() {
+  clearInterval(mazeTimer);
+  maze = null;
+  const r = S.tower.run;
+  const floor = r.floor;
+  S.tower.run = null;
+  save();
+  renderExplore();
+  openModal(box => {
+    box.append(el('h3', null, '파티가 모두 쓰러졌어요'));
+    box.append(el('p', null, `${floor}층에서 정신을 잃고 탑 입구로 돌아왔어요. 저장하지 않은 포인트와 아이템은 잃어버렸어요.`));
+    box.append(el('p', null, '동료를 더 키우거나 장비를 갖춰서 다시 도전해 봐요.'));
+    const ok = el('button', 'btn', '확인');
+    ok.addEventListener('click', closeModal);
+    box.append(ok);
+  });
+}
+
+// 아이템박스 '용품' 탭
+function goodsCards() {
+  return Object.keys(EX_ITEMS).filter(id => (S.goodsBag[id] || 0) > 0).map(id => {
+    const it = EX_ITEMS[id];
+    const card = el('div', 'food-card');
+    const img = el('img');
+    img.src = exImg(id);
+    img.alt = '';
+    const btn = el('button', null, it.kind === 'material' ? '연금술 재료' : '탐험에서 쓰기');
+    btn.disabled = it.kind === 'material';
+    btn.addEventListener('click', () => showTab('explore'));
+    card.append(img, el('strong', null, it.name), el('small', null, `${EX_KIND[it.kind]} · ${S.goodsBag[id]}개`), btn);
+    return card;
+  });
 }
 
 // ===== 시작 =====

@@ -14,7 +14,7 @@ OUT = Path(__file__).resolve().parent.parent / "archive_original" / "pages"
 
 
 def fetch(spec):
-    ts, url = spec.split("/", 1)
+    ts, url = spec.strip().split("/", 1)
     raw_url = f"https://web.archive.org/web/{ts}id_/{url}"
     req = urllib.request.Request(raw_url, headers={"User-Agent": "Mozilla/5.0"})
     data = urllib.request.urlopen(req, timeout=40).read()

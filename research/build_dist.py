@@ -13,13 +13,15 @@ DIST = PROJECT / "dist"
 
 FILES = ["manifest.json"]
 # 동물/꾸미기/음식 그림은 묶음 파일에도 들어 있지만, 묶음에 없을 때를 대비해 개별 파일도 올린다
-DIRS = ["assets/backgrounds", "assets/icons", "assets/ui", "assets/animals", "assets/deco", "assets/food", "assets/medicine", "assets/school", "assets/travel"]
+DIRS = ["assets/backgrounds", "assets/icons", "assets/ui", "assets/animals", "assets/deco", "assets/food", "assets/medicine", "assets/school", "assets/travel", "assets/explore"]
 VERSIONED = ["assets/sprites_bundle.js", "assets/food_data.js"]
 
 # Cloudflare Pages 캐시 설정: 화면/서비스워커는 매번 확인, 나머지는 하루 캐시
 HEADERS = """/index.html
   Cache-Control: no-cache
 /sw.js
+  Cache-Control: no-cache
+/puzzle.html
   Cache-Control: no-cache
 /
   Cache-Control: no-cache
@@ -28,6 +30,17 @@ HEADERS = """/index.html
 /assets/*.js
   Cache-Control: no-cache
 """
+
+
+def build_puzzle_page(game_html):
+    """퍼즐 연습 페이지: puzzle_lab.html 에 게임의 퍼즐 코드(생성·판정·그리기·누르기)를 그대로 끼워 넣는다."""
+    def cut(start, end):
+        i = game_html.index(start)
+        return game_html[i:game_html.index(end, i)]
+    code = cut("const PUZZLES", "function startChestPuzzle") + cut("const DIAL_COLORS", "function openChest")
+    page = (PROJECT / "puzzle_lab.html").read_text(encoding="utf-8")
+    assert "/*@PUZZLE_CODE@*/" in page
+    return page.replace("/*@PUZZLE_CODE@*/", code)
 
 
 def main():
@@ -49,6 +62,7 @@ def main():
         assert f'src="{v}"' in html, v
         html = html.replace(f'src="{v}"', f'src="{v}?v={build}"')
     (DIST / "index.html").write_text(html, encoding="utf-8")
+    (DIST / "puzzle.html").write_text(build_puzzle_page(html), encoding="utf-8")
     sw = (PROJECT / "sw.js").read_text(encoding="utf-8").replace("__BUILD__", build)
     (DIST / "sw.js").write_text(sw, encoding="utf-8")
     (DIST / "_headers").write_text(HEADERS, encoding="utf-8")
